@@ -73,7 +73,7 @@ void update_degree_top(Node * n){
 
 //FUNCTIONS TO CALCULATE AVERAGE AND MAXIMUM DEGREE BOT AND TOP
 
-
+//SHOULD BE MORE EFFIECENT TO DO IT WHILE CALCULATING ..
 void average_top(){
 	float total = 0;
 	float total_disp=0;
@@ -319,9 +319,12 @@ vector<string> get_channels(string name,int nbChannels,map<string,int> list){
 	string str;
 	string b;
 	vector<string> tmp;
+	string time_str;
 	while (getline(file, str) && tmp.size() < nbChannels)
     {
     	istringstream iss(str);
+    	iss >> time_str;
+    	iss >> time_str;
     	iss >> b;
     	if (regex_match (b, regex("(192.168)(.*)")) && (find(tmp.begin(), tmp.end(), b)==tmp.end())){
     		size_t n = std::count(b.begin(), b.end(), '.');
@@ -347,12 +350,15 @@ float file2dataPCAP(string name,vector<string> channels){
 	string str; 
 	string t;
 	string b;
+	string time_str;
 	float links = 0;
 
 
 	while (getline(file, str))
     {
     	istringstream iss(str);
+    	iss >> time_str;
+    	iss >> time_str;
     	iss >> b;
     	iss >> t;
     	size_t n = std::count(b.begin(), b.end(), '.');
@@ -502,118 +508,16 @@ int main(int argc, char* argv[]){
 	}else{
 	vector<int> nbChannels;
 	vector<string> list;
-	list.push_back("../Data/Japon2013/SIT-exp131219/PC_A/A_G_H_00001_20131218115553.pcap.txt");
-	list.push_back("../Data/Japon2013/SIT-exp131219/PC_A/A_G_H_00002_20131218132135.pcap.txt");
-	// list.push_back("../Data/Japon2013/SIT-exp131219/PC_A/A_G_H_00003_20131218143817.pcap.txt");
-	// list.push_back(" ../Data/Japon2013/SIT-exp131219/PC_A/A_G_H_00004_20131218160722.pcap.txt");
-	// list.push_back("../Data/Japon2013/SIT-exp131219/PC_A/A_G_H_00005_20131218173528.pcap.txt");
-	// list.push_back("../Data/Japon2013/SIT-exp131219/PC_A/A_G_H_00006_20131218191707.pcap.txt");
-	// list.push_back("../Data/Japon2013/SIT-exp131219/PC_A/A_G_H_00007_20131218204422.pcap.txt");
-	// list.push_back("../Data/Japon2013/SIT-exp131219/PC_A/A_G_H_00008_20131218215110.pcap.txt");
-	// list.push_back("../Data/Japon2013/SIT-exp131219/PC_A/A_G_H_00009_20131218231353.pcap.txt");
-	// list.push_back("../Data/Japon2013/SIT-exp131219/PC_A/A_G_H_00010_20131219003426.pcap.txt");
-
-	// list.push_back("../Data/Japon2013/SIT-exp131219/PC_B/B_00001_20131218120014.pcap.txt");
-	// list.push_back("../Data/Japon2013/SIT-exp131219/PC_B/B_00002_20131218141733.pcap.txt");
-	// list.push_back("../Data/Japon2013/SIT-exp131219/PC_B/B_00003_20131218172202.pcap.txt");
-	// list.push_back("../Data/Japon2013/SIT-exp131219/PC_B/B_00004_20131218194842.pcap.txt");
-	// list.push_back("../Data/Japon2013/SIT-exp131219/PC_B/B_00005_20131218211907.pcap.txt");
-	// list.push_back("../Data/Japon2013/SIT-exp131219/PC_B/B_00006_20131218220346.pcap.txt");
-	// list.push_back("../Data/Japon2013/SIT-exp131219/PC_B/B_00007_20131218224840.pcap.txt");
-	// list.push_back("../Data/Japon2013/SIT-exp131219/PC_B/B_00008_20131219002334.pcap.txt");
-
-	// list.push_back("../Data/Japon2013/SIT-exp131219/PC_C/C_I_J_00001_20131218120218.pcap.txt");
-	// list.push_back("../Data/Japon2013/SIT-exp131219/PC_C/C_I_J_00002_20131218131749.pcap.txt");
-	// list.push_back("../Data/Japon2013/SIT-exp131219/PC_C/C_I_J_00003_20131218143928.pcap.txt");
-	// list.push_back("../Data/Japon2013/SIT-exp131219/PC_C/C_I_J_00004_20131218154832.pcap.txt");
-	// list.push_back("../Data/Japon2013/SIT-exp131219/PC_C/C_I_J_00005_20131218170101.pcap.txt");
-	// list.push_back("../Data/Japon2013/SIT-exp131219/PC_C/C_I_J_00006_20131218181937.pcap.txt");
-	// list.push_back("../Data/Japon2013/SIT-exp131219/PC_C/C_I_J_00007_20131218193727.pcap.txt");
-	// list.push_back("../Data/Japon2013/SIT-exp131219/PC_C/C_I_J_00008_20131218205810.pcap.txt");
-	// list.push_back("../Data/Japon2013/SIT-exp131219/PC_C/C_I_J_00009_20131218221915.pcap.txt");
-	// list.push_back("../Data/Japon2013/SIT-exp131219/PC_C/C_I_J_00010_20131218233604.pcap.txt");
-	// list.push_back("../Data/Japon2013/SIT-exp131219/PC_C/C_I_J_00011_20131219010324.pcap.txt");
-
-
-	// list.push_back("../Data/Japon2013/SIT-exp131219/PC_D/D_00001_20131218120321.pcap.txt");
-	// list.push_back("../Data/Japon2013/SIT-exp131219/PC_D/D_00002_20131218192029.pcap.txt");
-	// list.push_back("../Data/Japon2013/SIT-exp131219/PC_D/D_00003_20131219000742.pcap.txt");
-
-
-	// list.push_back("../Data/Japon2013/SIT-exp131219/PC_E/E_00001_20131218120435.pcap.txt");
-	// list.push_back("../Data/Japon2013/SIT-exp131219/PC_E/E_00002_20131218182235.pcap.txt");
-
-
-	// list.push_back("../Data/Japon2013/SIT-exp131219/PC_F/F_K_L_00001_20131218120615.pcap.txt");
-	// list.push_back("../Data/Japon2013/SIT-exp131219/PC_F/F_K_L_00002_20131218134102.pcap.txt");
-	// list.push_back("../Data/Japon2013/SIT-exp131219/PC_F/F_K_L_00003_20131218150055.pcap.txt");
-	// list.push_back("../Data/Japon2013/SIT-exp131219/PC_F/F_K_L_00004_20131218165206.pcap.txt");
-	// list.push_back("../Data/Japon2013/SIT-exp131219/PC_F/F_K_L_00005_20131218184403.pcap.txt");
-	// list.push_back("../Data/Japon2013/SIT-exp131219/PC_F/F_K_L_00006_20131218200349.pcap.txt");
-	// list.push_back("../Data/Japon2013/SIT-exp131219/PC_F/F_K_L_00007_20131218211442.pcap.txt");
-	// list.push_back("../Data/Japon2013/SIT-exp131219/PC_F/F_K_L_00008_20131218221643.pcap.txt");
-	// list.push_back("../Data/Japon2013/SIT-exp131219/PC_F/F_K_L_00009_20131218231258.pcap.txt");
-	// list.push_back("../Data/Japon2013/SIT-exp131219/PC_F/F_K_L_00010_20131219002102.pcap.txt");
-	// list.push_back("../Data/Japon2013/SIT-exp131219/PC_F/F_K_L_00011_20131219014213.pcap.txt");
+	list.push_back("../Data/Japon2013/SIT-exp131219/PC_A/PC_A.txt");
 	
 
-
 	nbChannels.push_back(3);
-	nbChannels.push_back(3);
-	// nbChannels.push_back(3);
-	// nbChannels.push_back(3);
-	// nbChannels.push_back(3);
-	// nbChannels.push_back(3);
-	// nbChannels.push_back(3);
-	// nbChannels.push_back(3);
-	// nbChannels.push_back(3);
-	// nbChannels.push_back(3);
-		
-	// nbChannels.push_back(1);
-	// nbChannels.push_back(1);
-	// nbChannels.push_back(1);
-	// nbChannels.push_back(1);
-	// nbChannels.push_back(1);
-	// nbChannels.push_back(1);
-	// nbChannels.push_back(1);
-	// nbChannels.push_back(1);
 
-	// nbChannels.push_back(3);
-	// nbChannels.push_back(3);
-	// nbChannels.push_back(3);
-	// nbChannels.push_back(3);
-	// nbChannels.push_back(3);
-	// nbChannels.push_back(3);
-	// nbChannels.push_back(3);
-	// nbChannels.push_back(3);
-	// nbChannels.push_back(3);
-	// nbChannels.push_back(3);
-	// nbChannels.push_back(3);
-
-	// nbChannels.push_back(1);
-	// nbChannels.push_back(1);
-	// nbChannels.push_back(1);
-
-	// nbChannels.push_back(1);
-	// nbChannels.push_back(1);
-
-	// nbChannels.push_back(3);
-	// nbChannels.push_back(3);
-	// nbChannels.push_back(3);
-	// nbChannels.push_back(3);
-	// nbChannels.push_back(3);
-	// nbChannels.push_back(3);
-	// nbChannels.push_back(3);
-	// nbChannels.push_back(3);
-	// nbChannels.push_back(3);
-	// nbChannels.push_back(3);
-	// nbChannels.push_back(3);
-	
 
 
 	get_stat_pcap(list,nbChannels);
 	stat_to_file();
-	stat_each_node(tops,"detail");
+	stat_each_node(tops,"detail.txt");
 	graph_degree(degrees_top,max_top,tops.size(),"graph_degree_top.dat");
 	graph_degree(degrees_bot,max_bot,bots.size(),"graph_degree_bot.dat");
 	system("top -l 1 -o mem  > top-output.txt");
