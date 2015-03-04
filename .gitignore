@@ -27,6 +27,9 @@
 *.out
 *.app
 
+# My own files
 .DS_Store
 *.txt
 data/
+*.dat
+output
