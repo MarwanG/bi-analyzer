@@ -9,6 +9,7 @@
 #include <unordered_map>
 #include <utility>
 #include <ctime>
+#include <time.h>
 
 #include "node.h"
 #include "print_tools.h"
@@ -71,51 +72,6 @@ void update_degree_top(Node * n){
 	}
 }
 
-//FUNCTIONS TO CALCULATE AVERAGE AND MAXIMUM DEGREE BOT AND TOP
-
-//SHOULD BE MORE EFFIECENT TO DO IT WHILE CALCULATING ..
-void average_top(){
-	float total = 0;
-	float total_disp=0;
-	float nb_count = 0;
-	float nb_count_red = 0;
-	for(int i = 0 ; i < tops.size() ; i++){
-		int d = tops[i]->get_degree();
-		total += d;
-		if(max_top <  d){
-			max_top = d;
-		}
-		if(tops[i]->get_disp() != -1){
-			total_disp += tops[i]->get_disp();
-			nb_count++;
-		}
-		if(tops[i]->get_red() != -1){
-			red += tops[i]->get_red();
-			nb_count_red++;
-		}else{
-		}
-	}
-	red = red / nb_count_red;
-	total = total / tops.size();
-    average_degree_top_v = total;
-    disp = total_disp/nb_count;
-}
-
-
-void average_max_degree_bot(){
-	float total;
-	for(int i = 0 ; i < bots.size() ; i++){
-		update_degree_bot(bots[i]);
-		int d = bots[i]->get_degree();
-		total += d;
-		if(max_bot <  d){
-			max_bot = d;
-		}
-	}
-	average_degree_bot_v =  total / bots.size();
-}
-
-
 // FUNCTION TO UPDATE REDUNDANCY TOP AND BOT
 
 void update_redundancy_top(Node * n){
@@ -163,6 +119,53 @@ void update_degree_cc(Node *n){
 	}
 }
 
+//FUNCTIONS TO CALCULATE AVERAGE AND MAXIMUM DEGREE BOT AND TOP
+
+//SHOULD BE MORE EFFIECENT TO DO IT WHILE CALCULATING ..
+void average_top(){
+	float total = 0;
+	float total_disp=0;
+	float nb_count = 0;
+	float nb_count_red = 0;
+	for(int i = 0 ; i < tops.size() ; i++){
+		int d = tops[i]->get_degree();
+		total += d;
+		if(max_top <  d){
+			max_top = d;
+		}
+		if(tops[i]->get_disp() != -1){
+			total_disp += tops[i]->get_disp();
+			nb_count++;
+		}
+		if(tops[i]->get_red() != -1){
+			red += tops[i]->get_red();
+			nb_count_red++;
+		}else{
+		}
+	}
+	red = red / nb_count_red;
+	total = total / tops.size();
+    average_degree_top_v = total;
+    disp = total_disp/nb_count;
+}
+
+
+void average_max_degree_bot(){
+	float total;
+	for(int i = 0 ; i < bots.size() ; i++){
+		update_degree_bot(bots[i]);
+		int d = bots[i]->get_degree();
+		total += d;
+		if(max_bot <  d){
+			max_bot = d;
+		}
+	}
+	average_degree_bot_v =  total / bots.size();
+}
+
+
+
+
 void calculate_cc(Node* n1,Node* n2){
 	int max_size = max(n1->get_degree(),n2->get_degree());
 	int min_size = min(n1->get_degree(),n2->get_degree());
@@ -173,7 +176,7 @@ void calculate_cc(Node* n1,Node* n2){
                           n2->neighbours_indexs.begin(), n2->neighbours_indexs.end(),
                           std::back_inserter(tmp));
     common = tmp.size();
-	 if(common > 0){
+	if(common > 0){
 	 	for(int i = 0 ; i < tmp.size() ; i++){
 	 		for(int j = i+1 ; j < tmp.size() ; j++){
 	 			n1->pairs.insert(make_pair(tmp[i],tmp[j]));
@@ -386,8 +389,37 @@ float file2dataPCAP(string name,vector<string> channels){
     return links;
 }
 
-// functions to generate stat files and graphs
+float file2dataPCAP_10Mins(string name,vector<string> channels){
+	ifstream file(name.c_str());
+	string str; 
+	string t;
+	string b;
+	string time_str;
+	float links = 0;
+	struct tm tm;
+	time_t t1;
+	time_t t2;
 
+	while (getline(file, str))
+    {
+    	istringstream iss(str);
+    	iss >> time_str;
+    	iss >> get_time(&tm,"%H:%M:%S");
+    	iss >> b;
+    	iss >> t;
+    	if(t1 == NULL){
+    		t1 = mktime(&tm);
+    	}
+    	if(difftime(t1,mktime(&tm))){
+    		cout << "TIME ENDED \n";
+    		break;
+    	}
+    	cout << time_str << "  " << b << "  " << t << "\n";
+	}
+	return 0;
+}
+
+// functions to generate stat files and graphs
 
 void get_stat_pcap(vector<string> names,vector<int> nbChannels){
 	max_top = 0;
@@ -407,21 +439,21 @@ void get_stat_pcap(vector<string> names,vector<int> nbChannels){
 		for(int j = 0 ; j < v.size() ; j++){
 			cout << v[j] << "\n";
 		}
-		links = links + file2dataPCAP(names[i],v);
+		links = links + file2dataPCAP_10Mins(names[i],v);
 		cout << "Number of links found till now : " << links << "\n";
 	}
-	cout << "Number of tops : " << tops.size() << "\n";
-	cout << "Number of bots : " << bots.size() << "\n";
-	cout << fixed << "Number of edges : " << links << "\n";
-	density = links / (float)(tops.size()*bots.size());
-	cout << "Density : " << fixed << density << "\n";
-	cout << "Calculation " << "\n";
-	calculate_cc_total_top();
-	average_top();
-	average_max_degree_bot();	
-	cc = cc/tops.size();
-	cc_min = cc_min/tops.size();
-    cc_max = cc_max/tops.size();
+	// cout << "Number of tops : " << tops.size() << "\n";
+	// cout << "Number of bots : " << bots.size() << "\n";
+	// cout << fixed << "Number of edges : " << links << "\n";
+	// density = links / (float)(tops.size()*bots.size());
+	// cout << "Density : " << fixed << density << "\n";
+	// cout << "Calculation " << "\n";
+	// calculate_cc_total_top();
+	// average_top();
+	// average_max_degree_bot();	
+	// cc = cc/tops.size();
+	// cc_min = cc_min/tops.size();
+ //    cc_max = cc_max/tops.size();
 	
 }
 
@@ -446,7 +478,6 @@ void get_stat(string name){
 	cc = cc/tops.size();
 	cc_min = cc_min/tops.size();
     cc_max = cc_max/tops.size();
-	
 }
 
 
@@ -471,6 +502,8 @@ void stat_to_file(){
 	myfile.close();
 }
 
+
+// NEEDS TO BE MOVED
 void graph_degree_cc(){
 	ofstream myfile;
 	myfile.open("graph_degree_cc.dat");
