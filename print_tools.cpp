@@ -4,10 +4,19 @@
 #include <fstream>
 #include <set>
 #include <map>
-
+#include <time.h>
 #include "node.h"
 using namespace std;
 
+
+time_t timestamp_to_ctime(const char* time_stamp )
+{
+   time_t _return;
+   struct tm tm_struct ; 
+   strptime(time_stamp ,"%Y-%m-%d %H:%M:%S",&tm_struct);
+   _return  = mktime(&tm_struct);   return
+   _return;
+}
 
 void stat_each_node(vector<Node*> data,string name){
 	ofstream myfile;

@@ -364,7 +364,7 @@ float file2dataPCAP(string name,vector<string> channels){
     	iss >> time_str;
     	iss >> b;
     	iss >> t;
-    	size_t n = std::count(b.begin(), b.end(), '.');
+    	size_t n = count(b.begin(), b.end(), '.');
     	if(n==4){
     		unsigned found = b.find_last_of(".");
 	    	b = b.substr(0,found);
@@ -395,26 +395,36 @@ float file2dataPCAP_10Mins(string name,vector<string> channels){
 	string t;
 	string b;
 	string time_str;
+	string tmp;
 	float links = 0;
 	struct tm tm;
-	time_t t1;
-	time_t t2;
+	time_t t1 = 4;
+	time_t t2 = 4;
 
 	while (getline(file, str))
     {
     	istringstream iss(str);
     	iss >> time_str;
-    	iss >> get_time(&tm,"%H:%M:%S");
+    	iss >> tmp;
+    	time_str.append(" " + tmp);
     	iss >> b;
     	iss >> t;
-    	if(t1 == NULL){
-    		t1 = mktime(&tm);
-    	}
-    	if(difftime(t1,mktime(&tm))){
-    		cout << "TIME ENDED \n";
-    		break;
-    	}
-    	cout << time_str << "  " << b << "  " << t << "\n";
+    	if(count(b.begin(), b.end(), '.') > 2 &&  count(t.begin(), t.end(), '.') > 2){
+	    	if(t1 == 4){
+	    		cout << time_str << "  " << b << "  " << t << "\n";
+	    		t1 = timestamp_to_ctime(time_str.c_str());
+	    		cout << ctime(&t1) << "\n";
+	    	}else{
+	    		t2 = timestamp_to_ctime(time_str.c_str());
+	    		double diff = difftime(t2,t1);
+	    		if(diff >60){
+	    			cout << time_str << "  " << b << "  " << t << "\n";
+	    			cout << "TIME ENDED \n";
+	    			cout << ctime(&t2) << "\n";
+	    			break;
+	    		}
+	    	}
+	    }
 	}
 	return 0;
 }
@@ -545,6 +555,8 @@ int main(int argc, char* argv[]){
 	
 
 	nbChannels.push_back(3);
+
+
 
 
 
