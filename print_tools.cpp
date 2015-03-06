@@ -4,18 +4,20 @@
 #include <fstream>
 #include <set>
 #include <map>
+#include <vector>
 #include <time.h>
-#include "node.h"
+
+#include "graph.h"
+
 using namespace std;
 
 
-time_t timestamp_to_ctime(const char* time_stamp )
-{
+time_t timestamp_to_ctime(const char* time_stamp ){
    time_t _return;
    struct tm tm_struct ; 
    strptime(time_stamp ,"%Y-%m-%d %H:%M:%S",&tm_struct);
-   _return  = mktime(&tm_struct);   return
-   _return;
+   _return  = mktime(&tm_struct);   
+   return _return;
 }
 
 void stat_each_node(vector<Node*> data,string name){
@@ -96,8 +98,65 @@ void graph_cc(map<float,int> data,int size,string name){
 }
 
 
+void stat_to_file(Graph *g,int nb_top){
+	ofstream myfile;
+	myfile.open ("global_test.txt");
+	myfile.precision(6);
+	myfile << "Number of tops : " << g->tops.size() << "\n";
+	myfile << "Number of bots : " << g->bots.size() << "\n";
+	myfile << "Number of edges : " << fixed << g->links << "\n";
+	myfile << "Density : " << fixed << g->density << "\n";
+	myfile << "average_degree_top_v :" << g->average_degree_top_v << "\n";
+	myfile << "Max degree (top) : " << g->max_top << " (" << nb_top << ")\n";
+	myfile << "Clustering coefficient cc_top : " << g->cc << "\n";
+	myfile << "Clustering coefficient cc_min_top : " << g->cc_min << "\n";
+	myfile << "Clustering coefficient cc_max_top : " << g->cc_max << "\n";
+	myfile << "Redundancy coefficient (top) : " << g->red << "\n";
+	myfile << "Dispersion coefficient (top) : " << g->disp << "\n";
+	myfile.close();
+}
+
+void stat_to_stdout(Graph *g){
+	cout << "Number of tops : " << g->tops.size() << "\n";
+	cout << "Number of bots : " << g->bots.size() << "\n";
+	cout << "Number of edges : " << g->links << "\n";
+	cout << "Density : " << fixed << g->density << "\n";
+}
 
 
+void create_graph_int(vector<int> v,string name){
+	ofstream myfile;
+	myfile.open (name);
+	for(int i = 0 ; i < v.size() ; i++){
+		myfile << i << " " << v[i] << "\n";
+	}
+	myfile.close();
+}
+
+void create_graph_float(vector<float> v,string name){
+	ofstream myfile;
+	myfile.open (name);
+	for(int i = 0 ; i < v.size() ; i++){
+		myfile << i << " " << v[i] << "\n";
+	}
+	myfile.close();
+}
+
+
+// NEEDS TO BE MOVED TO BE FIXED
+// void graph_degree_cc(){
+// 	ofstream myfile;
+// 	myfile.open("graph_degree_cc.dat");
+// 	map<int,float>::iterator it;
+// 	for(it = degree_cc_top.begin(); it != degree_cc_top.end() ; it++){
+// 		int deg = it->first;
+// 		float v = it->second;
+// 		v = v / (float)degrees_top[deg];
+// 		myfile << deg << " ";
+// 		myfile << v << "\n";
+// 	}
+// 	myfile.close();
+// }
 
 
 

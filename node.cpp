@@ -16,38 +16,21 @@ Node::Node(string name){
 
  
 
-void Node::addneighbours(Node* son){
+bool Node::addneighbours(Node* son){
  unordered_map<int,Node*>::const_iterator it = neighbours.find(son->get_index());
   if(it == neighbours.end()){
     neighbours[son->get_index()]=son; 
     neighbours_indexs.insert(son->get_index());
     degree++; 
+    return true;
   }else{
+    return false;
   }
 }
 
 
 
 void Node::calculate_redundancy(){
-  // double nb = 0;
-  // set<int>::iterator it;
-  // for(it = neighbours_indexs.begin() ; it != neighbours_indexs.end() ; it++){
-  //   Node * n_son = neighbours[*it];
-  //   set<int>::iterator it2;
-  //   for(it2 = it ; it2 != neighbours_indexs.end() ; it2++){
-  //     if(it != it2){
-  //       vector<int> tmp;
-  //       Node * n_son_2 = neighbours[*it2];
-  //       std::set_intersection(n_son->neighbours_indexs.begin(), n_son->neighbours_indexs.end(),
-  //                         n_son_2->neighbours_indexs.begin(), n_son_2->neighbours_indexs.end(),
-  //                         std::back_inserter(tmp));
-  //       if(tmp.size() > 1){
-  //         nb++;
-  //       }
-  //     }
-  //   }
-  // }
-  // cout << pairs.size() << "   " << nb << "  \n";
   double nb = (double) pairs.size();
   double bot = (degree*(degree-1))/2;
   if(bot != 0 ){
@@ -144,4 +127,6 @@ float Node::get_disp(){
   return disp;
 }
 
-      
+// float Node::get_red_norm(){
+//   return red_norm;
+// }

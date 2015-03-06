@@ -14,10 +14,10 @@ public:
 	void free_data();
 
 	// data
-	unordered_map<string,int> topsIndex;
-	unordered_map<string,int> botsIndex;
-	vector<Node*> tops;
-	vector<Node*> bots;
+	std::unordered_map<std::string,int> topsIndex;
+	std::unordered_map<std::string,int> botsIndex;
+	std::vector<Node*> tops;
+	std::vector<Node*> bots;
 
 	// variables for stat
 	float average_degree_top_v;

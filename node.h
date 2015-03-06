@@ -9,7 +9,7 @@
 #include <unordered_map>
 
 
-using namespace std;
+
 
 
 class Node
@@ -23,8 +23,8 @@ public:
   	}
 
 
-	Node(string name);
-	void addneighbours(Node* son);
+	Node(std::string name);
+	bool addneighbours(Node* son);
 	double get_degree();
 	void add_cc(float new_cc);
 	void add_cc_min(float new_cc);
@@ -34,6 +34,7 @@ public:
 	float get_cc_max ();
 	void set_red(float r);
 	float get_red();
+	// float get_red_norm();
 	void calculate_disp();
 	void set_cc(float cc_new);
 	void set_cc_min(float cc_new);
@@ -43,15 +44,12 @@ public:
 	float get_disp();
 	void set_index(int i);
 	int get_index();
-	string get_title();
+	std::string get_title();
 
 	int nb_top_neighbours;
-	// vector <Node*> neighbours;
-	set <int>   neighbours_indexs ;
-
-
-	unordered_map<int,Node*> neighbours;
-	set< pair<int,int> > pairs;
+	std::set <int>   neighbours_indexs ;
+	std::unordered_map<int,Node*> neighbours;
+	std::set<std::pair<int,int> > pairs;
 
 
 	private:
@@ -62,7 +60,7 @@ public:
 		double red;
 		float disp;
 		int index;
-		string title;
+		std::string title;
 		
 };
 

@@ -30,7 +30,9 @@
 # My own files
 .DS_Store
 *.txt
+*.stat
 data/
 *.dat
 output
 *.png
+outtest

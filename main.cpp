@@ -48,8 +48,28 @@ float density;
 float disp;
 
 
-// Functions used in calculation
+void init_variables(){
+	density = 0;
+	max_top = 0;
+	max_bot = 0;
+	cc=0;
+	cc_min =0;
+	cc_max = 0;
+	red = 0;
+	links = 0;
+}
 
+
+//free data
+
+void free_data(){
+	for(int i = 0 ; i < tops.size() ; i++){
+		delete tops[i];
+	}
+	for(int i = 0 ; i < bots.size() ; i++){
+		delete bots[i];
+	}
+}
 
 //FUNCTIONS TO UPDATE DEGREE BOT AND TOP
 
@@ -199,37 +219,6 @@ void calculate_cc(Node* n1,Node* n2){
 }
 
 
-void calculate_cc_total_bot(){
-	for(int i = 0 ; i < bots.size() ; i++){
-		Node *n = bots[i];
-		vector<int> treated;
-		for(int j = 0 ; j < n->get_degree() ; j++){
-			Node *bo = n->neighbours[j];
-			for(int z = 0 ; z < bo->get_degree() ; z++){
-				Node *tmp = bo->neighbours[z];
-				int index_x = topsIndex.find(tmp->get_title())->second;
-				if(i < index_x && find(treated.begin(), treated.end(), index_x)==treated.end() && n!= tmp){
-					calculate_cc(n,tmp);
-					treated.push_back(index_x);
-				}
-			}
-		}
-		if(n->nb_top_neighbours > 0){
-			n->set_cc(n->get_cc()/n->nb_top_neighbours);			
-			cc += n->get_cc();
-			cc_min+= (n->get_cc_min()/n->nb_top_neighbours);
-			cc_max+= (n->get_cc_max()/n->nb_top_neighbours);
-		}
-		n->calculate_disp();
-		n->calculate_redundancy();
-		update_degree_bot(n);
-		update_redundancy_bot(n);
-		update_ccs_bot(n);
-		// update_degree_cc(n); NEEDS TO BE DONE
-	}
-}
-
-
 void calculate_cc_total_top(){
 	for(int i = 0 ; i < tops.size() ; i++){
 		Node *n = tops[i];
@@ -314,6 +303,23 @@ float file2data(string name){
     return links;
 }
 
+void get_stat(string name){
+	init_variables();
+	links = file2data(name);
+	cout << "Number of tops : " << tops.size() << "\n";
+	cout << "Number of bots : " << bots.size() << "\n";
+	cout << "Number of edges : " << links << "\n";
+	density = links / (float)(tops.size()*bots.size());
+	cout << "Density : " << fixed << density << "\n";
+	cout << "Calculation " << "\n";
+	calculate_cc_total_top();
+	average_top();
+	average_max_degree_bot();	
+	cc = cc/tops.size();
+	cc_min = cc_min/tops.size();
+    cc_max = cc_max/tops.size();
+}
+
 
 //functions for treating pcap files.
 
@@ -389,8 +395,7 @@ float file2dataPCAP(string name,vector<string> channels){
     return links;
 }
 
-float file2dataPCAP_10Mins(string name,vector<string> channels){
-	ifstream file(name.c_str());
+float file2dataPCAP_interval(ifstream * file,vector<string> channels,int interval){
 	string str; 
 	string t;
 	string b;
@@ -401,7 +406,7 @@ float file2dataPCAP_10Mins(string name,vector<string> channels){
 	time_t t1 = 4;
 	time_t t2 = 4;
 
-	while (getline(file, str))
+	while (getline(*file, str))
     {
     	istringstream iss(str);
     	iss >> time_str;
@@ -411,35 +416,43 @@ float file2dataPCAP_10Mins(string name,vector<string> channels){
     	iss >> t;
     	if(count(b.begin(), b.end(), '.') > 2 &&  count(t.begin(), t.end(), '.') > 2){
 	    	if(t1 == 4){
-	    		cout << time_str << "  " << b << "  " << t << "\n";
 	    		t1 = timestamp_to_ctime(time_str.c_str());
-	    		cout << ctime(&t1) << "\n";
-	    	}else{
+	    		// cout << ctime(&t1) << "\n";
+	    	}else{    		
 	    		t2 = timestamp_to_ctime(time_str.c_str());
 	    		double diff = difftime(t2,t1);
-	    		if(diff >60){
-	    			cout << time_str << "  " << b << "  " << t << "\n";
-	    			cout << "TIME ENDED \n";
-	    			cout << ctime(&t2) << "\n";
+	    		if(diff > interval){
 	    			break;
 	    		}
 	    	}
+	    	size_t n = count(b.begin(), b.end(), '.');
+	    	if(n==4){
+	    		unsigned found = b.find_last_of(".");
+		    	b = b.substr(0,found);
+	    	}
+		    if(find(channels.begin(), channels.end(), b)!=channels.end()){
+		    		addlink(b,t);
+		    		continue;
+		    		links++;
+		    }
+			n = std::count(b.begin(), b.end(), '.');
+			if(n==4){
+				unsigned found = t.find_last_of(".");
+		    	t = t.substr(0,found);
+			}
+		    if(find(channels.begin(), channels.end(), t)!=channels.end()){
+		   			addlink(t,b);
+		    		links++;
+		    		continue;
+		    }
 	    }
 	}
-	return 0;
+	return links;
 }
 
-// functions to generate stat files and graphs
 
-void get_stat_pcap(vector<string> names,vector<int> nbChannels){
-	max_top = 0;
-	max_bot = 0;
-	cc=0;
-	cc_min =0;
-	cc_max = 0;
-	red = 0;
-	links = 0;
-
+void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
+	init_variables();
 	map<string,int> list;
 	cout << names.size() << "\n";
 	for(int i = 0 ; i < names.size() ; i++){
@@ -449,36 +462,12 @@ void get_stat_pcap(vector<string> names,vector<int> nbChannels){
 		for(int j = 0 ; j < v.size() ; j++){
 			cout << v[j] << "\n";
 		}
-		links = links + file2dataPCAP_10Mins(names[i],v);
+		links = links + file2dataPCAP(names[i],v);
 		cout << "Number of links found till now : " << links << "\n";
 	}
-	// cout << "Number of tops : " << tops.size() << "\n";
-	// cout << "Number of bots : " << bots.size() << "\n";
-	// cout << fixed << "Number of edges : " << links << "\n";
-	// density = links / (float)(tops.size()*bots.size());
-	// cout << "Density : " << fixed << density << "\n";
-	// cout << "Calculation " << "\n";
-	// calculate_cc_total_top();
-	// average_top();
-	// average_max_degree_bot();	
-	// cc = cc/tops.size();
-	// cc_min = cc_min/tops.size();
- //    cc_max = cc_max/tops.size();
-	
-}
-
-void get_stat(string name){
-	max_top = 0;
-	max_bot = 0;
-	cc=0;
-	cc_min =0;
-	cc_max = 0;
-	red = 0;
-
-	links = file2data(name);
 	cout << "Number of tops : " << tops.size() << "\n";
 	cout << "Number of bots : " << bots.size() << "\n";
-	cout << "Number of edges : " << links << "\n";
+	cout << fixed << "Number of edges : " << links << "\n";
 	density = links / (float)(tops.size()*bots.size());
 	cout << "Density : " << fixed << density << "\n";
 	cout << "Calculation " << "\n";
@@ -488,6 +477,90 @@ void get_stat(string name){
 	cc = cc/tops.size();
 	cc_min = cc_min/tops.size();
     cc_max = cc_max/tops.size();
+}
+
+void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels){
+	vector<string> channels;
+	map<string,int> list;
+	vector<float> ccs;
+	vector<float> degreesss;
+	vector<int> botsss;
+
+	for(int i = 0 ; i < names.size() ; i++){
+		vector<string> tmp = get_channels(names[i],nbChannels[i],list);
+		channels.insert(channels.end(), tmp.begin(), tmp.end());
+	}
+	
+	// cout << "Number of channels found : " << channels.size() << "\n";
+
+
+	//opening all the files.
+	vector<ifstream*> files;
+	for(int i = 0 ; i < names.size() ; i++){
+		ifstream * file = new ifstream(names[i].c_str());
+		files.push_back(file);
+	}
+	//going through each file for 60 seconds.
+	bool keep = true;
+
+	while(keep){
+		init_variables();
+		cout << "SIZE OF BOTS : " << bots.size() << "\n";
+		for(int i = 0 ; i < files.size() ; i++){
+			links = links + file2dataPCAP_interval(files[i],channels,600*2);
+			if(files[i]->eof() != 0){
+				keep = false;
+				break;
+			}
+		}
+		// cout << "END OF FILE : " << files[0]->eof() << "  \n";
+		// cout << "Number of links found till now : " << links << "\n";
+		// cout << "Number of tops : " << tops.size() << "\n";
+		// cout << "Number of bots : " << bots.size() << "\n";
+		// cout << fixed << "Number of edges : " << links << "\n";
+		density = links / (float)(tops.size()*bots.size());
+		// cout << "Density : " << fixed << density << "\n";
+		// cout << "Calculation " << "\n";
+		
+		calculate_cc_total_top();
+		average_top();
+		average_max_degree_bot();	
+		cc = cc/tops.size();
+		
+		cout << cc << "\n";
+		cout << density << "\n";
+		cout << bots.size() <<"\n\n";
+
+		ccs.push_back(cc);
+		degreesss.push_back(density);
+		botsss.push_back(bots.size());
+
+		cc_min = cc_min/tops.size();
+	    cc_max = cc_max/tops.size();
+	    tops.clear();
+		bots.clear();
+	    topsIndex.clear();
+	    botsIndex.clear();
+	}
+
+	ofstream myfile;
+	myfile.open ("20_min_ccs.dat");
+	for(int i = 0 ; i < ccs.size() ; i++){
+		myfile << i << " " << ccs[i] << "\n";
+	}
+	myfile.close();
+
+	myfile.open ("20_min_density.dat");
+	for(int i = 0 ; i < degreesss.size() ; i++){
+		myfile << i << " " << degreesss[i] << "\n";
+	}
+	myfile.close();
+
+	myfile.open ("20_min_bots.dat");
+	for(int i = 0 ; i < botsss.size() ; i++){
+		myfile << i << " " << botsss[i] << "\n";
+	}
+	myfile.close();
 }
 
 
@@ -513,33 +586,6 @@ void stat_to_file(){
 }
 
 
-// NEEDS TO BE MOVED
-void graph_degree_cc(){
-	ofstream myfile;
-	myfile.open("graph_degree_cc.dat");
-	map<int,float>::iterator it;
-	for(it = degree_cc_top.begin(); it != degree_cc_top.end() ; it++){
-		int deg = it->first;
-		float v = it->second;
-		v = v / (float)degrees_top[deg];
-		myfile << deg << " ";
-		myfile << v << "\n";
-	}
-	myfile.close();
-}
-
-
-//free data
-
-void free_data(){
-	for(int i = 0 ; i < tops.size() ; i++){
-		delete tops[i];
-	}
-	for(int i = 0 ; i < bots.size() ; i++){
-		delete bots[i];
-	}
-}
-
 int main(int argc, char* argv[]){
 	if(argc > 1 ){
 		cout << argv[1] << "\n";
@@ -549,25 +595,20 @@ int main(int argc, char* argv[]){
    	 	free_data();
    	 	return 0;
 	}else{
-	vector<int> nbChannels;
-	vector<string> list;
-	list.push_back("../Data/Japon2013/SIT-exp131219/PC_A/PC_A.txt");
-	
-
-	nbChannels.push_back(3);
-
-
-
-
-
-	get_stat_pcap(list,nbChannels);
-	stat_to_file();
-	stat_each_node(tops,"detail.txt");
-	graph_degree(degrees_top,max_top,tops.size(),"graph_degree_top.dat");
-	graph_degree(degrees_bot,max_bot,bots.size(),"graph_degree_bot.dat");
-	system("top -l 1 -o mem  > top-output.txt");
-	free_data();
-
-	return 0;
+		vector<int> nbChannels;
+		vector<string> list;
+		list.push_back("../Data/Japon2013/SIT-exp131219/PC_A/PC_A.txt");
+		list.push_back("../Data/Japon2013/SIT-exp131219/PC_B/PC_B.txt");
+		nbChannels.push_back(3);
+		nbChannels.push_back(1);
+		// get_stat_pcap_batch(list,nbChannels);
+		// stat_to_file();
+		get_stat_pcap_interval(list,nbChannels);
+		stat_each_node(tops,"detail.txt");
+		graph_degree(degrees_top,max_top,tops.size(),"graph_degree_top.dat");
+		graph_degree(degrees_bot,max_bot,bots.size(),"graph_degree_bot.dat");
+		system("top -l 1 -o mem  > top-output.txt");
+		free_data();
+		return 0;
 	}
 }

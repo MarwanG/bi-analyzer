@@ -15,6 +15,8 @@
 #include "print_tools.h"
 #include "graph.h"
 
+using namespace std;
+
 
 int limit = 50;
 // STATS MIGHT BE GOOD IDEA TO PASS THEM NOT SO SURE YET.
@@ -393,7 +395,7 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	vector<int> nb_bot_graph;
 
 	// get all channels
-	cout << "get  the channels \n";
+	
 	for(int i = 0 ; i < names.size() ; i++){
 		cout << i << "\n";
 		vector<string> tmp = get_channels(names[i],nbChannels[i],list);
@@ -401,7 +403,7 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	}
 
 	//opening all the files.
-	cout << "opening the files \n";
+
 	vector<ifstream*> files;
 	for(int i = 0 ; i < names.size() ; i++){
 		ifstream * file = new ifstream(names[i].c_str());
@@ -436,17 +438,18 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 
 
 int main(int argc, char* argv[]){
-	// if(argc > 1){
-	// 	cout << argv[1] << "\n";
-	// 	get_stat(argv[1]);
-	// }
-	vector<int> nbChannels;
-	vector<string> list;
+	if(argc > 1){
+		cout << argv[1] << "\n";
+		get_stat(argv[1]);
+	}else{
+		vector<int> nbChannels;
+		vector<string> list;
 
-	list.push_back("../Data/Japon2013/SIT-exp131219/PC_A/PC_A.txt");
-	list.push_back("../Data/Japon2013/SIT-exp131219/PC_B/PC_B.txt");		
-	nbChannels.push_back(3);
-	nbChannels.push_back(1);
-	// get_stat_pcap_batch(list,nbChannels);
-	get_stat_pcap_interval(list,nbChannels,600);
+		list.push_back("../Data/Japon2013/SIT-exp131219/PC_A/PC_A.txt");
+		list.push_back("../Data/Japon2013/SIT-exp131219/PC_B/PC_B.txt");		
+		nbChannels.push_back(3);
+		nbChannels.push_back(1);
+		// get_stat_pcap_batch(list,nbChannels);
+		get_stat_pcap_interval(list,nbChannels,600);
+	}
 }
