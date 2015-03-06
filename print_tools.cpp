@@ -12,6 +12,31 @@
 using namespace std;
 
 
+void split(const string& s, char c,
+           vector<string>& v) {
+   string::size_type i = 0;
+   string::size_type j = s.find(c);
+
+   while (j != string::npos) {
+      v.push_back(s.substr(i, j-i));
+      i = ++j;
+      j = s.find(c, j);
+
+      if (j == string::npos)
+         v.push_back(s.substr(i, s.length()));
+   }
+}
+
+bool my_own_regex(string s){
+	vector<string> v;
+	split(s,'.',v);
+	if(v.size() > 2){
+		if((v[0].compare("192") == 0) && (v[1].compare("168")==0))
+			return true;
+	}
+	return false;
+}
+
 time_t timestamp_to_ctime(const char* time_stamp ){
    time_t _return;
    struct tm tm_struct ; 

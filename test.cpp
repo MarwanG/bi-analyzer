@@ -247,6 +247,7 @@ void get_stat(string name){
  	stat_to_file(g,degrees_top[g->max_top]);
 }
 
+
 // GETTING LIST OF CHANNELS FROM FILE.
 vector<string> get_channels(string name,int nbChannels,map<string,int> list){
 	ifstream file(name.c_str());
@@ -260,7 +261,7 @@ vector<string> get_channels(string name,int nbChannels,map<string,int> list){
     	iss >> time_str;
     	iss >> time_str;
     	iss >> b;  
-    	if (regex_match (b, regex("(192.168)(.*)")) && (find(tmp.begin(), tmp.end(), b)==tmp.end())){
+    	if (my_own_regex(b) && (find(tmp.begin(), tmp.end(), b)==tmp.end())){
     		size_t n = std::count(b.begin(), b.end(), '.');
     		if(n == 3){
     			map<string,int>::iterator it = list.find(b);
@@ -430,9 +431,9 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 		g->free_data();
 		delete(g);
 	}
-	create_graph_float(cc_graph,"cc_interval_"+to_string(interval)+".stat");
-	create_graph_float(degree_graph,"degree_interval_"+to_string(interval)+".stat");
-	create_graph_int(nb_bot_graph,"nb_bot_interval_"+to_string(interval)+".stat");
+	create_graph_float(cc_graph,"cc_interval_.stat");
+	create_graph_float(degree_graph,"density_interval_.stat");
+	create_graph_int(nb_bot_graph,"nb_bot_interval_.stat");
 
 }
 
@@ -449,7 +450,7 @@ int main(int argc, char* argv[]){
 		list.push_back("../Data/Japon2013/SIT-exp131219/PC_B/PC_B.txt");		
 		nbChannels.push_back(3);
 		nbChannels.push_back(1);
-		// get_stat_pcap_batch(list,nbChannels);
-		get_stat_pcap_interval(list,nbChannels,600);
+		get_stat_pcap_batch(list,nbChannels);
+		// get_stat_pcap_interval(list,nbChannels,600);
 	}
 }
