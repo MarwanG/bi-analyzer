@@ -245,6 +245,8 @@ void get_stat(string name){
 	calculate_stat_graph(g);
 	stat_to_stdout(g);
  	stat_to_file(g,degrees_top[g->max_top]);
+ 	g->free_data();
+ 	delete(g);
 }
 
 
@@ -446,11 +448,19 @@ int main(int argc, char* argv[]){
 		vector<int> nbChannels;
 		vector<string> list;
 
-		list.push_back("../Data/Japon2013/SIT-exp131219/PC_A/PC_A.txt");
-		list.push_back("../Data/Japon2013/SIT-exp131219/PC_B/PC_B.txt");		
+		list.push_back("/data2/ghanem/PC_A_edit.txt");
+		list.push_back("/data2/ghanem/PC_B_edit.txt");
+		list.push_back("/data2/ghanem/PC_C_edit.txt");		
+		list.push_back("/data2/ghanem/PC_D_edit.txt");
+		list.push_back("/data2/ghanem/PC_E_edit.txt");
+		
+
 		nbChannels.push_back(3);
 		nbChannels.push_back(1);
-		get_stat_pcap_batch(list,nbChannels);
-		// get_stat_pcap_interval(list,nbChannels,600);
+		nbChannels.push_back(3);
+		nbChannels.push_back(1);
+		nbChannels.push_back(1);
+		
+		get_stat_pcap_interval(list,nbChannels,600);
 	}
 }
