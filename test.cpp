@@ -488,11 +488,23 @@ int main(int argc, char* argv[]){
 	// Parser p = Parser(argv[1]);
 
 	// cout << "MODE :: " << p.mode << "\n";
-	// cout << "file_type :: " << p.file_type << "\n";
-	// cout << "period :: " << p.period << "\n";
-
+	// cout << "File_type :: " << p.file_type << "\n";
+	// cout << "Period :: " << p.period << "\n";
+	// cout << "Files  :: \n"
 	// for(int i = 0 ; i < p.files.size() ; i++){
-	// 	cout << p.files[i] <<"  "<< p.nbChannels[i] << "\n";
+	// 	cout << p.files[i] << "\n";
 	// }
+
+	// if(p.file_type.compare("simple")){
+	// 	get_stat(files[0]);
+	// }else{
+	// 	if(p.mode == 1){
+	// 		// interval
+	// 		get_stat_pcap_interval(p.files,p.nbChannels,p.period);
+	// 	}else{
+	// 		get_stat_pcap_batch(p.files,p.nbChannels);
+	// 	}
+	// }
+
 
 }
