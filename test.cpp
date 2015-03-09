@@ -14,6 +14,7 @@
 #include "node.h"
 #include "print_tools.h"
 #include "graph.h"
+#include "parser.h"
 
 using namespace std;
 
@@ -343,7 +344,7 @@ void file2dataPCAP_interval(ifstream * file,vector<string> channels,int interval
     	if(count(b.begin(), b.end(), '.') > 2 &&  count(t.begin(), t.end(), '.') > 2){
 	    	if(t1 == 4){
 	    		t1 = timestamp_to_ctime(time_str.c_str());
-	    		g->set_time(time_str);
+	    		g->set_time(tmp);
 	    		// cout << time_str << "\n";
 	    	}else{    		
 	    		t2 = timestamp_to_ctime(time_str.c_str());
@@ -447,8 +448,8 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	delete(g_highest);
 
 	create_graph_float(cc_graph,times,"cc_interval_"+current_time()+".stat");
-	create_graph_float(degree_graph,times,"density_interval"+current_time()+".stat");
-	create_graph_int(nb_bot_graph,times,"nb_bot_interval"+current_time()+".stat");
+	create_graph_float(degree_graph,times,"density_interval_"+current_time()+".stat");
+	create_graph_int(nb_bot_graph,times,"nb_bot_interval_"+current_time()+".stat");
 }
 
 
@@ -479,4 +480,14 @@ int main(int argc, char* argv[]){
 		
 		get_stat_pcap_interval(list,nbChannels,300);
 	}
+	// Parser p = Parser(argv[1]);
+
+	// cout << "MODE :: " << p.mode << "\n";
+	// cout << "file_type :: " << p.file_type << "\n";
+	// cout << "period :: " << p.period << "\n";
+
+	// for(int i = 0 ; i < p.files.size() ; i++){
+	// 	cout << p.files[i] <<"  "<< p.nbChannels[i] << "\n";
+	// }
+
 }
