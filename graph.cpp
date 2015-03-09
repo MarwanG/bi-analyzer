@@ -13,11 +13,10 @@ Graph::Graph(){
 	average_degree_top_v = 0;
 	max_top = 0;
 	links = 0;
-	time_  = NULL;
 }
 
 void Graph::set_time(string s){
-	if(time_ == NULL){
+	if(time_.empty()){
 		time_ = s;
 	}
 }
