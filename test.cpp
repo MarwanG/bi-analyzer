@@ -172,6 +172,7 @@ void calculate_stat_graph(Graph * g){
 
 // FUNCTION ADD CONNECTION
 void addlink(Graph *g,string t , string b){
+
 	unordered_map<string, int>::const_iterator p;
 	p = g->topsIndex.find(t);
 	Node *top;
@@ -196,6 +197,8 @@ void addlink(Graph *g,string t , string b){
 	}
 	bool bTop = top->addneighbours(bot);
  	bool bBot = bot->addneighbours(top);
+    top = NULL;
+    bot = NULL;
     delete top;
     delete bot;
     if(bTop && bBot){
@@ -387,6 +390,7 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 		channels.insert(channels.end(), tmp.begin(), tmp.end());
 	}
 
+
 	//opening all the files.
 
 	vector<ifstream*> files;
@@ -402,6 +406,7 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	float highest_density = 0.0;
 	Graph * g_lowest;
 	Graph * g_highest;
+
 
 	while(keep){
 		Graph * g = new Graph();
@@ -452,22 +457,22 @@ int main(int argc, char* argv[]){
 		vector<int> nbChannels;
 		vector<string> list;
 
-		// list.push_back("../Data/Japon2013/SIT-exp131219/PC_B/PC_B.txt");
+		list.push_back("../Data/Japon2013/SIT-exp131219/PC_B/PC_B.txt");
 		// list.push_back("../Data/Japon2013/SIT-exp131219/PC_E/PC_E.txt");
 
-		list.push_back("/data2/ghanem/PC_A_edit.txt");
-		list.push_back("/data2/ghanem/PC_B_edit.txt");
-		list.push_back("/data2/ghanem/PC_C_edit.txt");		
-		list.push_back("/data2/ghanem/PC_D_edit.txt");
-		list.push_back("/data2/ghanem/PC_E_edit.txt");
-		list.push_back("/data2/ghanem/PC_F.txt");
+		// list.push_back("/data2/ghanem/PC_A_edit.txt");
+		// list.push_back("/data2/ghanem/PC_B_edit.txt");
+		// list.push_back("/data2/ghanem/PC_C_edit.txt");		
+		// list.push_back("/data2/ghanem/PC_D_edit.txt");
+		// list.push_back("/data2/ghanem/PC_E_edit.txt");
+		// list.push_back("/data2/ghanem/PC_F.txt");
 
-		nbChannels.push_back(3);
+		// nbChannels.push_back(3);
 		nbChannels.push_back(1);
-		nbChannels.push_back(3);
-		nbChannels.push_back(1);
-		nbChannels.push_back(1);
-		nbChannels.push_back(3);
+		// nbChannels.push_back(3);
+		// nbChannels.push_back(1);
+		// nbChannels.push_back(1);
+		// nbChannels.push_back(3);
 		
 		get_stat_pcap_interval(list,nbChannels,300);
 	}
