@@ -382,6 +382,7 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	vector<float> cc_graph;
 	vector<float> degree_graph;
 	vector<int> nb_bot_graph;
+	vector<string> times;
 
 	// get all channels
 	
@@ -419,6 +420,7 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 		}
 		calculate_stat_graph(g);
 		stat_to_stdout(g);
+		times.push_back(g->time_);
 		cc_graph.push_back(g->cc);
 		degree_graph.push_back(g->density);
 		nb_bot_graph.push_back(g->bots.size());
@@ -443,9 +445,10 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	delete(g_lowest);
 	g_highest->free_data();
 	delete(g_highest);
-	create_graph_float(cc_graph,"cc_interval_.stat");
-	create_graph_float(degree_graph,"density_interval_.stat");
-	create_graph_int(nb_bot_graph,"nb_bot_interval_.stat");
+
+	create_graph_float(cc_graph,times,"cc_interval_"+current_time()+".stat");
+	create_graph_float(degree_graph,times,"density_interval"+current_time()+".stat");
+	create_graph_int(nb_bot_graph,times,"nb_bot_interval"+current_time()+".stat");
 }
 
 

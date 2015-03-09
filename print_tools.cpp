@@ -12,6 +12,20 @@
 using namespace std;
 
 
+
+string current_time(){
+	time_t rawtime;
+	struct tm * timeinfo;
+	char buffer[80];
+
+	time (&rawtime);
+	timeinfo = localtime(&rawtime);
+
+	strftime(buffer,80,"%d-%m-%Y %I:%M:%S",timeinfo);
+	string str(buffer);
+	return str;
+}
+
 void split(const string& s, char c,
            vector<string>& v) {
    string::size_type i = 0;
@@ -156,20 +170,20 @@ void stat_to_stdout(Graph *g){
 }
 
 
-void create_graph_int(vector<int> v,string name){
+void create_graph_int(vector<int> v,vector<string> s,string name){
 	ofstream myfile;
 	myfile.open (name);
 	for(int i = 0 ; i < v.size() ; i++){
-		myfile << i << " " << v[i] << "\n";
+		myfile << s[i] << " " << v[i] << "\n";
 	}
 	myfile.close();
 }
 
-void create_graph_float(vector<float> v,string name){
+void create_graph_float(vector<float> v,vector<string> s,string name){
 	ofstream myfile;
 	myfile.open (name);
 	for(int i = 0 ; i < v.size() ; i++){
-		myfile << i << " " << v[i] << "\n";
+		myfile << s[i] << " " << v[i] << "\n";
 	}
 	myfile.close();
 }
