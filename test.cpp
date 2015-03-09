@@ -447,6 +447,8 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	g_highest->free_data();
 	delete(g_highest);
 
+	string interval_string = to_string(interval);
+
 	create_graph_float(cc_graph,times,"cc_interval_"+current_time()+".stat");
 	create_graph_float(degree_graph,times,"density_interval_"+current_time()+".stat");
 	create_graph_int(nb_bot_graph,times,"nb_bot_interval_"+current_time()+".stat");
