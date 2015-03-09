@@ -39,3 +39,22 @@ void Graph::free_data(){
 		delete bots[i];
 	}
 }
+
+//FUNCTIONS TO UPDATE DEGREE BOT AND TOP
+void Graph::update_degree_top(Node * n){
+	map<int,int>::iterator it = degrees_top.find(n->get_degree());
+	if(it != degrees_top.end()){
+		degrees_top[n->get_degree()]=degrees_top[n->get_degree()] +1;
+	}else{
+		degrees_top[n->get_degree()]=1;
+	}
+}
+
+void Graph::update_degree_bot(Node * n){
+	map<int,int>::iterator it = degrees_bot.find(n->get_degree());
+	if(it != degrees_bot.end()){
+		degrees_bot[n->get_degree()]=degrees_bot[n->get_degree()] +1;
+	}else{
+		degrees_bot[n->get_degree()]=1;
+	}
+}

@@ -123,7 +123,8 @@ void graph_cc(map<float,int> data,int size,string name){
 }
 
 
-void stat_to_file(Graph *g,int nb_top){
+void stat_to_file(Graph *g){
+	int nb_top = g->degrees_top[g->max_top];
 	ofstream myfile;
 	myfile.open ("global_test.txt");
 	myfile.precision(6);
@@ -173,6 +174,29 @@ void create_graph_float(vector<float> v,string name){
 	myfile.close();
 }
 
+
+void stats_to_file_interval(std::vector<Graph*> list,std::string name){
+	ofstream myfile;
+	myfile.open(name);
+	for(int i = 0 ; i < list.size() ; i++){
+		myfile << "Graph : " << i << "\n";
+		myfile.precision(6);
+		if(!list[i]->time_.empty()){
+			myfile << "Start Time : " << list[i]->time_ << "\n";
+		}
+		myfile << "Number of tops : " << list[i]->tops.size() << "\n";
+		myfile << "Number of bots : " << list[i]->bots.size() << "\n";
+		myfile << "Number of edges : " << fixed << list[i]->links << "\n";
+		myfile << "Density : " << fixed << list[i]->density << "\n";
+		myfile << "average_degree_top_v :" << list[i]->average_degree_top_v << "\n";
+		myfile << "Max degree (top) : " << list[i]->max_top << "\n";
+		myfile << "Clustering coefficient cc_top : " << list[i]->cc << "\n";
+		myfile << "Clustering coefficient cc_min_top : " << list[i]->cc_min << "\n";
+		myfile << "Clustering coefficient cc_max_top : " << list[i]->cc_max << "\n";
+		myfile << "Redundancy coefficient (top) : " << list[i]->red << "\n";
+		myfile << "Dispersion coefficient (top) : " << list[i]->disp << "\n";
+	}
+}
 
 // NEEDS TO BE MOVED TO BE FIXED
 // void graph_degree_cc(){

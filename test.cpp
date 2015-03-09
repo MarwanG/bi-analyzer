@@ -20,8 +20,8 @@ using namespace std;
 
 int limit = 50;
 // STATS MIGHT BE GOOD IDEA TO PASS THEM NOT SO SURE YET.
-map<int,int> degrees_top;
-map<int,int> degrees_bot;
+
+
 map<float,int> redundancys_top;
 map<float,int> redundancys_bot;
 map<float,int> ccs_top;
@@ -30,26 +30,11 @@ map<int,float> degree_cc_top;
 map<int,float> degree_cc_bot; 
 
 
-//FUNCTIONS TO UPDATE DEGREE BOT AND TOP
-
-void update_degree_bot(Node * n){
-	map<int,int>::iterator it = degrees_bot.find(n->get_degree());
-	if(it != degrees_bot.end()){
-		degrees_bot[n->get_degree()]=degrees_bot[n->get_degree()] +1;
-	}else{
-		degrees_bot[n->get_degree()]=1;
-	}
-}
 
 
-void update_degree_top(Node * n){
-	map<int,int>::iterator it = degrees_top.find(n->get_degree());
-	if(it != degrees_top.end()){
-		degrees_top[n->get_degree()]=degrees_top[n->get_degree()] +1;
-	}else{
-		degrees_top[n->get_degree()]=1;
-	}
-}
+
+
+
 
 // FUNCTION TO UPDATE REDUNDANCY TOP AND BOT
 
@@ -164,7 +149,7 @@ void calculate_stat_graph(Graph * g){
 
 		n->calculate_disp();
 	 	n->calculate_redundancy();
-		update_degree_top(n);
+		g->update_degree_top(n);
 		update_redundancy_top(n);
 		update_ccs_top(n);
 		update_degree_cc(n);
@@ -211,8 +196,6 @@ void addlink(Graph *g,string t , string b){
 	}
 	bool bTop = top->addneighbours(bot);
  	bool bBot = bot->addneighbours(top);
-    top = NULL;
-    bot = NULL;
     delete top;
     delete bot;
     if(bTop && bBot){
@@ -244,7 +227,7 @@ void get_stat(string name){
 	file2data(name,g);
 	calculate_stat_graph(g);
 	stat_to_stdout(g);
- 	stat_to_file(g,degrees_top[g->max_top]);
+ 	stat_to_file(g);
  	g->free_data();
  	delete(g);
 }
@@ -331,7 +314,7 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 	}
 	stat_to_stdout(g);
 	calculate_stat_graph(g);
-	stat_to_file(g,degrees_top[g->max_top]);
+	stat_to_file(g);
 	g->free_data();
 	delete(g);
 }
@@ -415,9 +398,10 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	//going through each file for interval seconds.
 	bool keep = true;
 	int index = 0;
-	bool inc = true;
-	float prev_dens = 0.0;
-	float last_add = 0.0;
+	float lowest_density = 1.0;
+	float highest_density = 0.0;
+	Graph * g_lowest;
+	Graph * g_highest;
 
 	while(keep){
 		Graph * g = new Graph();
@@ -433,41 +417,30 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 		cc_graph.push_back(g->cc);
 		degree_graph.push_back(g->density);
 		nb_bot_graph.push_back(g->bots.size());
-	
-		if(prev_dens == 0.0){
-			prev_dens = g->density;
-			cout << "i am here at the start \n"; 
-			//add it to the file.
+		if(g->density > highest_density){
+			highest_density = g->density;
+			g_highest = g;
+			g = NULL;
+		}else if(g->density < lowest_density){
+			lowest_density = g->density;
+			g_lowest = g;
+			g = NULL;
 		}else{
-			if(inc){
-				if(prev_dens > g->density){
-					inc = false;
-					cout << "i flipped to decrease \n";
-					// add it to the file
-				}else{
-					cout << "i shall still go high \n";
-				}
-				prev_dens = g->density;
-			}else{
-				if(prev_dens < g->density){
-					inc = true;
-					cout << "i just started rising\n";
-					// add it to the file
-				}else{
-					cout << "i shall still go down \n";
-				}
-				prev_dens = g->density;
-			}
+			g->free_data();
+			delete(g);
 		}
-
-
-		g->free_data();
-		delete(g);
 	}
+	vector<Graph *> peaks;
+	peaks.push_back(g_lowest);
+	peaks.push_back(g_highest);
+	stats_to_file_interval(peaks,"peaks.stat");
+	g_lowest->free_data();
+	delete(g_lowest);
+	g_highest->free_data();
+	delete(g_highest);
 	create_graph_float(cc_graph,"cc_interval_.stat");
 	create_graph_float(degree_graph,"density_interval_.stat");
 	create_graph_int(nb_bot_graph,"nb_bot_interval_.stat");
-
 }
 
 

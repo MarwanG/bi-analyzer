@@ -13,12 +13,19 @@ public:
 	void final_calculation();
 	void free_data();
 	void set_time(std::string s);
+	void update_degree_bot(Node * n);
+	void update_degree_top(Node * n);
 
 	// data
 	std::unordered_map<std::string,int> topsIndex;
 	std::unordered_map<std::string,int> botsIndex;
 	std::vector<Node*> tops;
 	std::vector<Node*> bots;
+
+
+	// STATS MIGHT BE GOOD IDEA TO PASS THEM NOT SO SURE YET.
+	std::map<int,int> degrees_top;
+	std::map<int,int> degrees_bot;
 
 	// variables for stat
 	float average_degree_top_v;
