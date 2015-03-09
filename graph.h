@@ -12,6 +12,7 @@ public:
 
 	void final_calculation();
 	void free_data();
+	void set_time(std::string s);
 
 	// data
 	std::unordered_map<std::string,int> topsIndex;
@@ -37,6 +38,8 @@ public:
 	
 	float disp;
 	int nb_disp;
+
+	std::string time_;
 
 };
 

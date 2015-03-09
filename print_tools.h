@@ -18,6 +18,7 @@ void stat_to_file(Graph *g,int nb_top);
 void stat_to_stdout(Graph *g);
 void create_graph_float(std::vector<float> v,std::string name);
 void create_graph_int(std::vector<int> v,std::string name);
+void stat_to_file_interval(Graph g*,std::string name);
 
 
 #endif

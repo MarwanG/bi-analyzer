@@ -358,7 +358,8 @@ void file2dataPCAP_interval(ifstream * file,vector<string> channels,int interval
     	if(count(b.begin(), b.end(), '.') > 2 &&  count(t.begin(), t.end(), '.') > 2){
 	    	if(t1 == 4){
 	    		t1 = timestamp_to_ctime(time_str.c_str());
-	    		cout << time_str << "\n";
+	    		g->set_time(time_str);
+	    		// cout << time_str << "\n";
 	    	}else{    		
 	    		t2 = timestamp_to_ctime(time_str.c_str());
 	    		double diff = difftime(t2,t1);

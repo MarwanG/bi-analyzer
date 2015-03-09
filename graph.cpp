@@ -13,6 +13,13 @@ Graph::Graph(){
 	average_degree_top_v = 0;
 	max_top = 0;
 	links = 0;
+	time_  = NULL;
+}
+
+void Graph::set_time(string s){
+	if(time_ == NULL){
+		time_ = s;
+	}
 }
 
 void Graph::final_calculation(){

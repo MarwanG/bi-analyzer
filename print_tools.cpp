@@ -127,6 +127,9 @@ void stat_to_file(Graph *g,int nb_top){
 	ofstream myfile;
 	myfile.open ("global_test.txt");
 	myfile.precision(6);
+	if(g->time_ != NULL){
+		myfile << "Start Time : " << g->time_ << "\n";
+	}
 	myfile << "Number of tops : " << g->tops.size() << "\n";
 	myfile << "Number of bots : " << g->bots.size() << "\n";
 	myfile << "Number of edges : " << fixed << g->links << "\n";
