@@ -346,7 +346,6 @@ void file2dataPCAP_interval(ifstream * file,vector<string> channels,int interval
 	struct tm tm;
 	time_t t1 = 4;
 	time_t t2 = 4;
-
 	while (getline(*file, str))
     {
     	istringstream iss(str);
@@ -401,7 +400,6 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	// get all channels
 	
 	for(int i = 0 ; i < names.size() ; i++){
-		cout << i << "\n";
 		vector<string> tmp = get_channels(names[i],nbChannels[i],list);
 		channels.insert(channels.end(), tmp.begin(), tmp.end());
 	}
@@ -416,6 +414,10 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 
 	//going through each file for interval seconds.
 	bool keep = true;
+	int index = 0;
+	bool inc = true;
+	float prev_dens = 0.0;
+	float last_add = 0.0;
 
 	while(keep){
 		Graph * g = new Graph();
@@ -431,6 +433,34 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 		cc_graph.push_back(g->cc);
 		degree_graph.push_back(g->density);
 		nb_bot_graph.push_back(g->bots.size());
+	
+		if(prev_dens == 0.0){
+			prev_dens = g->density;
+			cout << "i am here at the start \n"; 
+			//add it to the file.
+		}else{
+			if(inc){
+				if(prev_dens > g->density){
+					inc = false;
+					cout << "i flipped to decrease \n";
+					// add it to the file
+				}else{
+					cout << "i shall still go high \n";
+				}
+				prev_dens = g->density;
+			}else{
+				if(prev_dens < g->density){
+					inc = true;
+					cout << "i just started rising\n";
+					// add it to the file
+				}else{
+					cout << "i shall still go down \n";
+				}
+				prev_dens = g->density;
+			}
+		}
+
+
 		g->free_data();
 		delete(g);
 	}
@@ -449,19 +479,23 @@ int main(int argc, char* argv[]){
 		vector<int> nbChannels;
 		vector<string> list;
 
+		// list.push_back("../Data/Japon2013/SIT-exp131219/PC_B/PC_B.txt");
+		// list.push_back("../Data/Japon2013/SIT-exp131219/PC_E/PC_E.txt");
+
 		list.push_back("/data2/ghanem/PC_A_edit.txt");
 		list.push_back("/data2/ghanem/PC_B_edit.txt");
 		list.push_back("/data2/ghanem/PC_C_edit.txt");		
 		list.push_back("/data2/ghanem/PC_D_edit.txt");
 		list.push_back("/data2/ghanem/PC_E_edit.txt");
-		
+		list.push_back("/data2/ghanem/PC_F.txt");
 
 		nbChannels.push_back(3);
 		nbChannels.push_back(1);
 		nbChannels.push_back(3);
 		nbChannels.push_back(1);
 		nbChannels.push_back(1);
+		nbChannels.push_back(3);
 		
-		get_stat_pcap_interval(list,nbChannels,600);
+		get_stat_pcap_interval(list,nbChannels,300);
 	}
 }

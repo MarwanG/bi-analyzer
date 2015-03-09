@@ -145,6 +145,9 @@ void stat_to_file(Graph *g,int nb_top){
 }
 
 void stat_to_stdout(Graph *g){
+	if(!g->time_.empty()){
+		cout << "Start Time : " << g->time_ << "\n";
+	}
 	cout << "Number of tops : " << g->tops.size() << "\n";
 	cout << "Number of bots : " << g->bots.size() << "\n";
 	cout << "Number of edges : " << g->links << "\n";
