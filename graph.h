@@ -31,6 +31,8 @@ public:
 	float average_degree_top_v;
 	float average_degree_bot_v;
 	int max_top;
+	
+	float min_degree_bot_v;
 
 	
 	float cc;

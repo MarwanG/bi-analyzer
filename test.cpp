@@ -173,7 +173,6 @@ void calculate_stat_graph(Graph * g){
 
 // FUNCTION ADD CONNECTION
 void addlink(Graph *g,string t , string b){
-
 	unordered_map<string, int>::const_iterator p;
 	p = g->topsIndex.find(t);
 	Node *top;
@@ -293,6 +292,12 @@ void file2data_PCAP_batch(string name,vector<string> channels,Graph * g){
 		if(n==4){
 			unsigned found = t.find_last_of(".");
 	    	t = t.substr(0,found);
+		}
+		if(my_own_regex(b)&&find(channels.begin(), channels.end(), b) == channels.end()){
+			continue;
+		}
+		if(my_own_regex(t)&&find(channels.begin(), channels.end(), t) == channels.end()){
+			continue;
 		}
 	    if(find(channels.begin(), channels.end(), b)!=channels.end()){
 	    		addlink(g,b,t);
@@ -470,20 +475,20 @@ int main(int argc, char* argv[]){
 		// list.push_back("../Data/Japon2013/SIT-exp131219/PC_E/PC_E.txt");
 
 		list.push_back("/data2/ghanem/PC_A_edit.txt");
-		list.push_back("/data2/ghanem/PC_B_edit.txt");
-		list.push_back("/data2/ghanem/PC_C_edit.txt");		
-		list.push_back("/data2/ghanem/PC_D_edit.txt");
-		list.push_back("/data2/ghanem/PC_E_edit.txt");
-		list.push_back("/data2/ghanem/PC_F.txt");
+		// list.push_back("/data2/ghanem/PC_B_edit.txt");
+		// list.push_back("/data2/ghanem/PC_C_edit.txt");		
+		// list.push_back("/data2/ghanem/PC_D_edit.txt");
+		// list.push_back("/data2/ghanem/PC_E_edit.txt");
+		// list.push_back("/data2/ghanem/PC_F.txt");
 
 		nbChannels.push_back(3);
-		nbChannels.push_back(1);
-		nbChannels.push_back(3);
-		nbChannels.push_back(1);
-		nbChannels.push_back(1);
-		nbChannels.push_back(3);
+		// nbChannels.push_back(1);
+		// nbChannels.push_back(3);
+		// nbChannels.push_back(1);
+		// nbChannels.push_back(1);
+		// nbChannels.push_back(3);
 		
-		get_stat_pcap_interval(list,nbChannels,300);
+		get_stat_pcap_batch(list,nbChannels);
 	}
 	// Parser p = Parser(argv[1]);
 
