@@ -249,6 +249,11 @@ vector<string> get_channels(string name,int nbChannels,map<string,int> list){
     	iss >> time_str;
     	iss >> time_str;
     	iss >> b;  
+    	size_t n = count(b.begin(), b.end(), '.');
+    	if(n==4){
+    		unsigned found = b.find_last_of(".");
+	    	b = b.substr(0,found);
+    	}
     	if (my_own_regex(b) && (find(tmp.begin(), tmp.end(), b)==tmp.end())){
     		size_t n = std::count(b.begin(), b.end(), '.');
     		if(n == 3){
@@ -283,6 +288,7 @@ void file2data_PCAP_batch(string name,vector<string> channels,Graph * g){
     	iss >> time_str;
     	iss >> b;
     	iss >> t;
+    	cout << b << "   " << t << "\n";
     	size_t n = count(b.begin(), b.end(), '.');
     	if(n==4){
     		unsigned found = b.find_last_of(".");
@@ -471,17 +477,17 @@ int main(int argc, char* argv[]){
 		vector<int> nbChannels;
 		vector<string> list;
 
-		// list.push_back("../Data/Japon2013/SIT-exp131219/PC_B/PC_B.txt");
+		list.push_back("../Data/Japon2013/SIT-exp131219/PC_B/PC_B.txt");
 		// list.push_back("../Data/Japon2013/SIT-exp131219/PC_E/PC_E.txt");
 
-		list.push_back("/data2/ghanem/PC_A_edit.txt");
+		// list.push_back("/data2/ghanem/PC_A_edit.txt");
 		// list.push_back("/data2/ghanem/PC_B_edit.txt");
 		// list.push_back("/data2/ghanem/PC_C_edit.txt");		
 		// list.push_back("/data2/ghanem/PC_D_edit.txt");
 		// list.push_back("/data2/ghanem/PC_E_edit.txt");
 		// list.push_back("/data2/ghanem/PC_F.txt");
 
-		nbChannels.push_back(3);
+		nbChannels.push_back(1);
 		// nbChannels.push_back(1);
 		// nbChannels.push_back(3);
 		// nbChannels.push_back(1);
