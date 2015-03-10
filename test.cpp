@@ -288,7 +288,7 @@ void file2data_PCAP_batch(string name,vector<string> channels,Graph * g){
     	iss >> time_str;
     	iss >> b;
     	iss >> t;
-    	cout << b << "   " << t << "\n";
+    	// cout << b << "   " << t << "\n";
     	size_t n = count(b.begin(), b.end(), '.');
     	if(n==4){
     		unsigned found = b.find_last_of(".");
@@ -323,7 +323,7 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 	map<string,int> list;
 	Graph * g = new Graph();
 	for(int i = 0 ; i < names.size() ; i++){
-		cout << names[i] << "   " << nbChannels[i] << "\n";
+		// cout << names[i] << "   " << nbChannels[i] << "\n";
 		vector<string> v =  get_channels(names[i],nbChannels[i],list);
 		file2data_PCAP_batch(names[i],v,g);
 	}
