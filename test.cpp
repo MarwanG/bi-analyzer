@@ -477,19 +477,19 @@ int main(int argc, char* argv[]){
 		vector<int> nbChannels;
 		vector<string> list;
 
-		list.push_back("../Data/Japon2013/SIT-exp131219/PC_B/PC_B.txt");
+		// list.push_back("../Data/Japon2013/SIT-exp131219/PC_B/PC_B.txt");
 		// list.push_back("../Data/Japon2013/SIT-exp131219/PC_E/PC_E.txt");
 
-		// list.push_back("/data2/ghanem/PC_A_edit.txt");
+		list.push_back("/data2/ghanem/PC_A_edit_no_degree_1.txt");
 		// list.push_back("/data2/ghanem/PC_B_edit.txt");
 		// list.push_back("/data2/ghanem/PC_C_edit.txt");		
 		// list.push_back("/data2/ghanem/PC_D_edit.txt");
 		// list.push_back("/data2/ghanem/PC_E_edit.txt");
 		// list.push_back("/data2/ghanem/PC_F.txt");
 
-		nbChannels.push_back(1);
 		// nbChannels.push_back(1);
-		// nbChannels.push_back(3);
+		// nbChannels.push_back(1);
+		nbChannels.push_back(3);
 		// nbChannels.push_back(1);
 		// nbChannels.push_back(1);
 		// nbChannels.push_back(3);
