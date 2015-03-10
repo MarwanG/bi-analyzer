@@ -32,7 +32,7 @@ void Graph::final_calculation(){
  	red = red / nb_red;
  	for(int i = 0 ; i < bots.size() ; i++){
  		update_degree_bot(bots[i]);
- 		if(min_degree_bot_v < bots[i]->get_degree()){
+ 		if(min_degree_bot_v > bots[i]->get_degree()){
  			min_degree_bot_v = bots[i]->get_degree();
  		}
  		average_degree_bot_v = average_degree_bot_v + bots[i]->get_degree();
