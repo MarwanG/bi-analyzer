@@ -16,7 +16,7 @@
 using namespace std;
 
 
-void read_write(map<string,int> list,string name,string new_name){
+void read_write(set<string> list,string name,string new_name){
 	ifstream file(name.c_str());
 	ofstream myfile(new_name);
 	string str,b,t,time_str;
@@ -38,17 +38,20 @@ void read_write(map<string,int> list,string name,string new_name){
             t = t.substr(0,found);
         }
         // cout << t << "  " << b << "\n";
-    	if(list[b] != 1 && list[t] != 1){
-    		myfile << str << "\n";
-    	}
-	}
+        // container.find(element) != container.end();
+        if(list.find(b) != list.end() || list.find(t) != list.end()){
+               
+        }else{
+             myfile << str << "\n";
+        }
+    }
     myfile.close();
     file.close();
 }
 
 // GETTING LIST OF CHANNELS FROM FILE.
-map<string,int> get_channels(string name){
-	map<string,int> list;
+map<string,set<string> > get_channels(string name){
+	map<string,set<string> > list;
 	ifstream file(name.c_str());
 	string str;
 	string b;
@@ -78,28 +81,26 @@ map<string,int> get_channels(string name){
 			unsigned found = t.find_last_of(".");
 	    	t = t.substr(0,found);
 		}
-    	// if (my_own_regex(b)){
-    		n = std::count(b.begin(), b.end(), '.');
-    		if(n == 3){
-    			map<string,int>::iterator it = list.find(b);
-    			if(it != list.end()){
-					list[b]=list[b] +1;
-				}else{
-					list[b]=1;
-				}
-    		}
-    	// }
-    	// if (my_own_regex(t)){
-    		n = std::count(t.begin(), t.end(), '.');
-    		if(n == 3){
-    			map<string,int>::iterator it = list.find(t);
-    			if(it != list.end()){
-					list[t]=list[t] +1;
-				}else{
-					list[t]=1;
-				}
-    		}
-    	// }	
+    	n = std::count(b.begin(), b.end(), '.');
+        size_t n_t = std::count(t.begin(), t.end(), '.');
+    	if(n == 3 && n_t == 3){
+    		map<string,set<string> >::iterator it = list.find(b);
+    		if(it != list.end()){
+					list[b].insert(t);
+		    }else{
+                    std::set<string> tmp;
+                    tmp.insert(t);
+					list[b]=tmp;
+			}
+            it = list.find(t);
+            if(it != list.end()){
+                    list[t].insert(b);
+            }else{
+                    set<string> tmp;
+                    tmp.insert(b);
+                    list.insert(make_pair(t, tmp));
+            }
+		}
     }
     return list;
 }
@@ -107,13 +108,30 @@ map<string,int> get_channels(string name){
 int main(int argc,char* argv[]){
 	if(argc > 1){
 		cout << argv[1] << "\n";
-		map<string,int> list = get_channels(argv[1]);
-        map<string,int>::iterator it;
+		map<string,set<string> > list = get_channels(argv[1]);
+        set<string> list_tmp;
+        map<string,set<string> >::iterator it;
         for(it = list.begin() ; it != list.end() ; it++){
-            if(it->second == 1){
-                cout << it->first << "  " << it->second << "\n";
+            if(it->second.size() == 1){
+                list_tmp.insert(it->first);
+            }else{
+                // list_tmp.insert(it->first);
+                // cout << it->first << "   " << it->second.size() << "\n";
             }
         }
-		read_write(list,argv[1],argv[2]);
+        // cout << "ici \n";
+        // std::set<string>::iterator it1;
+        // for (it1 = list_tmp.begin(); it1 != list_tmp.end(); ++it1)
+        // {
+        //    cout << *it1 << "  " << list[*it1].size() << "\n  ";
+        //    set<string>::iterator it2;
+        //    set<string> tmp = list[*it1];
+        //    for (it2 = tmp.begin(); it2 != tmp.end(); ++it2)
+        //   {
+        //     cout << " == " << *it2;
+        //   }
+        //   cout << "\n";
+        // }
+		read_write(list_tmp,argv[1],argv[2]);
 	}
 }

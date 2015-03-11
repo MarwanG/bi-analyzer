@@ -299,16 +299,19 @@ void file2data_PCAP_batch(string name,vector<string> channels,Graph * g){
 			unsigned found = t.find_last_of(".");
 	    	t = t.substr(0,found);
 		}
+		// if(b.compare("192.168.12.40") == 0){
+			// cout << b << "  " << t << "\n";
+		// }
 		if(my_own_regex(b)&&find(channels.begin(), channels.end(), b) == channels.end()){
 			continue;
 		}
 		if(my_own_regex(t)&&find(channels.begin(), channels.end(), t) == channels.end()){
 			continue;
 		}
-	    if(find(channels.begin(), channels.end(), b)!=channels.end()){
+	    if(find(channels.begin(), channels.end(), b)!=channels.end() && find(channels.begin(), channels.end(), t)==channels.end()){
 	    		addlink(g,b,t);
 	    }else{		
-		    if(find(channels.begin(), channels.end(), t)!=channels.end()){
+		    if(find(channels.begin(), channels.end(), t)!=channels.end() && find(channels.begin(), channels.end(), b)==channels.end()){
 		   			addlink(g,t,b);
 		    }
 		}
@@ -325,6 +328,10 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 	for(int i = 0 ; i < names.size() ; i++){
 		// cout << names[i] << "   " << nbChannels[i] << "\n";
 		vector<string> v =  get_channels(names[i],nbChannels[i],list);
+		for(int i = 0 ; i < v.size() ; i++){
+			cout << v[i] << "\n";
+		}
+		cout << " ==== \n"; 
 		file2data_PCAP_batch(names[i],v,g);
 	}
 	stat_to_stdout(g);
@@ -477,10 +484,10 @@ int main(int argc, char* argv[]){
 		vector<int> nbChannels;
 		vector<string> list;
 
-		// list.push_back("../Data/Japon2013/SIT-exp131219/PC_B/PC_B.txt");
+		list.push_back("../Data/Japon2013/SIT-exp131219/PC_A/PC_A_short_new.txt");
 		// list.push_back("../Data/Japon2013/SIT-exp131219/PC_E/PC_E.txt");
 
-		list.push_back("/data2/ghanem/PC_A_edit_no_degree_1.txt");
+		// list.push_back("/data2/ghanem/PC_A_edit_no_degree_1.txt");
 		// list.push_back("/data2/ghanem/PC_B_edit.txt");
 		// list.push_back("/data2/ghanem/PC_C_edit.txt");		
 		// list.push_back("/data2/ghanem/PC_D_edit.txt");
