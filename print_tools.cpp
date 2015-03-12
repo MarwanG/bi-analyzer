@@ -191,6 +191,15 @@ void create_graph_float(vector<float> v,vector<string> s,string name){
 }
 
 
+void create_graph_int_map(map<int,int degree_bot>,string name){
+	ofstream myfile;
+	map<int,int>::iterator it;
+    for(it=degrees_bot.begin();it!=degrees_bot.end();it++){
+        myfile << it->first << "  " << it->second << "\n";
+    }
+    myfile.close();
+}
+
 void stats_to_file_interval(std::vector<Graph*> list,std::string name){
 	ofstream myfile;
 	myfile.open(name);

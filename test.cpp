@@ -302,9 +302,6 @@ void file2data_PCAP_batch(string name,vector<string> channels,Graph * g){
 			unsigned found = t.find_last_of(".");
 	    	t = t.substr(0,found);
 		}
-		// if(b.compare("192.168.12.40") == 0){
-			// cout << b << "  " << t << "\n";
-		// }
 		if(my_own_regex(b)&&find(channels.begin(), channels.end(), b) == channels.end()){
 			continue;
 		}
@@ -329,12 +326,10 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 	map<string,int> list;
 	Graph * g = new Graph();
 	for(int i = 0 ; i < names.size() ; i++){
-		// cout << names[i] << "   " << nbChannels[i] << "\n";
 		vector<string> v =  get_channels(names[i],nbChannels[i],list);
 		for(int z = 0 ; z < v.size() ; z++){
 			cout << v[z] << "\n";
 		}
-//		cout << " ==== \n"; 
 		file2data_PCAP_batch(names[i],v,g);
 	}
 	for(int i = 0 ; i < g->tops.size() ; i++){
@@ -343,6 +338,7 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 	stat_to_stdout(g);
 	calculate_stat_graph(g);
 	stat_to_file(g);
+	create_graph_int_map(g->degree_bot,"dist_degree_bot.stat");
 	g->free_data();
 	delete(g);
 }
