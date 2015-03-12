@@ -40,9 +40,7 @@ void read_write(set<string> list,string name,string new_name){
         // cout << t << "  " << b << "\n";
         // container.find(element) != container.end();
         if(list.find(b) != list.end() || list.find(t) != list.end()){
-               
-        }else{
-             myfile << str << "\n";
+             myfile << str << "\n";   
         }
     }
     myfile.close();
@@ -106,41 +104,36 @@ void get_channels(string name,map<string,set<string> > *list){
 int main(int argc,char* argv[]){
 	// if(argc > 1){
 		// cout << argv[1] << "\n";
-//        string f1 = "/data2/ghanem/same_time/PC_E_edit.txt";
-  //      string f2 = "/data2/ghanem/same_time/PC_B_edit.txt";
-    //    string f3 = "/data2/ghanem/orginal/PC_F.txt";
-	//    string f4 = "/data2/ghanem/same_time/PC_C_edit.txt";
-	//    string f5 = "/data2/ghanem/same_time/PC_A_edit.txt";
+    string f1 = "/data2/ghanem/same_time/PC_E_edit.txt";
+    string f2 = "/data2/ghanem/same_time/PC_B_edit.txt";
+    string f3 = "/data2/ghanem/orginal/PC_F.txt";
+    string f4 = "/data2/ghanem/same_time/PC_C_edit.txt";
+    string f5 = "/data2/ghanem/same_time/PC_A_edit.txt";
 
 	map<string,set<string> > *list = new map<string,set<string> >;
-      /*
-      //  cout << f1 << "\n";
-      //  get_channels(f1,list);
-       // cout << f2 << "\n";
-      //  get_channels(f2,list);
-      //  cout << f3 << "\n";
-        get_channels(f3,list);
-        cout << f4 << "\n";
-        get_channels(f4,list);
-        cout << f5 << "\n";
-        get_channels(f5,list);
-        */
-      get_channels("/data2/ghanem/PC_A_new.txt",list);
-        set<string> list_tmp;
-        map<string,set<string> >::iterator it;
-        for(it = list->begin() ; it != list->end() ; it++){
-            if(it->second.size() == 1){
-                cout << it->first << "\n";
-                list_tmp.insert(it->first);
-            }else{
-           
-            }
+    
+    cout << f1 << "\n";
+    get_channels(f1,list);
+    cout << f2 << "\n";
+    get_channels(f2,list);
+    cout << f3 << "\n";
+    get_channels(f3,list);
+    cout << f4 << "\n";
+    get_channels(f4,list);
+    cout << f5 << "\n";
+    get_channels(f5,list);
+   
+    set<string> list_tmp;
+    map<string,set<string> >::iterator it;
+    ofstream myfile;
+    myfile.open(name);
+    for(it = list->begin() ; it != list->end() ; it++){
+        if(it->second.size() == 1){
+            cout << it->first << "\n";
+            myfile << it->first << "\n";
+            list_tmp.insert(it->first);
         }
-//	read_write(list_tmp,f1,"/data2/ghanem/PC_E_new.txt");
-//	read_write(list_tmp,f2,"/data2/ghanem/PC_B_new.txt");
-//	read_write(list_tmp,f3,"/data2/ghanem/PC_F_new.txt");
-//	read_write(list_tmp,f4,"/data2/ghanem/PC_C_new.txt");
-//	read_write(list_tmp,f5,"/data2/ghanem/PC_A_new.txt");
-		//read_write(list_tmp,argv[1],argv[2]);
-	}
+    }
+    myfile.close();
+}
 
