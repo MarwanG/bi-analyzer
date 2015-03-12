@@ -19,7 +19,7 @@
 using namespace std;
 
 
-int limit = 50;
+int limit = 70;
 // STATS MIGHT BE GOOD IDEA TO PASS THEM NOT SO SURE YET.
 
 
@@ -132,7 +132,10 @@ void calculate_stat_graph(Graph * g){
 			Node *bo = n->neighbours[*it];
 			set<int>::iterator it2;
 			for(it2 = bo->neighbours_indexs.begin() ; it2 != bo->neighbours_indexs.end() ; it2++){
-				Node *tmp = bo->neighbours[*it2];
+				if(bo->get_degree() == 1){
+                    cout << bo->neighbours[*it2]->get_title() << "\n";
+                }
+                Node *tmp = bo->neighbours[*it2];
 				int index_x = g->topsIndex.find(tmp->get_title())->second;
 				if(i < index_x && find(treated.begin(), treated.end(), index_x)==treated.end() && n!= tmp){
 					calculate_cc(n,tmp);
@@ -316,8 +319,8 @@ void file2data_PCAP_batch(string name,vector<string> channels,Graph * g){
 		    }
 		}
     }
-    cout << g->links  << " \n";
-    cout << (float)(g->tops.size()*g->bots.size()) << "\n";
+    cout << "nb of links : " << g->links  << " \n";
+    cout << "size*size   : " << (float)(g->tops.size()*g->bots.size()) << "\n";
     g->density = g->links / (float)(g->tops.size()*g->bots.size());
     file.close();
 }
@@ -328,12 +331,15 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 	for(int i = 0 ; i < names.size() ; i++){
 		// cout << names[i] << "   " << nbChannels[i] << "\n";
 		vector<string> v =  get_channels(names[i],nbChannels[i],list);
-		for(int i = 0 ; i < v.size() ; i++){
-			cout << v[i] << "\n";
+		for(int z = 0 ; z < v.size() ; z++){
+			cout << v[z] << "\n";
 		}
-		cout << " ==== \n"; 
+//		cout << " ==== \n"; 
 		file2data_PCAP_batch(names[i],v,g);
 	}
+	for(int i = 0 ; i < g->tops.size() ; i++){
+		cout << g->tops[i]->get_title() << "\n";
+	}	
 	stat_to_stdout(g);
 	calculate_stat_graph(g);
 	stat_to_file(g);
@@ -381,10 +387,10 @@ void file2dataPCAP_interval(ifstream * file,vector<string> channels,int interval
 				unsigned found = t.find_last_of(".");
 		    	t = t.substr(0,found);
 			}
-		    if(find(channels.begin(), channels.end(), b)!=channels.end()){
+		    if(find(channels.begin(), channels.end(), b)!=channels.end()  && find(channels.begin(), channels.end(), t)==channels.end()){
 		    		addlink(g,b,t);
 		    }else{		
-			    if(find(channels.begin(), channels.end(), t)!=channels.end()){
+			    if(find(channels.begin(), channels.end(), t)!=channels.end() && find(channels.begin(), channels.end(), b)==channels.end()){
 			   		addlink(g,t,b);
 			    }
 			}
@@ -410,7 +416,9 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 		channels.insert(channels.end(), tmp.begin(), tmp.end());
 	}
 
-
+    for(int i = 0 ; i < channels.size() ; i++){
+        cout << channels[i] << "\n";
+    }
 	//opening all the files.
 
 	vector<ifstream*> files;
@@ -484,23 +492,36 @@ int main(int argc, char* argv[]){
 		vector<int> nbChannels;
 		vector<string> list;
 
-		list.push_back("../Data/Japon2013/SIT-exp131219/PC_A/PC_A_short_new.txt");
+		//list.push_back("../Data/Japon2013/SIT-exp131219/PC_A/PC_A_short_new.txt");
 		// list.push_back("../Data/Japon2013/SIT-exp131219/PC_E/PC_E.txt");
+        
+           list.push_back("/data2/ghanem/tmp/PC_A_new.txt");
+           list.push_back("/data2/ghanem/tmp/PC_B_new.txt");
+           list.push_back("/data2/ghanem/tmp/PC_C_new.txt");
+           list.push_back("/data2/ghanem/tmp/PC_D_new.txt");
+           list.push_back("/data2/ghanem/tmp/PC_E_new.txt");
+       // list.push_back("/data2/ghanem/same_time/PC_A_edit.txt");
+  //   /   list.push_back("/data2/ghanem/same_time/PC_B_edit.txt");
+ //       list.push_back("/data2/ghanem/same_time/PC_C_edit.txt");
+//        list.push_back("/data2/ghanem/same_time/PC_D_edit.txt");
+  //      list.push_back("/data2/ghanem/same_time/PC_E_edit.txt");
+//        list.push_back("/data2/ghanem/same_time/PC_F.txt");
 
-		// list.push_back("/data2/ghanem/PC_A_edit_no_degree_1.txt");
-		// list.push_back("/data2/ghanem/PC_B_edit.txt");
-		// list.push_back("/data2/ghanem/PC_C_edit.txt");		
-		// list.push_back("/data2/ghanem/PC_D_edit.txt");
-		// list.push_back("/data2/ghanem/PC_E_edit.txt");
-		// list.push_back("/data2/ghanem/PC_F.txt");
+//		list.push_back("/data2/ghanem/PC_A_new.txt");
+//		list.push_back("/data2/ghanem/PC_B_edit_no_degree_1.txt");
+//		list.push_back("/data2/ghanem/PC_C_edit_no_degree_1.txt");		
+//		list.push_back("/data2/ghanem/PC_D_edit_no_degree_1.txt");
+		//list.push_back("/data2/ghanem/PC_E_new.txt");
+//		list.push_back("/data2/ghanem/PC_F_new.txt");
 
-		// nbChannels.push_back(1);
-		// nbChannels.push_back(1);
 		nbChannels.push_back(3);
-		// nbChannels.push_back(1);
-		// nbChannels.push_back(1);
-		// nbChannels.push_back(3);
-		
+		nbChannels.push_back(1);
+		nbChannels.push_back(3);
+		nbChannels.push_back(1);
+		nbChannels.push_back(1);
+		nbChannels.push_back(3);
+
+//        get_stat_pcap_interval(list,nbChannels,60);
 		get_stat_pcap_batch(list,nbChannels);
 	}
 	// Parser p = Parser(argv[1]);

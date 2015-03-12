@@ -61,7 +61,7 @@ void get_channels(string name,map<string,set<string> > *list){
 	while (getline(file, str))
     {
     	i++;
-    	if(i%1000000 == 0){
+    	if(i%3000000 == 0){
     		cout << str << "\n";
     		i=0;
     	}
@@ -106,14 +106,26 @@ void get_channels(string name,map<string,set<string> > *list){
 int main(int argc,char* argv[]){
 	// if(argc > 1){
 		// cout << argv[1] << "\n";
-        string f1 = "";
-        string f2 = "";
-        string f3 = "";
+//        string f1 = "/data2/ghanem/same_time/PC_E_edit.txt";
+  //      string f2 = "/data2/ghanem/same_time/PC_B_edit.txt";
+    //    string f3 = "/data2/ghanem/orginal/PC_F.txt";
+	//    string f4 = "/data2/ghanem/same_time/PC_C_edit.txt";
+	//    string f5 = "/data2/ghanem/same_time/PC_A_edit.txt";
 
-	   	map<string,set<string> > *list;
-        get_channels(f1,list); 
-        get_channels(f2,list);
+	map<string,set<string> > *list = new map<string,set<string> >;
+      /*
+      //  cout << f1 << "\n";
+      //  get_channels(f1,list);
+       // cout << f2 << "\n";
+      //  get_channels(f2,list);
+      //  cout << f3 << "\n";
         get_channels(f3,list);
+        cout << f4 << "\n";
+        get_channels(f4,list);
+        cout << f5 << "\n";
+        get_channels(f5,list);
+        */
+      get_channels("/data2/ghanem/PC_A_new.txt",list);
         set<string> list_tmp;
         map<string,set<string> >::iterator it;
         for(it = list->begin() ; it != list->end() ; it++){
@@ -124,6 +136,11 @@ int main(int argc,char* argv[]){
            
             }
         }
-		read_write(list_tmp,argv[1],argv[2]);
+//	read_write(list_tmp,f1,"/data2/ghanem/PC_E_new.txt");
+//	read_write(list_tmp,f2,"/data2/ghanem/PC_B_new.txt");
+//	read_write(list_tmp,f3,"/data2/ghanem/PC_F_new.txt");
+//	read_write(list_tmp,f4,"/data2/ghanem/PC_C_new.txt");
+//	read_write(list_tmp,f5,"/data2/ghanem/PC_A_new.txt");
+		//read_write(list_tmp,argv[1],argv[2]);
 	}
 

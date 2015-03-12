@@ -45,8 +45,16 @@ void Graph::free_data(){
 		delete tops[i];
 	}
 	for(int i = 0 ; i < bots.size() ; i++){
-		delete bots[i];
+        if(bots[i]->get_degree()== 1){
+            cout << bots[i]->get_title() << "  " << bots[i]->get_degree() << "\n";
+		}
+        delete bots[i];
 	}
+    cout << "mappp \n";
+    map<int,int>::iterator it;
+    for(it=degrees_bot.begin();it!=degrees_bot.end();it++){
+        cout << it->first << "  " << it->second << "\n";
+    }
 }
 
 //FUNCTIONS TO UPDATE DEGREE BOT AND TOP
