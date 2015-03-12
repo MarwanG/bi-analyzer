@@ -338,7 +338,8 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 	stat_to_stdout(g);
 	calculate_stat_graph(g);
 	stat_to_file(g);
-	create_graph_int_map(g->degree_bot,"dist_degree_bot.stat");
+	cout << "testing this should work \n";
+    create_graph_int_map(g->degrees_bot,"dist_degree_bot.stat");
 	g->free_data();
 	delete(g);
 }
@@ -491,17 +492,17 @@ int main(int argc, char* argv[]){
 		//list.push_back("../Data/Japon2013/SIT-exp131219/PC_A/PC_A_short_new.txt");
 		// list.push_back("../Data/Japon2013/SIT-exp131219/PC_E/PC_E.txt");
         
-           list.push_back("/data2/ghanem/tmp/PC_A_new.txt");
-           list.push_back("/data2/ghanem/tmp/PC_B_new.txt");
-           list.push_back("/data2/ghanem/tmp/PC_C_new.txt");
-           list.push_back("/data2/ghanem/tmp/PC_D_new.txt");
-           list.push_back("/data2/ghanem/tmp/PC_E_new.txt");
-       // list.push_back("/data2/ghanem/same_time/PC_A_edit.txt");
-  //   /   list.push_back("/data2/ghanem/same_time/PC_B_edit.txt");
- //       list.push_back("/data2/ghanem/same_time/PC_C_edit.txt");
-//        list.push_back("/data2/ghanem/same_time/PC_D_edit.txt");
-  //      list.push_back("/data2/ghanem/same_time/PC_E_edit.txt");
-//        list.push_back("/data2/ghanem/same_time/PC_F.txt");
+        //   list.push_back("/data2/ghanem/tmp/PC_A_new.txt");
+        //   list.push_back("/data2/ghanem/tmp/PC_B_new.txt");
+        //   list.push_back("/data2/ghanem/tmp/PC_C_new.txt");
+        //   list.push_back("/data2/ghanem/tmp/PC_D_new.txt");
+        //   list.push_back("/data2/ghanem/tmp/PC_E_new.txt");
+         list.push_back("/data2/ghanem/same_time/PC_A_edit.txt");
+         list.push_back("/data2/ghanem/same_time/PC_B_edit.txt");
+         list.push_back("/data2/ghanem/same_time/PC_C_edit.txt");
+         list.push_back("/data2/ghanem/same_time/PC_D_edit.txt");
+         list.push_back("/data2/ghanem/same_time/PC_E_edit.txt");
+         list.push_back("/data2/ghanem/same_time/PC_F.txt");
 
 //		list.push_back("/data2/ghanem/PC_A_new.txt");
 //		list.push_back("/data2/ghanem/PC_B_edit_no_degree_1.txt");

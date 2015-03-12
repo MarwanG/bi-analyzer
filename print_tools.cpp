@@ -191,11 +191,13 @@ void create_graph_float(vector<float> v,vector<string> s,string name){
 }
 
 
-void create_graph_int_map(map<int,int degree_bot>,string name){
+void create_graph_int_map(map<int,int>degrees_bot,string name){
 	ofstream myfile;
-	map<int,int>::iterator it;
+	myfile.open(name);
+    map<int,int>::iterator it;
     for(it=degrees_bot.begin();it!=degrees_bot.end();it++){
-        myfile << it->first << "  " << it->second << "\n";
+       cout << it->first << "  " << it->second << "\n";
+       myfile << it->first << "  " << it->second << "\n";
     }
     myfile.close();
 }
