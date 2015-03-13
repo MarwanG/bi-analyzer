@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
+#include <sstream>
 
 using namespace std;
 
@@ -48,8 +49,11 @@ void Graph::final_calculation(){
 
 string Graph::degrees_to_string(){
 	string res = "";
-	for(int i = 0 ; i < tops.size() ; i++){
-		res = res + to_string(tops[i]->get_degree()) + " ";
+    string s;
+    for(int i = 0 ; i < tops.size() ; i++){
+	    ostringstream oss;
+        oss << tops[i]->get_degree();
+        res = res + oss.str() + " ";
 	}
 	return res;
 }
