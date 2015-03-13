@@ -15,6 +15,7 @@ public:
 	void set_time(std::string s);
 	void update_degree_bot(Node * n);
 	void update_degree_top(Node * n);
+	std::string degrees_to_string();
 
 	// data
 	std::unordered_map<std::string,int> topsIndex;

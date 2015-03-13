@@ -40,6 +40,15 @@ void Graph::final_calculation(){
  	average_degree_bot_v = average_degree_bot_v/bots.size();
 }
 
+
+string Graph::degrees_to_string(){
+	string res = "";
+	for(int i = 0 ; i < tops.size() ; i++){
+		res = res + to_string(tops[i]->get_degree()) + " ";
+	}
+	return res;
+}
+
 void Graph::free_data(){
 	for(int i = 0 ; i < tops.size() ; i++){
 		delete tops[i];

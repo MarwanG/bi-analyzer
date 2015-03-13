@@ -202,6 +202,16 @@ void create_graph_int_map(map<int,int>degrees_bot,string name){
     myfile.close();
 }
 
+
+void create_graph_nb_bot(vector<int> v,vector<string> time,vector<string> s,string name){
+	ofstream myfile;
+	myfile.open(name);
+    for(int i = 0 ; i < v.size() ; i++){
+    	myfile << time[i] << " " << v[i] << " " << s[i] << "\n";
+    }
+    myfile.close();
+}
+
 void stats_to_file_interval(std::vector<Graph*> list,std::string name){
 	ofstream myfile;
 	myfile.open(name);

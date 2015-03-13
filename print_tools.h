@@ -20,7 +20,7 @@ void stat_to_stdout(Graph *g);
 void create_graph_float(std::vector<float> v,std::vector<std::string> s,std::string name);
 void create_graph_int(std::vector<int> v,std::vector<std::string> s,std::string name);
 void stats_to_file_interval(std::vector<Graph*> list,std::string name);
-void create_graph_int_map(std::map<int,int> degree_bot,std::string name);
-
-
+void create_graph_int_map(std::map<int,int> degrees_bot,std::string name);
+void create_graph_nb_bot(std::vector<int> v,std::vector<std::string> time,std::vector<std::string> s,std::string name);
+// void create_graph_nb_bot(stdvector<int> v,vector<string> time,vector<string> s,string name);
 #endif
