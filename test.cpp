@@ -65,9 +65,9 @@ void calculate_stat_graph(Graph * g){
 			Node *bo = n->neighbours[*it];
 			set<int>::iterator it2;
 			for(it2 = bo->neighbours_indexs.begin() ; it2 != bo->neighbours_indexs.end() ; it2++){
-				if(bo->get_degree() == 1){
-                    cout << bo->neighbours[*it2]->get_title() << "\n";
-                }
+			//	if(bo->get_degree() == 1){
+              //      cout << bo->neighbours[*it2]->get_title() << "\n";
+             //   }
                 Node *tmp = bo->neighbours[*it2];
 				int index_x = g->topsIndex.find(tmp->get_title())->second;
 				if(i < index_x && find(treated.begin(), treated.end(), index_x)==treated.end() && n!= tmp){
