@@ -15,6 +15,12 @@ public:
 	void set_time(std::string s);
 	void update_degree_bot(Node * n);
 	void update_degree_top(Node * n);
+	void update_ccs_top(Node *n);
+	void update_ccs_bot(Node *n);
+	void update_degree_cc(Node *n);
+	void update_redundancy_bot(Node * n);
+	void update_redundancy_top(Node * n);
+
 	std::string degrees_to_string();
 
 	// data
@@ -28,12 +34,22 @@ public:
 	std::map<int,int> degrees_top;
 	std::map<int,int> degrees_bot;
 
+
+	std::map<float,int> redundancys_top;
+	std::map<float,int> redundancys_bot;
+	std::map<float,int> ccs_top;
+	std::map<float,int> ccs_bot;
+	std::map<int,float> degree_cc_top; 
+	std::map<int,float> degree_cc_bot; 
+
 	// variables for stat
 	float average_degree_top_v;
 	float average_degree_bot_v;
-	int max_top;
 	
-	float min_degree_bot_v;
+	int max_top;
+	int max_bot;
+
+	int min_bot;
 
 	
 	float cc;

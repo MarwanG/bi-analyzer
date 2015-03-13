@@ -152,7 +152,7 @@ void stat_to_file(Graph *g){
 	myfile << "average_degree_top_v :" << g->average_degree_top_v << "\n";
 	myfile << "average_degree_bot_v :" << g->average_degree_bot_v << "\n";
 	myfile << "Max degree (top) : " << g->max_top << " (" << nb_top << ")\n";
-	myfile << "Min degree (bot) : " << g->min_degree_bot_v << "\n";
+	myfile << "Min degree (bot) : " << g->min_bot << "\n";
 	myfile << "Clustering coefficient cc_top : " << g->cc << "\n";
 	myfile << "Clustering coefficient cc_min_top : " << g->cc_min << "\n";
 	myfile << "Clustering coefficient cc_max_top : " << g->cc_max << "\n";

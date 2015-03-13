@@ -11,8 +11,9 @@ Graph::Graph(){
 	red = 0;
 	nb_red = 0;
 	average_degree_top_v = 0;
-	min_degree_bot_v = 10000;
+	min_bot = 10000;
 	max_top = 0;
+	max_bot = 0;
 	links = 0;
 	time_.clear();
 }
@@ -32,10 +33,14 @@ void Graph::final_calculation(){
  	red = red / nb_red;
  	for(int i = 0 ; i < bots.size() ; i++){
  		update_degree_bot(bots[i]);
- 		if(min_degree_bot_v > bots[i]->get_degree()){
- 			min_degree_bot_v = bots[i]->get_degree();
+ 		int degree_tmp = bots[i]->get_degree();
+ 		if(min_bot > degree_tmp){
+ 			min_bot = degree_tmp;
  		}
- 		average_degree_bot_v = average_degree_bot_v + bots[i]->get_degree();
+ 		if(max_bot < degree_tmp){
+ 			max_bot = degree_tmp;
+ 		}
+ 		average_degree_bot_v = average_degree_bot_v + degree_tmp;
  	}
  	average_degree_bot_v = average_degree_bot_v/bots.size();
 }
@@ -54,9 +59,6 @@ void Graph::free_data(){
 		delete tops[i];
 	}
 	for(int i = 0 ; i < bots.size() ; i++){
-        if(bots[i]->get_degree()== 1){
-            cout << bots[i]->get_title() << "  " << bots[i]->get_degree() << "\n";
-		}
         delete bots[i];
 	}
 }
@@ -77,5 +79,56 @@ void Graph::update_degree_bot(Node * n){
 		degrees_bot[n->get_degree()]=degrees_bot[n->get_degree()] +1;
 	}else{
 		degrees_bot[n->get_degree()]=1;
+	}
+}
+
+// FUNCTION TO UPDATE REDUNDANCY TOP AND BOT
+
+void Graph::update_redundancy_top(Node * n){
+	map<float,int>::iterator it = redundancys_top.find(n->get_red());
+	if(it != redundancys_top.end()){
+		redundancys_top[n->get_red()]=redundancys_top[n->get_red()] +1;
+	}else{
+		redundancys_top[n->get_red()]=1;
+	}
+}
+
+void Graph::update_redundancy_bot(Node * n){
+	map<float,int>::iterator it = redundancys_bot.find(n->get_red());
+	if(it != redundancys_bot.end()){
+		redundancys_bot[n->get_red()]=redundancys_bot[n->get_red()] +1;
+	}else{
+		redundancys_bot[n->get_red()]=1;
+	}
+}
+
+// FUNCTION TO UPDATE CCS TOP AND BOT
+
+void Graph::update_ccs_top(Node *n){
+	map<float,int>::iterator it = ccs_top.find(n->get_cc());
+	if(it != ccs_top.end()){
+		ccs_top[n->get_cc()]=ccs_top[n->get_cc()] +1;
+	}else{
+		ccs_top[n->get_cc()]=1;
+	}
+}
+
+void Graph::update_ccs_bot(Node *n){
+	map<float,int>::iterator it = ccs_bot.find(n->get_cc());
+	if(it != ccs_bot.end()){
+		ccs_bot[n->get_cc()]=ccs_bot[n->get_cc()] +1;
+	}else{
+		ccs_bot[n->get_cc()]=1;
+	}
+}
+
+// FUNCTION TO UPDATE CCS/DEGREE TOP AND BOT
+
+void Graph::update_degree_cc(Node *n){
+	map<int,float>::iterator it = degree_cc_top.find(n->get_degree());
+	if(it != degree_cc_top.end()){
+		degree_cc_top[n->get_degree()] = degree_cc_top[n->get_degree()] + n->get_cc();
+	}else{
+		degree_cc_top[n->get_degree()] = n->get_cc();
 	}
 }

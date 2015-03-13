@@ -20,73 +20,6 @@ using namespace std;
 
 
 int limit = 70;
-// STATS MIGHT BE GOOD IDEA TO PASS THEM NOT SO SURE YET.
-
-
-map<float,int> redundancys_top;
-map<float,int> redundancys_bot;
-map<float,int> ccs_top;
-map<float,int> ccs_bot;
-map<int,float> degree_cc_top; 
-map<int,float> degree_cc_bot; 
-
-
-
-
-
-
-
-
-// FUNCTION TO UPDATE REDUNDANCY TOP AND BOT
-
-void update_redundancy_top(Node * n){
-	map<float,int>::iterator it = redundancys_top.find(n->get_red());
-	if(it != redundancys_top.end()){
-		redundancys_top[n->get_red()]=redundancys_top[n->get_red()] +1;
-	}else{
-		redundancys_top[n->get_red()]=1;
-	}
-}
-
-void update_redundancy_bot(Node * n){
-	map<float,int>::iterator it = redundancys_bot.find(n->get_red());
-	if(it != redundancys_bot.end()){
-		redundancys_bot[n->get_red()]=redundancys_bot[n->get_red()] +1;
-	}else{
-		redundancys_bot[n->get_red()]=1;
-	}
-}
-
-// FUNCTION TO UPDATE CCS TOP AND BOT
-
-void update_ccs_top(Node *n){
-	map<float,int>::iterator it = ccs_top.find(n->get_cc());
-	if(it != ccs_top.end()){
-		ccs_top[n->get_cc()]=ccs_top[n->get_cc()] +1;
-	}else{
-		ccs_top[n->get_cc()]=1;
-	}
-}
-
-void update_ccs_bot(Node *n){
-	map<float,int>::iterator it = ccs_bot.find(n->get_cc());
-	if(it != ccs_bot.end()){
-		ccs_bot[n->get_cc()]=ccs_bot[n->get_cc()] +1;
-	}else{
-		ccs_bot[n->get_cc()]=1;
-	}
-}
-
-// FUNCTION TO UPDATE CCS/DEGREE TOP AND BOT
-
-void update_degree_cc(Node *n){
-	map<int,float>::iterator it = degree_cc_top.find(n->get_degree());
-	if(it != degree_cc_top.end()){
-		degree_cc_top[n->get_degree()] = degree_cc_top[n->get_degree()] + n->get_cc();
-	}else{
-		degree_cc_top[n->get_degree()] = n->get_cc();
-	}
-}
 
 // FUNCTION CALCULATES CC/REDUNDANCY BETWEEN TWO NODES.
 
@@ -154,9 +87,9 @@ void calculate_stat_graph(Graph * g){
 		n->calculate_disp();
 	 	n->calculate_redundancy();
 		g->update_degree_top(n);
-		update_redundancy_top(n);
-		update_ccs_top(n);
-		update_degree_cc(n);
+		g->update_redundancy_top(n);
+		g->update_ccs_top(n);
+		g->update_degree_cc(n);
 
 		g->average_degree_top_v = g->average_degree_top_v + n->get_degree();
 		if(n->get_degree() > g->max_top){
@@ -291,7 +224,6 @@ void file2data_PCAP_batch(string name,vector<string> channels,Graph * g){
     	iss >> time_str;
     	iss >> b;
     	iss >> t;
-    	// cout << b << "   " << t << "\n";
     	size_t n = count(b.begin(), b.end(), '.');
     	if(n==4){
     		unsigned found = b.find_last_of(".");
@@ -365,7 +297,6 @@ void file2dataPCAP_interval(ifstream * file,vector<string> channels,int interval
 	    	if(t1 == 4){
 	    		t1 = timestamp_to_ctime(time_str.c_str());
 	    		g->set_time(tmp);
-	    		// cout << time_str << "\n";
 	    	}else{    		
 	    		t2 = timestamp_to_ctime(time_str.c_str());
 	    		double diff = difftime(t2,t1);
@@ -405,6 +336,7 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	vector<int> nb_bot_graph;
 	vector<string> times;
 	vector<string> dist_degree_by_top;
+	vector<int> nb_super_pere;
 
 	// get all channels
 	
@@ -444,11 +376,14 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 		}
 		calculate_stat_graph(g);
 		stat_to_stdout(g);
+		
 		times.push_back(g->time_);
 		cc_graph.push_back(g->cc);
 		degree_graph.push_back(g->density);
 		nb_bot_graph.push_back(g->bots.size());
 		dist_degree_by_top.push_back(g->degrees_to_string());
+		nb_super_pere.push_back(g->degrees_bot[g->max_bot]);
+		
 		if(g->density > highest_density){
 			highest_density = g->density;
 			g_highest = g;
@@ -475,10 +410,13 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	stringstream stream1;
 	stream1 << interval;
 	string interval_string = stream1.str();
+	string current_time_ = current_time();
 
-	create_graph_float(cc_graph,times,"cc_interval_"+current_time()+".stat");
-	create_graph_float(degree_graph,times,"density_interval_"+current_time()+".stat");
-	create_graph_nb_bot(nb_bot_graph,times,dist_degree_by_top,"nb_bot_interval_"+current_time()+".stat");
+	create_graph_float(cc_graph,times,"cc_interval_"+current_time_+".stat");
+	create_graph_float(degree_graph,times,"density_interval_"+current_time_+".stat");
+	create_graph_nb_bot(nb_bot_graph,times,dist_degree_by_top,"nb_bot_interval_"+current_time_+".stat");
+	create_graph_int(nb_super_pere,times,"nb_super_pere_"+current_time_+".stat");
+
 }
 
 
