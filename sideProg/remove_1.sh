@@ -11,7 +11,7 @@ cd $1
 FILE=$2
 while read line; do
 	echo "removing $line"
-    sed -i '/$line/d' * 
+    sed -i '/\<$line\>/d' PC_A_edit.txt    
 done < $FILE
 
 rm $2
