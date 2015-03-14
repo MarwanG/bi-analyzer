@@ -126,9 +126,9 @@ int main(int argc,char* argv[]){
     set<string> list_tmp;
     map<string,set<string> >::iterator it;
     ofstream myfile;
-    myfile.open("to_remove.txt");
+    myfile.open("to_keep.txt");
     for(it = list->begin() ; it != list->end() ; it++){
-        if(it->second.size() == 1){
+        if(it->second.size() > 1){
             cout << it->first << "\n";
             myfile << it->first << "\n";
             list_tmp.insert(it->first);
