@@ -61,7 +61,7 @@ string Graph::degrees_to_string(){
 string Graph::degrees_to_string_bot(){
 	string res = "";
 	string s;
-	for(int i = 0 ; i < tops.size() ; i++){
+	for(int i = 1 ; i <= tops.size() ; i++){
 		if (degrees_bot.find(i) == degrees_bot.end()){
 			res = res + "0 ";
 		}else{
