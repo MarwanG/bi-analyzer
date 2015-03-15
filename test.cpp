@@ -337,6 +337,7 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	vector<string> times;
 	vector<string> dist_degree_by_top;
 	vector<int> nb_super_pere;
+	vector<string> dist_degree_by_bot;
 
 	// get all channels
 	
@@ -382,6 +383,7 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 		degree_graph.push_back(g->density);
 		nb_bot_graph.push_back(g->bots.size());
 		dist_degree_by_top.push_back(g->degrees_to_string());
+		dist_degree_by_bot.push_back(g->degrees_to_string_bot());
 		nb_super_pere.push_back(g->degrees_bot[g->max_bot]);
 		
 		if(g->density > highest_density){
@@ -412,10 +414,14 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	string interval_string = stream1.str();
 	string current_time_ = current_time();
 
+	//graphs using basic functions
 	create_graph_float(cc_graph,times,"cc_interval_"+current_time_+".stat");
 	create_graph_float(degree_graph,times,"density_interval_"+current_time_+".stat");
-	create_graph_nb_bot(nb_bot_graph,times,dist_degree_by_top,"nb_bot_interval_"+current_time_+".stat");
 	create_graph_int(nb_super_pere,times,"nb_super_pere_"+current_time_+".stat");
+	create_graph_string(dist_degree_by_bot,times,"dist_degree_bot_"+current_time_+".stat");
+
+	create_graph_nb_bot(nb_bot_graph,times,dist_degree_by_top,"nb_bot_interval_"+current_time_+".stat");
+	
 
 }
 
@@ -430,7 +436,7 @@ int main(int argc, char* argv[]){
 
 	   
        list.push_back("/data2/ghanem/same_time/PC_A_edit.txt");
-       list.push_back("/data2/ghanem/same_time/PC_B_edit.txt");
+       // list.push_back("/data2/ghanem/same_time/PC_B_edit.txt");
        // list.push_back("/data2/ghanem/same_time/PC_C_edit.txt");
        // list.push_back("/data2/ghanem/same_time/PC_D_edit.txt");
        // list.push_back("/data2/ghanem/same_time/PC_E_edit.txt");

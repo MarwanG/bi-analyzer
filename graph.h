@@ -22,6 +22,7 @@ public:
 	void update_redundancy_top(Node * n);
 
 	std::string degrees_to_string();
+	std::string degrees_to_string_bot();
 
 	// data
 	std::unordered_map<std::string,int> topsIndex;

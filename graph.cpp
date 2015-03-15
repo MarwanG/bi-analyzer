@@ -58,6 +58,21 @@ string Graph::degrees_to_string(){
 	return res;
 }
 
+string Graph::degrees_to_string_bot(){
+	string res = "";
+	string s;
+	for(int i = 0 ; i < tops.size() ; i++){
+		if (degrees_bot.find(i) == degrees_bot.end()){
+			res = res + "0 ";
+		}else{
+			ostringstream oss;
+			oss << degrees_bot[i];
+			res = res + oss.str() + " ";
+		}
+	}
+	return res;
+}
+
 void Graph::free_data(){
 	for(int i = 0 ; i < tops.size() ; i++){
 		delete tops[i];
