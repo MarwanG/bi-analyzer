@@ -146,12 +146,15 @@ map<string,float> get_ecart_type(map<string,vector<int> > list){
 			avg = avg + tmp[i]; 
 		}
 		avg = avg/(float)tmp.size();
+		cout << "avg : " << avg << "\n";
 		float sd = 0;
 		for(int i = 0 ; i < tmp.size() ; i++){
-			float sd_tmp = pow(sd-avg,2);
+			float sd_tmp = pow(tmp[i]-avg,2);
 			sd = sd + sd_tmp;
 		}
+		cout << "sd : " << sd << "\n";
 		sd = sqrt(sd/(float)tmp.size());
+		cout << "sd : " << sd << "\n";
 		res[it->first] = sd;
 	}
 	return res;
@@ -244,20 +247,20 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 			}
 		}
 
-		set<string> id_super_pere = g->distr_by_degree[g->max_bot]; 
-        set<string>::iterator it;
-        if(prev.empty()){
-            cout << "i am here \n";
-            prev = id_super_pere;
-        }else{
-            vector<string> tmp;
-            std::set_intersection(id_super_pere.begin(), id_super_pere.end(),
-                                  prev.begin(),prev.end(),std::back_inserter(tmp));
-            float val = (float)tmp.size()*2/(float)id_super_pere.size()+prev.size();
-            cout << val << "\n";
-            change_degree_top.push_back(val);
-            prev = id_super_pere;
-        }
+		// set<string> id_super_pere = g->distr_by_degree[g->max_bot]; 
+  //       set<string>::iterator it;
+  //       if(prev.empty()){
+  //           cout << "i am here \n";
+  //           prev = id_super_pere;
+  //       }else{
+  //           vector<string> tmp;
+  //           std::set_intersection(id_super_pere.begin(), id_super_pere.end(),
+  //                                 prev.begin(),prev.end(),std::back_inserter(tmp));
+  //           float val = (float)tmp.size()*2/(float)id_super_pere.size()+prev.size();
+  //           cout << val << "\n";
+  //           change_degree_top.push_back(val);
+  //           prev = id_super_pere;
+  //       }
 		
 		if(g->density > highest_density){
 			highest_density = g->density;
