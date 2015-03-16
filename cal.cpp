@@ -205,14 +205,16 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
             prev = id_super_pere;
         }else{
             vector<string> tmp;
-            cout << "calculating intersection \n";
+            // cout << "calculating intersection \n";
         //    cout << prev.empty() << "\n";
             std::set_intersection(id_super_pere.begin(), id_super_pere.end(),
                                   prev.begin(),prev.end(),std::back_inserter(tmp));
-            cout << "getting tmp size \n";
-            cout << "Common : "<< tmp.size() << "\n";
-            cout << "Total  : "<< id_super_pere.size() << "\n";
-            change_degree_top.push_back(tmp.size()/id_super_pere.size());
+            // cout << "getting tmp size \n";
+            // cout << "Common : "<< tmp.size() << "\n";
+            // cout << "Total  : "<< id_super_pere.size() << "\n";
+            float val = (float)tmp.size()*2/(float)id_super_pere.size();
+            cout << val << "\n";
+            change_degree_top.push_back(val);
             prev = id_super_pere;
         }
 		
