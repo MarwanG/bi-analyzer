@@ -11,6 +11,7 @@
 #include <algorithm>
 #include <regex>
 #include <unordered_map>
+#include <math.h> 
 
 
 using namespace std;
@@ -135,6 +136,27 @@ void file2dataPCAP_interval(ifstream * file,vector<string> channels,int interval
 
 
 
+map<string,float> get_ecart_type(map<string,vector<int> > list){
+	map<string,float> res;
+	map<string,vector<int> >::iterator it;
+	for(it=list.begin();it!=list.end();it++){
+		vector<int> tmp = it->second;
+		float avg = 0;
+		for(int i = 0 ; i < tmp.size() ; i++){
+			avg = avg + tmp[i]; 
+		}
+		avg = avg/(float)tmp.size();
+		float sd = 0;
+		for(int i = 0 ; i < tmp.size() ; i++){
+			float sd_tmp = pow(sd-avg,2);
+			sd = sd + sd_tmp;
+		}
+		sd = sqrt(sd/(float)tmp.size());
+		res[it->first] = sd;
+	}
+	return res;
+}
+
 void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int interval){
 	vector<string> channels;
 	map<string,int> list;
@@ -145,8 +167,9 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	vector<string> dist_degree_by_top;
 	vector<int> nb_super_pere;
 	vector<string> dist_degree_by_bot;
-
 	vector<float> change_degree_top;
+
+	map<string,vector<int> > distr_tops;
 
 	// get all channels
 	
@@ -194,25 +217,43 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 		dist_degree_by_top.push_back(g->degrees_to_string());
 		dist_degree_by_bot.push_back(g->degrees_to_string_bot());
 		nb_super_pere.push_back(g->degrees_bot[g->max_bot]);
+
+		if(distr_tops.empty()){
+			for(int i = g->max_bot - 4 ; i <= g->max_bot ; i++){
+				set<string> list_tmp = g->distr_by_degree[i];
+				set<string>::iterator it;
+				for (it = list_tmp.begin(); it != list_tmp.end(); ++it){
+					vector<int> tmp_;
+					tmp_.push_back(i); 
+					distr_tops[*it] = tmp_;
+				}		 
+			}
+		}else{
+			for(int i = g->max_bot - 4 ; i <= g->max_bot ; i++){
+				set<string> list_tmp = g->distr_by_degree[i];
+				set<string>::iterator it;
+				for (it = list_tmp.begin(); it != list_tmp.end(); ++it){
+					if(distr_tops.find(*it) == distr_tops.end()){
+						vector<int> tmp_;
+						tmp_.push_back(i); 
+						distr_tops[*it] = tmp_;
+					}else{
+						distr_tops[*it].push_back(i);
+					}
+				}
+			}
+		}
+
 		set<string> id_super_pere = g->distr_by_degree[g->max_bot]; 
         set<string>::iterator it;
-		for (it = id_super_pere.begin(); it != id_super_pere.end(); ++it)
-		{
-    		cout << *it << "\n"; // Note the "*" here
-		}
         if(prev.empty()){
             cout << "i am here \n";
             prev = id_super_pere;
         }else{
             vector<string> tmp;
-            // cout << "calculating intersection \n";
-        //    cout << prev.empty() << "\n";
             std::set_intersection(id_super_pere.begin(), id_super_pere.end(),
                                   prev.begin(),prev.end(),std::back_inserter(tmp));
-            // cout << "getting tmp size \n";
-            // cout << "Common : "<< tmp.size() << "\n";
-            // cout << "Total  : "<< id_super_pere.size() << "\n";
-            float val = (float)tmp.size()*2/(float)id_super_pere.size();
+            float val = (float)tmp.size()*2/(float)id_super_pere.size()+prev.size();
             cout << val << "\n";
             change_degree_top.push_back(val);
             prev = id_super_pere;
@@ -245,6 +286,12 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	stream1 << interval;
 	string interval_string = stream1.str();
 	string current_time_ = current_time();
+
+	map<string,float> ecart_distr =  get_ecart_type(distr_tops);
+	map<string,float>::iterator it;
+	for(it=ecart_distr.begin();it!=ecart_distr.end();it++){
+		cout << it->first << "  " << it->second << "\n";
+	}
 
 	//graphs using basic functions
 	create_graph_float(cc_graph,times,"cc_interval_"+current_time_+".stat");
