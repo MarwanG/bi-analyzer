@@ -136,8 +136,8 @@ void file2dataPCAP_interval(ifstream * file,vector<string> channels,int interval
 
 
 
-map<string,float> get_ecart_type(map<string,vector<int> > list){
-	map<string,float> res;
+map<string,int> get_ecart_type(map<string,vector<int> > list){
+	map<string,int> res;
 	map<string,vector<int> >::iterator it;
 	for(it=list.begin();it!=list.end();it++){
 		vector<int> tmp = it->second;
@@ -146,16 +146,13 @@ map<string,float> get_ecart_type(map<string,vector<int> > list){
 			avg = avg + tmp[i]; 
 		}
 		avg = avg/(float)tmp.size();
-		cout << "avg : " << avg << "\n";
 		float sd = 0;
 		for(int i = 0 ; i < tmp.size() ; i++){
 			float sd_tmp = pow(tmp[i]-avg,2);
 			sd = sd + sd_tmp;
 		}
-		cout << "sd : " << sd << "\n";
 		sd = sqrt(sd/(float)tmp.size());
-		cout << "sd : " << sd << "\n";
-		res[it->first] = sd;
+		res[it->first] = (int)sd;
 	}
 	return res;
 }
@@ -232,7 +229,7 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 				}		 
 			}
 		}else{
-			for(int i = g->max_bot - 4 ; i <= g->max_bot ; i++){
+			for(int i = g->max_bot - 6 ; i <= g->max_bot ; i++){
 				set<string> list_tmp = g->distr_by_degree[i];
 				set<string>::iterator it;
 				for (it = list_tmp.begin(); it != list_tmp.end(); ++it){
@@ -290,8 +287,8 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	string interval_string = stream1.str();
 	string current_time_ = current_time();
 
-	map<string,float> ecart_distr =  get_ecart_type(distr_tops);
-	map<string,float>::iterator it;
+	map<string,int> ecart_distr =  get_ecart_type(distr_tops);
+	map<string,int>::iterator it;
 	for(it=ecart_distr.begin();it!=ecart_distr.end();it++){
 		cout << it->first << "  " << it->second << "\n";
 	}
