@@ -27,14 +27,14 @@ void Graph::set_time(string s){
 
 
 void Graph::update_distr(Node * n){
-	unordered_map<int, set<int> >::const_iterator p;
+	unordered_map<int, set<string> >::const_iterator p;
 	p = distr_by_degree.find(n->get_degree());
 	if(p == distr_by_degree.end()){
-		set<int> list;
-		list.insert(n->get_index());
+		set<string> list;
+		list.insert(n->get_title());
 		distr_by_degree[n->get_degree()] = list;
 	}else{
-		distr_by_degree[n->get_degree()].insert(n->get_index());
+		distr_by_degree[n->get_degree()].insert(n->get_title());
 	}
 }
 

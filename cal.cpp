@@ -171,7 +171,7 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	float highest_density = 0.0;
 	Graph * g_lowest;
 	Graph * g_highest;
-
+    set<string> prev;
 
 	while(keep){
 		Graph * g = new Graph();
@@ -192,12 +192,26 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 		dist_degree_by_top.push_back(g->degrees_to_string());
 		dist_degree_by_bot.push_back(g->degrees_to_string_bot());
 		nb_super_pere.push_back(g->degrees_bot[g->max_bot]);
-		set<int> id_super_pere = g->distr_by_degree[g->max_bot];
-		set<int>::iterator it;
+		set<string> id_super_pere = g->distr_by_degree[g->max_bot]; 
+        set<string>::iterator it;
 		for (it = id_super_pere.begin(); it != id_super_pere.end(); ++it)
 		{
     		cout << *it << "\n"; // Note the "*" here
 		}
+        if(prev.empty()){
+            cout << "i am here \n";
+            prev = id_super_pere;
+        }else{
+            vector<string> tmp;
+            cout << "calculating intersection \n";
+        //    cout << prev.empty() << "\n";
+            std::set_intersection(id_super_pere.begin(), id_super_pere.end(),
+                                  prev.begin(),prev.end(),std::back_inserter(tmp));
+            cout << "getting tmp size \n";
+            cout << "Common : "<< tmp.size() << "\n";
+            cout << "Total  : "<< id_super_pere.size() << "\n";
+            prev = id_super_pere;
+        }
 		
 		if(g->density > highest_density){
 			highest_density = g->density;

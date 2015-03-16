@@ -86,19 +86,19 @@ int main(int argc, char* argv[]){
 
 	   
        list.push_back("/data2/ghanem/same_time/PC_A_edit.txt");
-       // list.push_back("/data2/ghanem/same_time/PC_B_edit.txt");
-       // list.push_back("/data2/ghanem/same_time/PC_C_edit.txt");
-       // list.push_back("/data2/ghanem/same_time/PC_D_edit.txt");
-       // list.push_back("/data2/ghanem/same_time/PC_E_edit.txt");
-       // list.push_back("/data2/ghanem/same_time/PC_F.txt");
+       list.push_back("/data2/ghanem/same_time/PC_B_edit.txt");
+       list.push_back("/data2/ghanem/same_time/PC_C_edit.txt");
+       list.push_back("/data2/ghanem/same_time/PC_D_edit.txt");
+       list.push_back("/data2/ghanem/same_time/PC_E_edit.txt");
+       list.push_back("/data2/ghanem/same_time/PC_F.txt");
 
 
 		nbChannels.push_back(3);
-		// nbChannels.push_back(1);
-		// nbChannels.push_back(3);
-		// nbChannels.push_back(1);
-		// nbChannels.push_back(1);
-		// nbChannels.push_back(3);
+		nbChannels.push_back(1);
+		nbChannels.push_back(3);
+		nbChannels.push_back(1);
+		nbChannels.push_back(1);
+		nbChannels.push_back(3);
 
 		get_stat_pcap_interval(list,nbChannels,60);
 		// get_stat_pcap_batch(list,nbChannels);

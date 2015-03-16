@@ -33,7 +33,7 @@ public:
 	std::vector<Node*> bots;
 
 
-	std::unordered_map<int,std::set<int> > distr_by_degree;
+	std::unordered_map<int,std::set<std::string> > distr_by_degree;
 
 	// STATS MIGHT BE GOOD IDEA TO PASS THEM NOT SO SURE YET.
 	std::map<int,int> degrees_top;
