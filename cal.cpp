@@ -146,6 +146,8 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	vector<int> nb_super_pere;
 	vector<string> dist_degree_by_bot;
 
+	vector<float> change_degree_top;
+
 	// get all channels
 	
 	for(int i = 0 ; i < names.size() ; i++){
@@ -210,6 +212,7 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
             cout << "getting tmp size \n";
             cout << "Common : "<< tmp.size() << "\n";
             cout << "Total  : "<< id_super_pere.size() << "\n";
+            change_degree_top.push_back(tmp.size()/id_super_pere.size());
             prev = id_super_pere;
         }
 		
@@ -244,6 +247,7 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	//graphs using basic functions
 	create_graph_float(cc_graph,times,"cc_interval_"+current_time_+".stat");
 	create_graph_float(degree_graph,times,"density_interval_"+current_time_+".stat");
+	create_graph_float(change_degree_top,times,"changement_"+current_time_+".stat");
 	create_graph_int(nb_super_pere,times,"nb_super_pere_"+current_time_+".stat");
 	create_graph_string(dist_degree_by_bot,times,"dist_degree_bot_"+current_time_+".stat");
 
