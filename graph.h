@@ -10,6 +10,8 @@ class Graph
 public:
 	Graph();
 
+
+	void update_distr(Node * n);
 	void final_calculation();
 	void free_data();
 	void set_time(std::string s);
@@ -30,6 +32,8 @@ public:
 	std::vector<Node*> tops;
 	std::vector<Node*> bots;
 
+
+	std::unordered_map<int,std::set<int> > distr_by_degree;
 
 	// STATS MIGHT BE GOOD IDEA TO PASS THEM NOT SO SURE YET.
 	std::map<int,int> degrees_top;

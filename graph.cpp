@@ -25,6 +25,19 @@ void Graph::set_time(string s){
 	}
 }
 
+
+void Graph::update_distr(Node * n){
+	unordered_map<int, set<int> >::const_iterator p;
+	p = distr_by_degree.find(n->get_degree());
+	if(p == distr_by_degree.end()){
+		set<int> list;
+		list.insert(n->get_index());
+		distr_by_degree[n->get_degree()] = list;
+	}else{
+		distr_by_degree[n->get_degree()].insert(n->get_index());
+	}
+}
+
 void Graph::final_calculation(){
 	cc = cc/tops.size();
 	cc_min = cc_min/tops.size();
@@ -41,6 +54,7 @@ void Graph::final_calculation(){
  		if(max_bot < degree_tmp){
  			max_bot = degree_tmp;
  		}
+ 		update_distr(bots[i]);
  		average_degree_bot_v = average_degree_bot_v + degree_tmp;
  	}
  	average_degree_bot_v = average_degree_bot_v/bots.size();
@@ -120,6 +134,7 @@ void Graph::update_redundancy_bot(Node * n){
 		redundancys_bot[n->get_red()]=1;
 	}
 }
+
 
 // FUNCTION TO UPDATE CCS TOP AND BOT
 

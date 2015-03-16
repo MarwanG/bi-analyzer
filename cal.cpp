@@ -192,6 +192,12 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 		dist_degree_by_top.push_back(g->degrees_to_string());
 		dist_degree_by_bot.push_back(g->degrees_to_string_bot());
 		nb_super_pere.push_back(g->degrees_bot[g->max_bot]);
+		set<int> id_super_pere = g->distr_by_degree[g->max_bot];
+		set<int>::iterator it;
+		for (it = id_super_pere.begin(); it != id_super_pere.end(); ++it)
+		{
+    		cout << *it << "\n"; // Note the "*" here
+		}
 		
 		if(g->density > highest_density){
 			highest_density = g->density;
