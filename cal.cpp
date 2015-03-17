@@ -98,7 +98,10 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 		std::map<int,std::vector<double> >::iterator it;
 		for(it = n->freq_ping.begin() ; it != n->freq_ping.end() ; it++){
 			std::vector<double> v = it->second;		
-			string title = n->get_title() + " " + std::to_string(it->first);	
+			stringstream stream1;
+			stream1 << it->first;
+			string tmp_string = stream1.str();
+			string title = n->get_title() + " " + tmp_string;	
 			ecart_type[title]=get_ecart_list(v);
 		}
 	}	
