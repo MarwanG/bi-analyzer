@@ -36,7 +36,7 @@ void file2data_PCAP_batch(string name,vector<string> channels,Graph * g){
     	time_str.append(" " + tmp);
     	iss >> b;
     	iss >> t;
-    	t1 = timestamp_to_ctime(time_str.c_str());
+    	// t1 = timestamp_to_ctime(time_str.c_str());
     	size_t n = count(b.begin(), b.end(), '.');
     	if(n==4){
     		unsigned found = b.find_last_of(".");
@@ -54,10 +54,10 @@ void file2data_PCAP_batch(string name,vector<string> channels,Graph * g){
 			continue;
 		}
 	    if(find(channels.begin(), channels.end(), b)!=channels.end() && find(channels.begin(), channels.end(), t)==channels.end()){
-	    		addlink(g,b,t,&t1);
+	    		addlink(g,b,t,&time_str);
 	    }else{		
 		    if(find(channels.begin(), channels.end(), t)!=channels.end() && find(channels.begin(), channels.end(), b)==channels.end()){
-		   			addlink(g,t,b,&t1);
+		   			addlink(g,t,b,&time_str);
 		    }
 		}
     }
@@ -67,8 +67,24 @@ void file2data_PCAP_batch(string name,vector<string> channels,Graph * g){
     file.close();
 }
 
+float get_ecart_list(vector<double> list){
+	float avg = 0;
+	for(int i = 0 ; i < list.size() ; i++){
+		avg = avg + list[i];
+	}
+	avg = avg/(float)list.size();
+	float sd = 0;
+	for(int i = 0 ; i < list.size() ; i++){
+		float sd_tmp = pow(list[i]-avg,2);
+		sd = sd + sd_tmp;
+	}
+	sd = sqrt(sd/(float)list.size());
+	return sd;
+}
+
 void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 	map<string,int> list;
+	map<string,float> ecart_type;
 	Graph * g = new Graph();
 	for(int i = 0 ; i < names.size() ; i++){
 		vector<string> v =  get_channels(names[i],nbChannels[i],list);
@@ -78,12 +94,19 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 		file2data_PCAP_batch(names[i],v,g);
 	}
 	for(int i = 0 ; i < g->tops.size() ; i++){
-		cout << g->tops[i]->get_title() << "\n";
+		Node * n = g->tops[i];
+		std::map<int,std::vector<double> >::iterator it;
+		for(it = n->freq_ping.begin() ; it != n->freq_ping.end() ; it++){
+			std::vector<double> v = it->second;		
+			string title = n->get_title() + " " + std::to_string(it->first);	
+			ecart_type[title]=get_ecart_list(v);
+		}
 	}	
 	stat_to_stdout(g);
 	calculate_stat_graph(g);
 	stat_to_file(g);
     create_graph_int_map(g->degrees_bot,"dist_degree_bot.stat");
+    create_graph_map(ecart_type,"ecart_type.stat");
 	g->free_data();
 	delete(g);
 }
@@ -272,7 +295,7 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	}
 
 
-	for(int i =  6 ; 12 ; i++){
+	for(int i =  6 ; i < 12 ; i++){
  		cout << variance_degree[i] / (float)nb_interval <<  "\n";
 	}
 

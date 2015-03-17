@@ -103,7 +103,7 @@ void calculate_stat_graph(Graph * g){
 }
 
 // FUNCTION ADD CONNECTION
-void addlink(Graph *g,string t , string b,time_t *t1){
+void addlink(Graph *g,string t , string b,string *t1){
 	unordered_map<string, int>::const_iterator p;
 	p = g->topsIndex.find(t);
 	Node *top;
@@ -128,14 +128,14 @@ void addlink(Graph *g,string t , string b,time_t *t1){
 	}
 	bool bTop = top->addneighbours(bot);
  	bool bBot = bot->addneighbours(top);
-    top = NULL;
-    bot = NULL;
-    if(bTop && bBot){
-    	if(t1 != NULL){
+	if(t1 != NULL){
     		top->add_ping(bot,*t1);
-    	}
+	}
+    if(bTop && bBot){
    	 	g->links = g->links + 1;
    	}
+   	top = NULL;
+    bot = NULL;
    	delete top;
     delete bot;
 }
