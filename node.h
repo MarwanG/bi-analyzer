@@ -39,6 +39,7 @@ public:
 	void set_cc(float cc_new);
 	void set_cc_min(float cc_new);
 	void set_cc_max(float cc_new);
+	void add_ping(Node *son,time_t t);
 	void calculate_ref();
 	void calculate_redundancy();
 	float get_disp();
@@ -49,6 +50,7 @@ public:
 	int nb_top_neighbours;
 	std::set <int>   neighbours_indexs ;
 	std::unordered_map<int,Node*> neighbours;
+	std::map<int,std::vector<time_t> > freq_ping;
 	std::set<std::pair<int,int> > pairs;
 
 

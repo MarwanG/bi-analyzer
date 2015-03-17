@@ -103,7 +103,7 @@ void calculate_stat_graph(Graph * g){
 }
 
 // FUNCTION ADD CONNECTION
-void addlink(Graph *g,string t , string b){
+void addlink(Graph *g,string t , string b,time_t *t1){
 	unordered_map<string, int>::const_iterator p;
 	p = g->topsIndex.find(t);
 	Node *top;
@@ -130,11 +130,14 @@ void addlink(Graph *g,string t , string b){
  	bool bBot = bot->addneighbours(top);
     top = NULL;
     bot = NULL;
-    delete top;
-    delete bot;
     if(bTop && bBot){
+    	if(t1 != NULL){
+    		top->add_ping(bot,*t1);
+    	}
    	 	g->links = g->links + 1;
    	}
+   	delete top;
+    delete bot;
 }
 
 // FILE TO DATA
@@ -149,7 +152,7 @@ void file2data(string name,Graph *g){
     	istringstream iss(str);
     	iss >> b;
     	iss >> t;
-    	addlink(g,t,b);
+    	addlink(g,t,b,NULL);
     }
     g->density = g->links / (float)(g->tops.size()*g->bots.size());
     file.close();

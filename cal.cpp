@@ -23,15 +23,20 @@ void file2data_PCAP_batch(string name,vector<string> channels,Graph * g){
 	string t;
 	string b;
 	string time_str;
+	string tmp;
+	struct tm tm;
+	time_t t1 = 4;
 
 	int z =  0;
 	while (getline(file, str))
     {
     	istringstream iss(str);
     	iss >> time_str;
-    	iss >> time_str;
+    	iss >> tmp;
+    	time_str.append(" " + tmp);
     	iss >> b;
     	iss >> t;
+    	t1 = timestamp_to_ctime(time_str.c_str());
     	size_t n = count(b.begin(), b.end(), '.');
     	if(n==4){
     		unsigned found = b.find_last_of(".");
@@ -49,10 +54,10 @@ void file2data_PCAP_batch(string name,vector<string> channels,Graph * g){
 			continue;
 		}
 	    if(find(channels.begin(), channels.end(), b)!=channels.end() && find(channels.begin(), channels.end(), t)==channels.end()){
-	    		addlink(g,b,t);
+	    		addlink(g,b,t,&t1);
 	    }else{		
 		    if(find(channels.begin(), channels.end(), t)!=channels.end() && find(channels.begin(), channels.end(), b)==channels.end()){
-		   			addlink(g,t,b);
+		   			addlink(g,t,b,&t1);
 		    }
 		}
     }
@@ -123,10 +128,10 @@ void file2dataPCAP_interval(ifstream * file,vector<string> channels,int interval
 		    	t = t.substr(0,found);
 			}
 		    if(find(channels.begin(), channels.end(), b)!=channels.end()  && find(channels.begin(), channels.end(), t)==channels.end()){
-		    		addlink(g,b,t);
+		    		addlink(g,b,t,NULL);
 		    }else{		
 			    if(find(channels.begin(), channels.end(), t)!=channels.end() && find(channels.begin(), channels.end(), b)==channels.end()){
-			   		addlink(g,t,b);
+			   		addlink(g,t,b,NULL);
 			    }
 			}
 	    }
@@ -146,13 +151,14 @@ map<string,float> get_ecart_type(map<string,vector<float> > list){
 			avg = avg + tmp[i]; 
 		}
 		avg = avg/(float)tmp.size();
+		res[it->first+"_avg"] = avg;
 		float sd = 0;
 		for(int i = 0 ; i < tmp.size() ; i++){
 			float sd_tmp = pow(tmp[i]-avg,2);
 			sd = sd + sd_tmp;
 		}
 		sd = sqrt(sd/(float)tmp.size());
-		res[it->first] = sd;
+		res[it->first+"_sd"] = sd;
 	}
 	return res;
 }
@@ -168,7 +174,8 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	vector<int> nb_super_pere;
 	vector<string> dist_degree_by_bot;
 	vector<float> change_degree_top;
-
+	map<int,set<string> > variance_degree_prev;
+	map<int,float> variance_degree;
 	map<string,vector<float> > distr_tops;
 
 	// get all channels
@@ -191,14 +198,11 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 
 	//going through each file for interval seconds.
 	bool keep = true;
-	int index = 0;
-	float lowest_density = 1.0;
-	float highest_density = 0.0;
-	Graph * g_lowest;
-	Graph * g_highest;
     set<string> prev;
+    int nb_interval = 0;
 
 	while(keep){
+		nb_interval++;
 		Graph * g = new Graph();
 		for(int i = 0 ; i < files.size() ; i++){
 			file2dataPCAP_interval(files[i],channels,interval,g);
@@ -218,6 +222,8 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 		dist_degree_by_bot.push_back(g->degrees_to_string_bot());
 		nb_super_pere.push_back(g->degrees_bot[g->max_bot]);
 
+
+		// DETECTION OF SUPER_USERS USING SD FOR EACH IP.
 		if(distr_tops.empty()){
 			for(int i = g->max_bot - 6 ; i <= g->max_bot ; i++){
 				set<string> list_tmp = g->distr_by_degree[i];
@@ -244,42 +250,31 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 			}
 		}
 
-		// set<string> id_super_pere = g->distr_by_degree[g->max_bot]; 
-  //       set<string>::iterator it;
-  //       if(prev.empty()){
-  //           cout << "i am here \n";
-  //           prev = id_super_pere;
-  //       }else{
-  //           vector<string> tmp;
-  //           std::set_intersection(id_super_pere.begin(), id_super_pere.end(),
-  //                                 prev.begin(),prev.end(),std::back_inserter(tmp));
-  //           float val = (float)tmp.size()*2/(float)id_super_pere.size()+prev.size();
-  //           cout << val << "\n";
-  //           change_degree_top.push_back(val);
-  //           prev = id_super_pere;
-  //       }
-		
-		if(g->density > highest_density){
-			highest_density = g->density;
-			g_highest = g;
-			g = NULL;
-		}else if(g->density < lowest_density){
-			lowest_density = g->density;
-			g_lowest = g;
-			g = NULL;
+		if(variance_degree_prev.empty()){
+			for(int i = g->max_bot - 6 ; i <= g->max_bot ; i++){
+				variance_degree_prev[i] = g->distr_by_degree[i];
+				variance_degree[i] = 0;
+			}
 		}else{
-			g->free_data();
-			delete(g);
+			for(int i = g->max_bot - 6 ; i <= g->max_bot ; i++){
+				set<string> list_current = g->distr_by_degree[i]; 
+				vector<string> tmp;
+    	        std::set_intersection(list_current.begin(), list_current.end(),
+     	                             variance_degree_prev[i].begin(),variance_degree_prev[i].end()
+     	                             ,std::back_inserter(tmp));
+    	        float val = (float)tmp.size()*2/(float)list_current.size()+variance_degree_prev[i].size();
+    	        variance_degree[i] = variance_degree[i] + val;
+			}
 		}
+
+		g->free_data();
+		delete(g);
 	}
-	vector<Graph *> peaks;
-	peaks.push_back(g_lowest);
-	peaks.push_back(g_highest);
-	stats_to_file_interval(peaks,"peaks.stat");
-	g_lowest->free_data();
-	delete(g_lowest);
-	g_highest->free_data();
-	delete(g_highest);
+
+
+	for(int i =  6 ; 12 ; i++){
+ 		cout << variance_degree[i] / (float)nb_interval <<  "\n";
+	}
 
 
 	stringstream stream1;
@@ -289,8 +284,6 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 
 	map<string,float> ecart_distr =  get_ecart_type(distr_tops);
     create_graph_map(ecart_distr,"ecart_distr_"+current_time_+".stat");
-
-	//graphs using basic functions
 	create_graph_float(cc_graph,times,"cc_interval_"+current_time_+".stat");
 	create_graph_float(degree_graph,times,"density_interval_"+current_time_+".stat");
 	create_graph_float(change_degree_top,times,"changement_"+current_time_+".stat");

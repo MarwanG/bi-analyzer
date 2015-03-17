@@ -29,6 +29,17 @@ bool Node::addneighbours(Node* son){
 }
 
 
+void Node::add_ping(Node *son,time_t t){
+  
+  if(freq_ping.find(son->get_index()) == freq_ping.end()){
+    vector<time_t> tmp;
+    tmp.push_back(t);
+    freq_ping[son->get_index()] = tmp;
+  }else{
+    freq_ping[son->get_index()].push_back(t);
+  }
+}
+
 
 void Node::calculate_redundancy(){
   double nb = (double) pairs.size();
