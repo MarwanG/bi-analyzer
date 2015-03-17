@@ -221,6 +221,16 @@ void create_graph_nb_bot(vector<int> v,vector<string> time,vector<string> s,stri
     myfile.close();
 }
 
+void create_graph_map(map<string,float> list,string name){
+    ofstream myfile;
+    myfile.open(name);
+    map<string,float>::iterator it;
+    for(it=list.begin();it!=list.end();it++){
+        myfile << it->first << "  " << it->second << "\n";
+    }
+    myfile.close();
+}
+
 void stats_to_file_interval(std::vector<Graph*> list,std::string name){
 	ofstream myfile;
 	myfile.open(name);
