@@ -36,12 +36,13 @@ void file2data_PCAP_batch(string name,vector<string> channels,Graph * g){
     	time_str.append(" " + tmp);
     	iss >> b;
     	iss >> t;
+        iss >> tmp;
   		iss >> tmp;
   		if(tmp.compare("ip-proto-17")==0){
   			continue;
   		}
   		size_pack = atoi(tmp.c_str());
-    	size_t n = count(b.begin(), b.end(), '.');
+        size_t n = count(b.begin(), b.end(), '.');
     	if(n==4){
     		unsigned found = b.find_last_of(".");
 	    	b = b.substr(0,found);
