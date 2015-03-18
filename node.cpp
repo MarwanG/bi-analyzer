@@ -65,12 +65,12 @@ void Node::add_ping(Node *son,string s,int size_pack){
 
     t = t * 1000;
 
-    cout << t1_str_milli << "   " << t2_str_milli << "  " << diff_milli_tmp << " \n";
+    // cout << t1_str_milli << "   " << t2_str_milli << "  " << diff_milli_tmp << " \n";
 
 
     t = t + diff_milli_tmp;
    
-    cout << freq_last_time[son->get_index()].c_str() << "  " << s.c_str() << " " << t << " \n";
+    // cout << freq_last_time[son->get_index()].c_str() << "  " << s.c_str() << " " << t << " \n";
     freq_ping[son->get_index()].push_back(t);
     freq_last_time[son->get_index()] = s;
     size_pack_list[son->get_index()] = size_pack_list[son->get_index()] + size_pack;
