@@ -26,7 +26,7 @@ void file2data_PCAP_batch(string name,vector<string> channels,Graph * g){
 	string tmp;
 	struct tm tm;
 	time_t t1 = 4;
-
+	int size_pack = 0;
 	int z =  0;
 	while (getline(file, str))
     {
@@ -36,7 +36,11 @@ void file2data_PCAP_batch(string name,vector<string> channels,Graph * g){
     	time_str.append(" " + tmp);
     	iss >> b;
     	iss >> t;
-    	// t1 = timestamp_to_ctime(time_str.c_str());
+  		iss >> tmp;
+  		if(tmp.compare("ip-proto-17")==0){
+  			continue;
+  		}
+  		size_pack = atoi(tmp.c_str());
     	size_t n = count(b.begin(), b.end(), '.');
     	if(n==4){
     		unsigned found = b.find_last_of(".");
@@ -54,10 +58,10 @@ void file2data_PCAP_batch(string name,vector<string> channels,Graph * g){
 			continue;
 		}
 	    if(find(channels.begin(), channels.end(), b)!=channels.end() && find(channels.begin(), channels.end(), t)==channels.end()){
-	    		addlink(g,b,t,&time_str);
+	    		addlink(g,b,t,&time_str,size_pack);
 	    }else{		
 		    if(find(channels.begin(), channels.end(), t)!=channels.end() && find(channels.begin(), channels.end(), b)==channels.end()){
-		   			addlink(g,t,b,&time_str);
+		   			addlink(g,t,b,&time_str,size_pack);
 		    }
 		}
     }
@@ -69,6 +73,9 @@ void file2data_PCAP_batch(string name,vector<string> channels,Graph * g){
 
 float get_ecart_list(vector<double> list){
 	float avg = 0;
+	if(list.size() <= 1){
+		return -1;
+	}
 	for(int i = 0 ; i < list.size() ; i++){
 		avg = avg + list[i];
 	}
@@ -102,7 +109,11 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 			stream1 << it->first;
 			string tmp_string = stream1.str();
 			string title = n->get_title() + " " + tmp_string;	
-			ecart_type[title]=get_ecart_list(v);
+			float res = get_ecart_list(v);
+			cout << "total share : " << n->size_pack_list[it->first] << "\n";
+			if(res != -1){
+				ecart_type[title]=res;
+			}
 		}
 	}	
 	stat_to_stdout(g);
@@ -154,10 +165,10 @@ void file2dataPCAP_interval(ifstream * file,vector<string> channels,int interval
 		    	t = t.substr(0,found);
 			}
 		    if(find(channels.begin(), channels.end(), b)!=channels.end()  && find(channels.begin(), channels.end(), t)==channels.end()){
-		    		addlink(g,b,t,NULL);
+		    		addlink(g,b,t,NULL,0);
 		    }else{		
 			    if(find(channels.begin(), channels.end(), t)!=channels.end() && find(channels.begin(), channels.end(), b)==channels.end()){
-			   		addlink(g,t,b,NULL);
+			   		addlink(g,t,b,NULL,0);
 			    }
 			}
 	    }
@@ -250,6 +261,7 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 
 
 		// DETECTION OF SUPER_USERS USING SD FOR EACH IP.
+		// dectection of variance of degree for ips that have degree >= 6
 		if(distr_tops.empty()){
 			for(int i = g->max_bot - 6 ; i <= g->max_bot ; i++){
 				set<string> list_tmp = g->distr_by_degree[i];
@@ -276,31 +288,34 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 			}
 		}
 
-		if(variance_degree_prev.empty()){
-			for(int i = g->max_bot - 6 ; i <= g->max_bot ; i++){
-				variance_degree_prev[i] = g->distr_by_degree[i];
-				variance_degree[i] = 0;
-			}
-		}else{
-			for(int i = g->max_bot - 6 ; i <= g->max_bot ; i++){
-				set<string> list_current = g->distr_by_degree[i]; 
-				vector<string> tmp;
-    	        std::set_intersection(list_current.begin(), list_current.end(),
-     	                             variance_degree_prev[i].begin(),variance_degree_prev[i].end()
-     	                             ,std::back_inserter(tmp));
-    	        float val = (float)tmp.size()*2/(float)list_current.size()+variance_degree_prev[i].size();
-    	        variance_degree[i] = variance_degree[i] + val;
-			}
-		}
+
+		// USELESS FOR NOW  !!
+		// if(variance_degree_prev.empty()){
+		// 	for(int i = g->max_bot - 6 ; i <= g->max_bot ; i++){
+		// 		variance_degree_prev[i] = g->distr_by_degree[i];
+		// 		variance_degree[i] = 0;
+		// 	}
+		// }else{
+		// 	for(int i = g->max_bot - 6 ; i <= g->max_bot ; i++){
+		// 		set<string> list_current = g->distr_by_degree[i]; 
+		// 		vector<string> tmp;
+  //   	        std::set_intersection(list_current.begin(), list_current.end(),
+  //    	                             variance_degree_prev[i].begin(),variance_degree_prev[i].end()
+  //    	                             ,std::back_inserter(tmp));
+  //   	        float val = (float)tmp.size()*2/(float)list_current.size()+variance_degree_prev[i].size();
+  //   	        variance_degree[i] = variance_degree[i] + val;
+		// 	}
+		// }
 
 		g->free_data();
 		delete(g);
 	}
 
 
-	for(int i =  6 ; i < 12 ; i++){
- 		cout << variance_degree[i] / (float)nb_interval <<  "\n";
-	}
+	 //affichage sur stdout
+	// for(int i =  6 ; i < 12 ; i++){
+ 	// 		cout << variance_degree[i] / (float)nb_interval <<  "\n";
+	// }
 
 
 	stringstream stream1;

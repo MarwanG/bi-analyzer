@@ -32,12 +32,13 @@ bool Node::addneighbours(Node* son){
 }
 
 
-void Node::add_ping(Node *son,string s){ 
+void Node::add_ping(Node *son,string s,int size_pack){ 
   if(freq_ping.find(son->get_index()) == freq_ping.end()){
     vector<double> tmp;
     tmp.push_back(0);
     freq_ping[son->get_index()] = tmp;
     freq_last_time[son->get_index()] = s;
+    size_pack_list[son->get_index()] = size_pack;
   }else{
     string prev_time = freq_last_time[son->get_index()];
     time_t t1 = timestamp_to_ctime(prev_time.c_str());
@@ -72,6 +73,7 @@ void Node::add_ping(Node *son,string s){
     cout << freq_last_time[son->get_index()].c_str() << "  " << s.c_str() << " " << t << " \n";
     freq_ping[son->get_index()].push_back(t);
     freq_last_time[son->get_index()] = s;
+    size_pack_list[son->get_index()] = size_pack_list[son->get_index()] + size_pack;
   }
 }
 

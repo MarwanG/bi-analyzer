@@ -101,7 +101,7 @@ int main(int argc, char* argv[]){
 		nbChannels.push_back(1);
 		nbChannels.push_back(3);
 
-		// get_stat_pcap_interval(list,nbChannels,60);
-		get_stat_pcap_batch(list,nbChannels);
+		get_stat_pcap_interval(list,nbChannels,60);
+		// get_stat_pcap_batch(list,nbChannels);
 	}	
 }

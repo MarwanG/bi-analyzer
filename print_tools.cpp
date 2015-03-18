@@ -226,7 +226,7 @@ void create_graph_map(map<string,float> list,string name){
     myfile.open(name);
     map<string,float>::iterator it;
     for(it=list.begin();it!=list.end();it++){
-        myfile << it->first << "  " << it->second << "\n";
+        myfile << it->first << "  " << fixed << it->second << "\n";
     }
     myfile.close();
 }
