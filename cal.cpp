@@ -93,6 +93,7 @@ float get_ecart_list(vector<double> list){
 void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 	map<string,int> list;
 	map<string,float> ecart_type;
+	map<string,float> avg_pack;
 	Graph * g = new Graph();
 	for(int i = 0 ; i < names.size() ; i++){
 		vector<string> v =  get_channels(names[i],nbChannels[i],list);
@@ -111,9 +112,10 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 			string tmp_string = stream1.str();
 			string title = n->get_title() + " " + tmp_string;	
 			float res = get_ecart_list(v);
-			cout << "total share : " << n->size_pack_list[it->first] << "\n";
+			float res2 = n->size_pack_list[it->first] / (float)v.size();
 			if(res != -1){
 				ecart_type[title]=res;
+				avg_pack[title] = res2;
 			}
 		}
 	}	
@@ -121,7 +123,7 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 	calculate_stat_graph(g);
 	stat_to_file(g);
     create_graph_int_map(g->degrees_bot,"dist_degree_bot.stat");
-    create_graph_map(ecart_type,"ecart_type.stat");
+    create_graph_2_map(ecart_type,avg_pack,"ecart_type_time_avg_pack.stat");
 	g->free_data();
 	delete(g);
 }
