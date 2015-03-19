@@ -211,6 +211,16 @@ void create_graph_int_map(map<int,int>degrees_bot,string name){
     myfile.close();
 }
 
+void create_graph_map_int_float(map<int,float>degrees_bot,string name){
+	ofstream myfile;
+	myfile.open(name);
+    map<int,float>::iterator it;
+    for(it=degrees_bot.begin();it!=degrees_bot.end();it++){
+       myfile << it->first << "  " << it->second << "\n";
+    }
+    myfile.close();
+}
+
 
 void create_graph_nb_bot(vector<int> v,vector<string> time,vector<string> s,string name){
 	ofstream myfile;
