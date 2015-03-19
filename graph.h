@@ -22,6 +22,7 @@ public:
 	void update_degree_cc(Node *n);
 	void update_redundancy_bot(Node * n);
 	void update_redundancy_top(Node * n);
+	std::string packs_to_string_bot();
 
 	std::string degrees_to_string();
 	std::string degrees_to_string_bot();
@@ -34,6 +35,7 @@ public:
 
 
 	std::unordered_map<int,std::set<std::string> > distr_by_degree;
+
 
 	// STATS MIGHT BE GOOD IDEA TO PASS THEM NOT SO SURE YET.
 	std::map<int,int> degrees_top;

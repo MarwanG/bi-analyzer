@@ -87,6 +87,17 @@ string Graph::degrees_to_string_bot(){
 	return res;
 }
 
+string Graph::packs_to_string_bot(){
+	string res = "";
+	string s;
+	for(int i = 0 ; i <= tops.size() ;i++){
+		ostringstream oss;
+        oss << tops[i]->total_packs;
+        res = res + oss.str() + " ";
+	}
+	return res;
+}
+
 void Graph::free_data(){
 	for(int i = 0 ; i < tops.size() ; i++){
 		delete tops[i];

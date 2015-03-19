@@ -131,6 +131,7 @@ void addlink(Graph *g,string t , string b,string *t1,int size_pack){
 	if(t1 != NULL){
     		top->add_ping(bot,*t1,size_pack);
 	}
+	top->total_packs = top->total_packs + size_pack;
     if(bTop && bBot){
    	 	g->links = g->links + 1;
    	}

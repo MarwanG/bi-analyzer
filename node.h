@@ -49,6 +49,8 @@ public:
 	std::string get_title();
 
 	int nb_top_neighbours;
+	int total_packs;
+
 	std::set <int>   neighbours_indexs ;
 	std::unordered_map<int,Node*> neighbours;
 	std::map<int,std::vector<double> > freq_ping;

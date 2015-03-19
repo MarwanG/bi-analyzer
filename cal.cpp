@@ -135,9 +135,11 @@ void file2dataPCAP_interval(ifstream * file,vector<string> channels,int interval
 	string b;
 	string time_str;
 	string tmp;
+	string tmp2;
 	struct tm tm;
 	time_t t1 = 4;
 	time_t t2 = 4;
+	int size_pack = 0;
 	while (getline(*file, str))
     {
     	istringstream iss(str);
@@ -146,11 +148,12 @@ void file2dataPCAP_interval(ifstream * file,vector<string> channels,int interval
     	time_str.append(" " + tmp);
     	iss >> b;
     	iss >> t; 
-    // 	iss >> tmp;
-  		// iss >> tmp;
-  		if(tmp.compare("ip-proto-17")==0){
+    	iss >> tmp2;
+  		iss >> tmp2;
+  		if(tmp2.compare("ip-proto-17")==0){
   			continue;
   		}
+  		size_pack = atoi(tmp2.c_str());
     	if(count(b.begin(), b.end(), '.') > 2 &&  count(t.begin(), t.end(), '.') > 2){
 	    	if(t1 == 4){
 	    		t1 = timestamp_to_ctime(time_str.c_str());
@@ -179,10 +182,10 @@ void file2dataPCAP_interval(ifstream * file,vector<string> channels,int interval
 				continue;
 			}
 		    if(find(channels.begin(), channels.end(), b)!=channels.end()  && find(channels.begin(), channels.end(), t)==channels.end()){
-		    		addlink(g,b,t,NULL,0);
+		    		addlink(g,b,t,NULL,size_pack);
 		    }else{		
 			    if(find(channels.begin(), channels.end(), t)!=channels.end() && find(channels.begin(), channels.end(), b)==channels.end()){
-			   		addlink(g,t,b,NULL,0);
+			   		addlink(g,t,b,NULL,size_pack);
 			    }
 			}
 	    }
@@ -229,6 +232,8 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	map<int,float> variance_degree;
 	map<string,vector<float> > distr_tops;
 
+	vector<string> size_pack_top;
+
 	// get all channels
 	
 	for(int i = 0 ; i < names.size() ; i++){
@@ -271,6 +276,7 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 		nb_bot_graph.push_back(g->bots.size());
 		dist_degree_by_top.push_back(g->degrees_to_string());
 		dist_degree_by_bot.push_back(g->degrees_to_string_bot());
+		size_pack_top.push_back(g->packs_to_string_bot());
 		nb_super_pere.push_back(g->degrees_bot[g->max_bot]);
 
 
@@ -302,6 +308,20 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 			}
 		}
 
+		set<string> id_super_pere = g->distr_by_degree[g->max_bot]; 
+        set<string>::iterator it;
+        if(prev.empty()){
+            prev = id_super_pere;
+        }else{
+            vector<string> tmp;
+            std::set_intersection(id_super_pere.begin(), id_super_pere.end(),
+                                  prev.begin(),prev.end(),std::back_inserter(tmp));
+            float val = (float)tmp.size()*2/(float)id_super_pere.size()+prev.size();
+            cout << val << "\n";
+            change_degree_top.push_back(val);
+            prev = id_super_pere;
+        }
+
 		// variance by for the 6 degree (how many the tps change)
 		if(variance_degree_prev.empty()){
 			for(int i = g->max_bot - 6 ; i <= g->max_bot ; i++){
@@ -325,6 +345,10 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	}
 
 
+	for(int i =  6 ; 12 ; i++){
+ 		cout << variance_degree[i] / (float)nb_interval <<  "\n";
+	}
+
 
 	stringstream stream1;
 	stream1 << interval;
@@ -340,6 +364,7 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	create_graph_float(change_degree_top,times,"changement_"+current_time_+".stat");
 	create_graph_int(nb_super_pere,times,"nb_super_pere_"+current_time_+".stat");
 	create_graph_string(dist_degree_by_bot,times,"dist_degree_bot_"+current_time_+".stat");
+	create_graph_string(size_pack_top,times,"size_pack_top_"+current_time_+".stat");
 	create_graph_nb_bot(nb_bot_graph,times,dist_degree_by_top,"nb_bot_interval_"+current_time_+".stat");	
 }
 
