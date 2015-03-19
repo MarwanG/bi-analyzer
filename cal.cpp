@@ -146,8 +146,8 @@ void file2dataPCAP_interval(ifstream * file,vector<string> channels,int interval
     	time_str.append(" " + tmp);
     	iss >> b;
     	iss >> t; 
-    	iss >> tmp;
-  		iss >> tmp;
+    // 	iss >> tmp;
+  		// iss >> tmp;
   		if(tmp.compare("ip-proto-17")==0){
   			continue;
   		}
