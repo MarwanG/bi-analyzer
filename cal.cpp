@@ -102,6 +102,9 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 		}
 		file2data_PCAP_batch(names[i],v,g);
 	}
+
+
+	//PACK/TIME TREATEMENT.
 	for(int i = 0 ; i < g->tops.size() ; i++){
 		Node * n = g->tops[i];
 		std::map<int,std::vector<double> >::iterator it;
@@ -322,8 +325,10 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
   			                     set_2.begin(),set_2.end(),std::back_inserter(tmp));
   	            nb_each_degree[degree].push_back(set_2.size());
   	            diff_nb_each_degree[degree].push_back(tmp.size());
+  	            cout << set_2 << "  " << tmp.size() << "\n";
 			}
 			prev_set_by_degree = current_set_by_degree;
+			current_set_by_degree.clear();
 		}
 
 		g->free_data();

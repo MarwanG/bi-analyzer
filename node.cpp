@@ -33,6 +33,11 @@ bool Node::addneighbours(Node* son){
 }
 
 
+// void Node::add_pack(Node*son,int size_pack){
+  
+// }
+
+
 void Node::add_ping(Node *son,string s,int size_pack){ 
   if(freq_ping.find(son->get_index()) == freq_ping.end()){
     vector<double> tmp;
@@ -55,23 +60,11 @@ void Node::add_ping(Node *son,string s,int size_pack){
     if(t2_str_milli[0]=='0'){
       t2_str_milli = prev_time.substr(prev_time.find('.')+2,prev_time.length());
     }
-
-
     int t1_milli = atoi(t1_str_milli.c_str());
     int t2_milli = atoi(t2_str_milli.c_str());
-
-   
-
     int diff_milli_tmp = abs(t1_milli-t2_milli);
-
     t = t * 1000;
-
-    // cout << t1_str_milli << "   " << t2_str_milli << "  " << diff_milli_tmp << " \n";
-
-
     t = t + diff_milli_tmp;
-   
-    // cout << freq_last_time[son->get_index()].c_str() << "  " << s.c_str() << " " << t << " \n";
     freq_ping[son->get_index()].push_back(t);
     freq_last_time[son->get_index()] = s;
     size_pack_list[son->get_index()] = size_pack_list[son->get_index()] + size_pack;
