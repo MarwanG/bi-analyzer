@@ -195,27 +195,6 @@ void file2dataPCAP_interval(ifstream * file,vector<string> channels,int interval
 
 
 
-map<string,float> get_ecart_type(map<string,vector<float> > list){
-	map<string,float> res;
-	map<string,vector<float> >::iterator it;
-	for(it=list.begin();it!=list.end();it++){
-		vector<float> tmp = it->second;
-		float avg = 0;
-		for(int i = 0 ; i < tmp.size() ; i++){
-			avg = avg + tmp[i]; 
-		}
-		avg = avg/(float)tmp.size();
-		res[it->first+"_avg"] = avg;
-		float sd = 0;
-		for(int i = 0 ; i < tmp.size() ; i++){
-			float sd_tmp = pow(tmp[i]-avg,2);
-			sd = sd + sd_tmp;
-		}
-		sd = sqrt(sd/(float)tmp.size());
-		res[it->first+"_sd"] = sd;
-	}
-	return res;
-}
 
 
 vector<pair<float,float> > avg_for_each (map<string,vector<int> > list){
@@ -344,6 +323,7 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
   	            nb_each_degree[degree].push_back(set_2.size());
   	            diff_nb_each_degree[degree].push_back(tmp.size());
 			}
+			prev_set_by_degree = current_set_by_degree;
 		}
 
 		g->free_data();

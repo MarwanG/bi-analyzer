@@ -273,7 +273,7 @@ void create_graph_degree_change(map<int,vector<int> > nb_each_degree,map<int,vec
 		map<int,vector<int> >::iterator it2;
 		it2 = diff_nb_each_degree.begin();
 		for(it=nb_each_degree.begin() ; it != nb_each_degree.end() ; it++){
-			myfile << it->second[i] << "  " << it2->second[i] << " ";
+			myfile << it->second[i] << " " << it2->second[i] << " ";
 			it2++;
 		}
 		myfile << "\n";
