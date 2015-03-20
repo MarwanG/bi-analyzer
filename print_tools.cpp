@@ -264,6 +264,24 @@ void create_graph_pairs(vector<pair<float,float> > list,string name){
 }
 
 
+void create_graph_degree_change(map<int,vector<int> > nb_each_degree,map<int,vector<int> > diff_nb_each_degree,vector<string> times,string name){
+	ofstream myfile;
+	myfile.open(name);
+	for(int i = 0 ; i < times.size() ; i++){
+		myfile << times[i] << " ";
+		map<int,vector<int> >::iterator it;
+		map<int,vector<int> >::iterator it2;
+		it2 = diff_nb_each_degree.begin();
+		for(it=nb_each_degree.begin() ; it != nb_each_degree.end() ; it++){
+			myfile << it->second[i] << "  " << it2->second[i] << " ";
+			it2++;
+		}
+		myfile << "\n";
+	}
+	myfile.close();
+}
+
+
 void stats_to_file_interval(std::vector<Graph*> list,std::string name){
 	ofstream myfile;
 	myfile.open(name);
@@ -286,6 +304,10 @@ void stats_to_file_interval(std::vector<Graph*> list,std::string name){
 		myfile << "Dispersion coefficient (top) : " << list[i]->disp << "\n";
 	}
 }
+
+
+
+
 
 // NEEDS TO BE MOVED TO BE FIXED
 // void graph_degree_cc(){

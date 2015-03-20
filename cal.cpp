@@ -253,27 +253,28 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	vector<string> dist_degree_by_top;
 	vector<int> nb_super_pere;
 	vector<string> dist_degree_by_bot;
-	vector<float> change_degree_top;
-	map<int,set<string> > variance_degree_prev;
-	map<int,float> variance_degree;
-	map<string,vector<float> > distr_tops;
-
 	map<string,vector<int> > variance_degree_each_bot;
-
 	vector<string> size_pack_top;
 
-	// get all channels
+
+	map<int,vector<int> > nb_each_degree;
+	map<int,vector<int> > diff_nb_each_degree;
 	
+	map<int,set<string> > prev_set_by_degree;
+	map<int,set<string> > current_set_by_degree;
+
+
+	set<string> diff_bots;
+
+
+
+	// get all channels	
 	for(int i = 0 ; i < names.size() ; i++){
 		vector<string> tmp = get_channels(names[i],nbChannels[i],list);
 		channels.insert(channels.end(), tmp.begin(), tmp.end());
 	}
 
-    for(int i = 0 ; i < channels.size() ; i++){
-        cout << channels[i] << "\n";
-    }
 	//opening all the files.
-
 	vector<ifstream*> files;
 	for(int i = 0 ; i < names.size() ; i++){
 		ifstream * file = new ifstream(names[i].c_str());
@@ -284,7 +285,6 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	bool keep = true;
     set<string> prev;
     int nb_interval = 0;
-
 	while(keep){
 		nb_interval++;
 		Graph * g = new Graph();
@@ -307,96 +307,52 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
         size_pack_top.push_back(g->packs_to_string_bot());
 		nb_super_pere.push_back(g->degrees_bot[g->max_bot]);
 
-		
-
-
 		// Getting the degree of each Node and placing is in a list.
 		if(variance_degree_each_bot.empty()){
 			for(int i = 0 ; i < g->bots.size() ; i++){
+				diff_bots.insert(g->bots[i]->get_title());
 				int degree = g->bots[i]->get_degree();	
+				if(degree >= 6){
+					current_set_by_degree[degree].insert(g->bots[i]->get_title());
+				}
 				vector<int> tmp_;
 				tmp_.push_back(degree);
 				variance_degree_each_bot[g->bots[i]->get_title()] = tmp_;
 			}
 		}else{
 			for(int i = 0 ; i < g->bots.size() ; i++){
+				diff_bots.insert(g->bots[i]->get_title());
 				int degree = g->bots[i]->get_degree();	
+				if(degree >= 6){
+					current_set_by_degree[degree].insert(g->bots[i]->get_title());
+				}
 				variance_degree_each_bot[g->bots[i]->get_title()].push_back(degree);
 			}
 		}
 
-
-
-		// DETECTION OF SUPER_USERS USING SD FOR EACH IP.
-		// dectection of variance of degree for ips that have degree >= 6
-		
-		// if(distr_tops.empty()){
-		// 	for(int i = g->max_bot - 6 ; i <= g->max_bot ; i++){
-		// 		set<string> list_tmp = g->distr_by_degree[i];
-		// 		set<string>::iterator it;
-		// 		for (it = list_tmp.begin(); it != list_tmp.end(); ++it){
-		// 			vector<float> tmp_;
-		// 			tmp_.push_back(i); 
-		// 			distr_tops[*it] = tmp_;
-		// 		}		 
-		// 	}
-		// }else{
-		// 	for(int i = g->max_bot - 6 ; i <= g->max_bot ; i++){
-		// 		set<string> list_tmp = g->distr_by_degree[i];
-		// 		set<string>::iterator it;
-		// 		for (it = list_tmp.begin(); it != list_tmp.end(); ++it){
-		// 			if(distr_tops.find(*it) == distr_tops.end()){
-		// 				vector<float> tmp_;
-		// 				tmp_.push_back(i); 
-		// 				distr_tops[*it] = tmp_;
-		// 			}else{
-		// 				distr_tops[*it].push_back(i);
-		// 			}
-		// 		}
-		// 	}
-		// }
-
-		// set<string> id_super_pere = g->distr_by_degree[g->max_bot]; 
-  //       set<string>::iterator it;
-  //       if(prev.empty()){
-  //           prev = id_super_pere;
-  //       }else{
-  //           vector<string> tmp;
-  //           std::set_intersection(id_super_pere.begin(), id_super_pere.end(),
-  //                                 prev.begin(),prev.end(),std::back_inserter(tmp));
-  //           float val = (float)tmp.size()*2/(float)id_super_pere.size()+prev.size();
-  //           cout << val << "\n";
-  //           change_degree_top.push_back(val);
-  //           prev = id_super_pere;
-  //       }
-
-		// variance by for the 6 degree (how many the tps change)
-		// if(variance_degree_prev.empty()){
-		// 	for(int i = g->max_bot - 6 ; i <= g->max_bot ; i++){
-		// 		variance_degree_prev[i] = g->distr_by_degree[i];
-		// 		variance_degree[i] = 0;
-		// 	}
-		// }else{
-		// 	for(int i = g->max_bot - 6 ; i <= g->max_bot ; i++){
-		// 		set<string> list_current = g->distr_by_degree[i]; 
-		// 		vector<string> tmp;
-  //   	        std::set_intersection(list_current.begin(), list_current.end(),
-  //    	                             variance_degree_prev[i].begin(),variance_degree_prev[i].end()
-  //    	                             ,std::back_inserter(tmp));
-  //   	        float val = (float)tmp.size()*2/(float)list_current.size()+variance_degree_prev[i].size();
-  //   	        variance_degree[i] = variance_degree[i] + val;
-		// 	}
-		// }
+		if(prev_set_by_degree.empty()){
+			prev_set_by_degree = current_set_by_degree;
+		}else{
+			map<int,set<string> >::iterator it;
+			for(it = prev_set_by_degree.begin() ; it != prev_set_by_degree.end() ;it++){
+				int degree = it->first;
+				set<string> set_1 = it->second;
+				set<string> set_2 = current_set_by_degree[degree];
+  				vector<string> tmp;
+  	            std::set_intersection(set_1.begin(), set_1.end(),
+  			                     set_2.begin(),set_2.end(),std::back_inserter(tmp));
+  	            nb_each_degree[degree].push_back(set_2.size());
+  	            diff_nb_each_degree[degree].push_back(tmp.size());
+			}
+		}
 
 		g->free_data();
 		delete(g);
 	}
 
 
-	// map<string,float> ecart_distr =  get_ecart_type(distr_tops);
 
-	// create_graph_map_int_float(variance_degree,"variance_degree_"+current_time_+".stat");
-    // create_graph_map(ecart_distr,"ecart_distr_"+current_time_+".stat");
+
 	
 
 	stringstream stream1;
@@ -408,10 +364,13 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	vector<pair<float,float> > avg_sd_degree =  avg_for_each(variance_degree_each_bot);
 
 
+	cout << "NUMBER OF DIFFERENT BOTS  :: " << diff_bots.size() << "\n";
+
+
+	create_graph_degree_change(nb_each_degree,diff_nb_each_degree,times,"degree_change_"+current_time_+".stat");
 	create_graph_pairs(avg_sd_degree,"avg_sd_degree_"+current_time_+".stat");
 	create_graph_float(cc_graph,times,"cc_interval_"+current_time_+".stat");
 	create_graph_float(degree_graph,times,"density_interval_"+current_time_+".stat");
-	create_graph_float(change_degree_top,times,"changement_"+current_time_+".stat");
 	create_graph_int(nb_super_pere,times,"nb_super_pere_"+current_time_+".stat");
 	create_graph_string(dist_degree_by_bot,times,"dist_degree_bot_"+current_time_+".stat");
 	create_graph_string(size_pack_top,times,"size_pack_top_"+current_time_+".stat");
