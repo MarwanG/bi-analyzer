@@ -251,6 +251,19 @@ void create_graph_2_map(map<string,float> list,map<string,float> list2,string na
     myfile.close();
 }
 
+
+
+void create_graph_pairs(vector<pair<float,float> > list,string name){
+	ofstream myfile;
+    myfile.open(name);
+    for(int i = 0 ; i < list.size() ; i++){
+    	myfile << list[i].first << "  " << list[i].second << "\n";
+    }
+    myfile.close();
+
+}
+
+
 void stats_to_file_interval(std::vector<Graph*> list,std::string name){
 	ofstream myfile;
 	myfile.open(name);

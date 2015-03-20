@@ -26,4 +26,5 @@ void create_graph_string(std::vector<std::string> v,std::vector<std::string> s,s
 void create_graph_map(std::map<std::string,float> list,std::string name);
 void create_graph_2_map(std::map<std::string,float> list,std::map<std::string,float> list2,std::string name);
 void create_graph_map_int_float(std::map<int,float>degrees_bot,std::string name);
+void create_graph_pairs(std::vector<std::pair<float,float> > list,std::string name);
 #endif
