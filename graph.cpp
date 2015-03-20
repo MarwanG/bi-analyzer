@@ -90,7 +90,7 @@ string Graph::degrees_to_string_bot(){
 string Graph::packs_to_string_bot(){
 	string res = "";
 	string s;
-	for(int i = 0 ; i <= tops.size() ;i++){
+	for(int i = 0 ; i < tops.size() ;i++){
 		ostringstream oss;
         oss << tops[i]->total_packs;
         res = res + oss.str() + " ";

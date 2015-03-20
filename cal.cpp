@@ -269,16 +269,15 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 		}
 		calculate_stat_graph(g);
 		stat_to_stdout(g);
-		
+    
 		times.push_back(g->time_);
 		cc_graph.push_back(g->cc);
 		degree_graph.push_back(g->density);
 		nb_bot_graph.push_back(g->bots.size());
 		dist_degree_by_top.push_back(g->degrees_to_string());
 		dist_degree_by_bot.push_back(g->degrees_to_string_bot());
-		size_pack_top.push_back(g->packs_to_string_bot());
+        size_pack_top.push_back(g->packs_to_string_bot());
 		nb_super_pere.push_back(g->degrees_bot[g->max_bot]);
-
 
 		// DETECTION OF SUPER_USERS USING SD FOR EACH IP.
 		// dectection of variance of degree for ips that have degree >= 6
@@ -345,7 +344,7 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	}
 
 
-	for(int i =  6 ; 12 ; i++){
+	for(int i =  6 ; i < 12 ; i++){
  		cout << variance_degree[i] / (float)nb_interval <<  "\n";
 	}
 
