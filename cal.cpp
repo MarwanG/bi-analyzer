@@ -366,8 +366,11 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 
 	cout << "NUMBER OF DIFFERENT BOTS  :: " << diff_bots.size() << "\n";
 
+	vector<string> times_tmp = times;
+	times_tmp.erase (times_tmp.begin());
 
-	create_graph_degree_change(nb_each_degree,diff_nb_each_degree,times,"degree_change_"+current_time_+".stat");
+
+	create_graph_degree_change(nb_each_degree,diff_nb_each_degree,times_tmp,"degree_change_"+current_time_+".stat");
 	create_graph_pairs(avg_sd_degree,"avg_sd_degree_"+current_time_+".stat");
 	create_graph_float(cc_graph,times,"cc_interval_"+current_time_+".stat");
 	create_graph_float(degree_graph,times,"density_interval_"+current_time_+".stat");
