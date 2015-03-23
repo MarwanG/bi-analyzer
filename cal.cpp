@@ -129,9 +129,6 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 			long double avg_pack_res = get_avg_list(n->size_pack_list[it->first]);
 			long double ecart_pack_res = get_ecart_list(n->size_pack_list[it->first],avg_pack_res);
 
-
-
-
 			if(avg_time_res != -1){
 				avg_time[title] = avg_time_res;
 				ecart_type_time[title]=ecart_time_res;
@@ -148,10 +145,10 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 
 	string current_time_ = current_time();
 
-    create_graph_int_map(g->degrees_bot,"dist_degree_bot"+current_time_+".stat");
-    create_graph_2_map(avg_pack,ecart_type_pack,"avg_ecart_pack"+current_time_+".stat");
-    create_graph_2_map(avg_time,ecart_type_time,"avg_ecart_time"+current_time_+".stat");
-    create_graph_2_map(ecart_type_time,avg_pack,"ecart_type_time_avg_pack"+current_time_+".stat");
+    create_graph_int_map(g->degrees_bot,"dist_degree_bot_"+current_time_+".stat");
+    create_graph_2_map(avg_pack,ecart_type_pack,"avg_ecart_pack_"+current_time_+".stat");
+    create_graph_2_map(avg_time,ecart_type_time,"avg_ecart_time_"+current_time_+".stat");
+    create_graph_2_map(ecart_type_time,avg_pack,"ecart_type_time_avg_pack_"+current_time_+".stat");
 	
 	g->free_data();
 	delete(g);
@@ -226,8 +223,7 @@ void file2dataPCAP_interval(ifstream * file,vector<string> channels,int interval
 
 
 
-vector<pair<float,float> > avg_for_each (map<string,vector<int> > list){
-	
+vector<pair<float,float> > avg_for_each (map<string,vector<int> > list){	
 	map<string,vector<int> >::iterator it;
 	vector<pair<float,float> > res;
 	for(it = list.begin() ; it != list.end() ; it++){
@@ -271,10 +267,7 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	map<int,set<string> > prev_set_by_degree;
 	map<int,set<string> > current_set_by_degree;
 
-
 	set<string> diff_bots;
-
-
 
 	// get all channels	
 	for(int i = 0 ; i < names.size() ; i++){
@@ -351,7 +344,6 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
   			                     set_2.begin(),set_2.end(),std::back_inserter(tmp));
   	            nb_each_degree[degree].push_back(set_2.size());
   	            diff_nb_each_degree[degree].push_back(tmp.size());
-  	            // cout << set_2 << "  " << tmp.size() << "\n";
 			}
 			prev_set_by_degree = current_set_by_degree;
 			current_set_by_degree.clear();
@@ -360,11 +352,6 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 		g->free_data();
 		delete(g);
 	}
-
-
-
-
-	
 
 	stringstream stream1;
 	stream1 << interval;
@@ -381,14 +368,13 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	times_tmp.erase (times_tmp.begin());
 
 
-	create_graph_degree_change(nb_each_degree,diff_nb_each_degree,times_tmp,"degree_change_"+current_time_+".stat");
-	create_graph_pairs(avg_sd_degree,"avg_sd_degree_"+current_time_+".stat");
-	create_graph_float(cc_graph,times,"cc_interval_"+current_time_+".stat");
-	create_graph_float(degree_graph,times,"density_interval_"+current_time_+".stat");
-	create_graph_int(nb_super_pere,times,"nb_super_pere_"+current_time_+".stat");
-	create_graph_string(dist_degree_by_bot,times,"dist_degree_bot_"+current_time_+".stat");
-	create_graph_string(size_pack_top,times,"size_pack_top_"+current_time_+".stat");
-	create_graph_nb_bot(nb_bot_graph,times,dist_degree_by_top,"nb_bot_interval_"+current_time_+".stat");	
+	create_graph_degree_change(nb_each_degree,diff_nb_each_degree,times_tmp,"degree_change_"+current_time_+"_"interval_string+".stat");
+	create_graph_pairs(avg_sd_degree,"avg_sd_degree_"+current_time_+"_"interval_string+".stat");
+	create_graph_float(cc_graph,times,"cc_interval_"+current_time_+"_"interval_string+".stat");
+	create_graph_float(degree_graph,times,"density_interval_"+current_time_+"_"interval_string+".stat");
+	create_graph_string(dist_degree_by_bot,times,"dist_degree_bot_"+current_time_+"_"interval_string+".stat");
+	create_graph_string(size_pack_top,times,"size_pack_top_"+current_time_+"_"interval_string+".stat");
+	create_graph_nb_bot(nb_bot_graph,times,dist_degree_by_top,"nb_bot_interval_"+current_time_+"_"interval_string+".stat");	
 }
 
 
