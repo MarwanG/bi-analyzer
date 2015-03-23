@@ -241,10 +241,10 @@ void create_graph_map(map<string,float> list,string name){
     myfile.close();
 }
 
-void create_graph_2_map(map<string,double> list,map<string,double> list2,string name){
+void create_graph_2_map(map<string,long double> list,map<string,long double> list2,string name){
     ofstream myfile;
     myfile.open(name);
-    map<string,double>::iterator it;
+    map<string,long double>::iterator it;
     for(it=list.begin();it!=list.end();it++){
         myfile << it->first << "  " << fixed << it->second << "  " << fixed << list2[it->first] << "\n";
     }

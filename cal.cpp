@@ -72,34 +72,34 @@ void file2data_PCAP_batch(string name,vector<string> channels,Graph * g){
     file.close();
 }
 
-float get_ecart_list(vector<double> list,float avg){
-	float sd = 0;
+long double get_ecart_list(vector<double> list,long double avg){
+	long double sd = 0;
 	for(int i = 0 ; i < list.size() ; i++){
-		float sd_tmp = pow(list[i]-avg,2);
+		long double sd_tmp = pow(list[i]-avg,2);
 		sd = sd + sd_tmp;
 	}
-	sd = sqrt(sd/(float)list.size());
+	sd = sqrt(sd/(long double)list.size());
 	return sd;
 }
 
-double get_avg_list(vector<double> list){
-	double avg = 0;
+long double get_avg_list(vector<double> list){
+	long double avg = 0;
 	if(list.size() <= 1){
 		return -1;
 	}
 	for(int i = 0 ; i < list.size() ; i++){
 		avg = avg + list[i];
 	}
-	avg = avg/(double)list.size();
+	avg = avg/(long double)list.size();
 	return avg;
 }
 
 void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 	map<string,int> list;
-	map<string,double> ecart_type_time;
-	map<string,double> ecart_type_pack;
-	map<string,double> avg_pack;
-	map<string,double> avg_time;
+	map<string,long double> ecart_type_time;
+	map<string,long double> ecart_type_pack;
+	map<string,long double> avg_pack;
+	map<string,long double> avg_time;
 
 	Graph * g = new Graph();
 	for(int i = 0 ; i < names.size() ; i++){
@@ -123,11 +123,11 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 			string tmp_string = stream1.str();
 			string title = n->get_title() + " " + tmp_string;
 			
-			double avg_time_res = get_avg_list(v);	
-			float ecart_time_res = get_ecart_list(v,avg_time_res);
+			long double avg_time_res = get_avg_list(v);	
+			long double ecart_time_res = get_ecart_list(v,avg_time_res);
 
-			double avg_pack_res = get_avg_list(n->size_pack_list[it->first]);
-			float ecart_pack_res = get_ecart_list(n->size_pack_list[it->first],avg_pack_res);
+			long double avg_pack_res = get_avg_list(n->size_pack_list[it->first]);
+			long double ecart_pack_res = get_ecart_list(n->size_pack_list[it->first],avg_pack_res);
 
 
 
