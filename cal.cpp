@@ -82,15 +82,15 @@ float get_ecart_list(vector<double> list,float avg){
 	return sd;
 }
 
-float get_avg_list(vector<double> list){
-	float avg = 0;
+double get_avg_list(vector<double> list){
+	double avg = 0;
 	if(list.size() <= 1){
 		return -1;
 	}
 	for(int i = 0 ; i < list.size() ; i++){
 		avg = avg + list[i];
 	}
-	avg = avg/(float)list.size();
+	avg = avg/(double)list.size();
 	return avg;
 }
 
@@ -98,8 +98,8 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 	map<string,int> list;
 	map<string,float> ecart_type_time;
 	map<string,float> ecart_type_pack;
-	map<string,float> avg_pack;
-	map<string,float> avg_time;
+	map<string,double> avg_pack;
+	map<string,double> avg_time;
 
 	Graph * g = new Graph();
 	for(int i = 0 ; i < names.size() ; i++){
@@ -123,10 +123,10 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 			string tmp_string = stream1.str();
 			string title = n->get_title() + " " + tmp_string;
 			
-			float avg_time_res = get_avg_list(v);	
+			double avg_time_res = get_avg_list(v);	
 			float ecart_time_res = get_ecart_list(v,avg_time_res);
 
-			float avg_pack_res = get_avg_list(n->size_pack_list[it->first]);
+			double avg_pack_res = get_avg_list(n->size_pack_list[it->first]);
 			float ecart_pack_res = get_ecart_list(n->size_pack_list[it->first],avg_pack_res);
 
 
