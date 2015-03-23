@@ -72,15 +72,7 @@ void file2data_PCAP_batch(string name,vector<string> channels,Graph * g){
     file.close();
 }
 
-float get_ecart_list(vector<double> list){
-	float avg = 0;
-	if(list.size() <= 1){
-		return -1;
-	}
-	for(int i = 0 ; i < list.size() ; i++){
-		avg = avg + list[i];
-	}
-	avg = avg/(float)list.size();
+float get_ecart_list(vector<double> list,float avg){
 	float sd = 0;
 	for(int i = 0 ; i < list.size() ; i++){
 		float sd_tmp = pow(list[i]-avg,2);
@@ -90,10 +82,25 @@ float get_ecart_list(vector<double> list){
 	return sd;
 }
 
+float get_avg_list(vector<double> list){
+	float avg = 0;
+	if(list.size() <= 1){
+		return -1;
+	}
+	for(int i = 0 ; i < list.size() ; i++){
+		avg = avg + list[i];
+	}
+	avg = avg/(float)list.size();
+	return avg;
+}
+
 void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 	map<string,int> list;
-	map<string,float> ecart_type;
+	map<string,float> ecart_type_time;
+	map<string,float> ecart_type_pack;
 	map<string,float> avg_pack;
+	map<string,float> avg_time;
+
 	Graph * g = new Graph();
 	for(int i = 0 ; i < names.size() ; i++){
 		vector<string> v =  get_channels(names[i],nbChannels[i],list);
@@ -110,23 +117,42 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 		std::map<int,std::vector<double> >::iterator it;
 		for(it = n->freq_ping.begin() ; it != n->freq_ping.end() ; it++){
 			std::vector<double> v = it->second;		
+			
 			stringstream stream1;
 			stream1 << it->first;
 			string tmp_string = stream1.str();
-			string title = n->get_title() + " " + tmp_string;	
-			float res = get_ecart_list(v);
-			float res2 = n->size_pack_list[it->first] / (float)v.size();
-			if(res != -1){
-				ecart_type[title]=res;
-				avg_pack[title] = res2;
+			string title = n->get_title() + " " + tmp_string;
+			
+			float avg_time_res = get_avg_list(v);	
+			float ecart_time_res = get_ecart_list(v,avg_time_res);
+
+			float avg_pack_res = get_avg_list(n->size_pack_list[it->first]);
+			float ecart_pack_res = get_ecart_list(n->size_pack_list[it->first],avg_pack_res);
+
+
+
+
+			if(avg_time_res != -1){
+				avg_time[title] = avg_time_res;
+				ecart_type_time[title]=ecart_time_res;
+				avg_pack[title] = avg_pack_res;
+				ecart_type_pack[title] = ecart_pack_res;
 			}
 		}
 	}	
 	stat_to_stdout(g);
 	calculate_stat_graph(g);
 	stat_to_file(g);
-    create_graph_int_map(g->degrees_bot,"dist_degree_bot.stat");
-    create_graph_2_map(ecart_type,avg_pack,"ecart_type_time_avg_pack.stat");
+    
+
+
+	string current_time_ = current_time();
+
+    create_graph_int_map(g->degrees_bot,"dist_degree_bot"+current_time_+".stat");
+    create_graph_2_map(avg_pack,ecart_type_pack,"avg_ecart_pack"+current_time_+".stat");
+    create_graph_2_map(avg_time,ecart_type_time,"avg_ecart_time"+current_time_+".stat");
+    create_graph_2_map(ecart_type_time,avg_pack,"ecart_type_time_avg_pack"+current_time_+".stat");
+	
 	g->free_data();
 	delete(g);
 }
@@ -325,7 +351,7 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
   			                     set_2.begin(),set_2.end(),std::back_inserter(tmp));
   	            nb_each_degree[degree].push_back(set_2.size());
   	            diff_nb_each_degree[degree].push_back(tmp.size());
-  	            cout << set_2 << "  " << tmp.size() << "\n";
+  	            // cout << set_2 << "  " << tmp.size() << "\n";
 			}
 			prev_set_by_degree = current_set_by_degree;
 			current_set_by_degree.clear();

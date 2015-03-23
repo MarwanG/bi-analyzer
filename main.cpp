@@ -90,21 +90,21 @@ int main(int argc, char* argv[]){
 
 
     list.push_back("/data2/ghanem/tmp/test_a.txt"); 
-    list.push_back("/data2/ghanem/tmp/test_b.txt");
-    list.push_back("/data2/ghanem/tmp/test_c.txt");
-    list.push_back("/data2/ghanem/tmp/test_d.txt");
-    list.push_back("/data2/ghanem/tmp/test_e.txt");
-    list.push_back("/data2/ghanem/tmp/test_f.txt");
+    // list.push_back("/data2/ghanem/tmp/test_b.txt");
+    // list.push_back("/data2/ghanem/tmp/test_c.txt");
+    // list.push_back("/data2/ghanem/tmp/test_d.txt");
+    // list.push_back("/data2/ghanem/tmp/test_e.txt");
+    // list.push_back("/data2/ghanem/tmp/test_f.txt");
 
 
-		nbChannels.push_back(3);
-		nbChannels.push_back(1);
-		nbChannels.push_back(3);
-		nbChannels.push_back(1);
-		nbChannels.push_back(1);
-		nbChannels.push_back(3);
+	nbChannels.push_back(3);
+	// nbChannels.push_back(1);
+	// nbChannels.push_back(3);
+	// nbChannels.push_back(1);
+	// nbChannels.push_back(1);
+	// nbChannels.push_back(3);
 
-		get_stat_pcap_interval(list,nbChannels,60);
-		// get_stat_pcap_batch(list,nbChannels);
+	// get_stat_pcap_interval(list,nbChannels,60);
+	get_stat_pcap_batch(list,nbChannels);
 	}	
 }

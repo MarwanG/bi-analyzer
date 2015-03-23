@@ -53,9 +53,14 @@ public:
 
 	std::set <int>   neighbours_indexs ;
 	std::unordered_map<int,Node*> neighbours;
+
 	std::map<int,std::vector<double> > freq_ping;
+	std::map<int,std::vector<double> > size_pack_list;
+	
 	std::map<int,std::string> freq_last_time;
-	std::map<int,int> size_pack_list;
+	
+	std::map<int,int> size_pack_list_total;
+	
 	std::set<std::pair<int,int> > pairs;
 
 
