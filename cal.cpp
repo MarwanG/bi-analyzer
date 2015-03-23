@@ -96,8 +96,8 @@ double get_avg_list(vector<double> list){
 
 void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 	map<string,int> list;
-	map<string,float> ecart_type_time;
-	map<string,float> ecart_type_pack;
+	map<string,double> ecart_type_time;
+	map<string,double> ecart_type_pack;
 	map<string,double> avg_pack;
 	map<string,double> avg_time;
 
