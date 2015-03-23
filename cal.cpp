@@ -83,15 +83,18 @@ long double get_ecart_list(vector<double> list,long double avg){
 }
 
 long double get_avg_list(vector<double> list){
-	long double avg = 0;
+	unsigned long long avg = 0;
+	long double res = 0;
 	if(list.size() <= 1){
 		return -1;
 	}
 	for(int i = 0 ; i < list.size() ; i++){
 		avg = avg + list[i];
 	}
-	avg = avg/(long double)list.size();
-	return avg;
+	cout << avg << "\n";
+	res = avg/(long double)list.size();
+	cout << res << "\n";
+	return res;
 }
 
 void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
