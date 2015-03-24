@@ -148,7 +148,6 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 
 	string current_time_ = current_time();
 
-    create_graph_int_map(g->degrees_bot,"dist_degree_bot_"+current_time_+".stat");
     create_graph_2_map(avg_pack,ecart_type_pack,"avg_ecart_pack_"+current_time_+".stat");
     create_graph_2_map(avg_time,ecart_type_time,"avg_ecart_time_"+current_time_+".stat");
     create_graph_2_map(ecart_type_time,avg_pack,"ecart_type_time_avg_pack_"+current_time_+".stat");
@@ -223,7 +222,20 @@ void file2dataPCAP_interval(ifstream * file,vector<string> channels,int interval
 }
 
 
-
+vector<pair<float,float> > avg_nb_for_each (map<string,vector<int> > list){
+	map<string,vector<int> >::iterator it;
+	vector<pair<float,float> > res;
+	for(it = list.begin() ; it != list.end() ; it++){
+		vector<int> values = it->second;
+		float avg = 0;
+		for(int i = 0 ; i < values.size() ; i++){
+			avg = avg + values[i];
+		}
+		avg = avg / (float)values.size();
+		res.push_back(make_pair(values.size(),avg));
+	}
+	return res;
+}
 
 
 vector<pair<float,float> > avg_for_each (map<string,vector<int> > list){	
@@ -363,6 +375,7 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 
 
 	vector<pair<float,float> > avg_sd_degree =  avg_for_each(variance_degree_each_bot);
+	vector<pair<float,float> > avg_nb_degree = avg_nb_for_each(variance_degree_each_bot);
 
 
 	cout << "NUMBER OF DIFFERENT BOTS  :: " << diff_bots.size() << "\n";
@@ -371,6 +384,7 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	times_tmp.erase (times_tmp.begin());
 
 
+	create_graph_pairs(avg_nb_degree,"avg_nb_degree_"+current_time_+"_"+interval_string+".stat");
 	create_graph_degree_change(nb_each_degree,diff_nb_each_degree,times_tmp,"degree_change_"+current_time_+"_"+interval_string+".stat");
 	create_graph_pairs(avg_sd_degree,"avg_sd_degree_"+current_time_+"_"+interval_string+".stat");
 	create_graph_float(cc_graph,times,"cc_interval_"+current_time_+"_"+interval_string+".stat");
