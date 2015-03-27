@@ -121,9 +121,8 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 		for(it = n->freq_ping.begin() ; it != n->freq_ping.end() ; it++){
 			std::vector<double> v = it->second;		
 			
-			stringstream stream1;
-			stream1 << it->first;
-			string tmp_string = stream1.str();
+		
+			string tmp_string =  n->neighbours[it->first]->get_title();
 			string title = n->get_title() + " " + tmp_string;
 			
 			long double avg_time_res = get_avg_list(v);	
