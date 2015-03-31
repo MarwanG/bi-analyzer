@@ -155,6 +155,8 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 	delete(g);
 }
 
+//Reads the file till interval is reached and returns the graph g with the new data that
+//was read.
 
 void file2dataPCAP_interval(ifstream * file,vector<string> channels,int interval,Graph *g){
 	string str; 
@@ -209,10 +211,10 @@ void file2dataPCAP_interval(ifstream * file,vector<string> channels,int interval
 				continue;
 			}
 		    if(find(channels.begin(), channels.end(), b)!=channels.end()  && find(channels.begin(), channels.end(), t)==channels.end()){
-		    		addlink(g,b,t,NULL,-size_pack);
+		    		addlink(g,b,t,&time_str,-size_pack);
 		    }else{		
 			    if(find(channels.begin(), channels.end(), t)!=channels.end() && find(channels.begin(), channels.end(), b)==channels.end()){
-			   		addlink(g,t,b,NULL,size_pack);
+			   		addlink(g,t,b,&time_str,size_pack);
 			    }
 			}
 	    }
@@ -221,60 +223,17 @@ void file2dataPCAP_interval(ifstream * file,vector<string> channels,int interval
 }
 
 
-vector<pair<float,float> > avg_nb_for_each (map<string,vector<int> > list){
-	map<string,vector<int> >::iterator it;
-	vector<pair<float,float> > res;
-	for(it = list.begin() ; it != list.end() ; it++){
-		vector<int> values = it->second;
-		float avg = 0;
-		for(int i = 0 ; i < values.size() ; i++){
-			avg = avg + values[i];
-		}
-		avg = avg / (float)values.size();
-		res.push_back(make_pair(values.size(),avg));
-	}
-	return res;
-}
-
-
-vector<pair<float,float> > avg_for_each (map<string,vector<int> > list){	
-	map<string,vector<int> >::iterator it;
-	vector<pair<float,float> > res;
-	for(it = list.begin() ; it != list.end() ; it++){
-		vector<int> values = it->second;
-		float avg = 0;
-		float sd = 0;
-		for(int i = 0 ; i < values.size() ; i++){
-			avg = avg + values[i];
-		}
-		avg = avg / (float)values.size();
-		
-
-		for(int i = 0 ; i < values.size() ; i++){
-			float tmp = pow((values[i]-avg),2);
-			sd = sd + tmp;
-		}
-		sd = sqrt(sd/(float)values.size());
-		res.push_back(make_pair(avg,sd));
-	}
-	return res;
-}
-
-
 void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int interval){
-	vector<string> channels;
-	map<string,int> list;
-	vector<float> cc_graph;
-	vector<float> degree_graph;
-	vector<int> nb_bot_graph;
-	vector<string> times;
-	vector<string> dist_degree_by_top;
+	vector<string> channels;			//list of channels
+	map<string,int> list; 				// map each channel's occurance
+	vector<float> cc_graph;				//cc per time graph
+	vector<float> density_graph;		//density per time graph
+	vector<int> nb_bot_graph;			//nb of total peers
+	vector<string> times;				//list of times	
+	vector<string> dist_degree_by_top;	//nb of degree for top/bot ??
 	vector<string> dist_degree_by_bot;
+	//variance of degree for each peer.
 	map<string,vector<int> > variance_degree_each_bot;
-	vector<string> size_pack_top;
-
-
-
 	//for variance each degree >= 6
 	map<int,vector<int> > nb_each_degree;
 	map<int,vector<int> > diff_nb_each_degree;	
@@ -282,10 +241,11 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	map<int,set<string> > current_set_by_degree;
 
 
-
+	//nb of peers
 	map<string,set<string> > peer_per_channel;
 	vector<vector<int > > nb_peer_per_channel;
 
+	// size of packets UP
 	vector<vector<int> >size_up_per_channel;
 
 
@@ -321,7 +281,7 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
     
 		times.push_back(g->time_);
 		cc_graph.push_back(g->cc);
-		degree_graph.push_back(g->density);
+		density_graph.push_back(g->density);
 		nb_bot_graph.push_back(g->bots.size());
 		dist_degree_by_top.push_back(g->degrees_to_string());
 		dist_degree_by_bot.push_back(g->degrees_to_string_bot());
@@ -376,31 +336,27 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 		delete(g);
 	}
 
-	stringstream stream1;
-	stream1 << interval;
-	string interval_string = stream1.str();
-	string current_time_ = current_time();
-
-
+	//vectors for peer-degree variance
 	vector<pair<float,float> > avg_sd_degree =  avg_for_each(variance_degree_each_bot);
 	vector<pair<float,float> > avg_nb_degree = avg_nb_for_each(variance_degree_each_bot);
 
 
-
-
+	//current time/interval to add to file names.
+	stringstream stream1;
+	stream1 << interval;
+	string interval_string = stream1.str();
+	string current_time_ = current_time();
+	//tmp list of times without the last time
 	vector<string> times_tmp = times;
 	times_tmp.erase (times_tmp.begin());
-
-
-
-
+	//creating graph
 	create_graph_vector_vector_int(size_up_per_channel,times,"up_stream_per_channel_"+current_time_+"_"+interval_string+".stat");
 	create_graph_vector_vector_int(nb_peer_per_channel,times,"nb_peers_per_channel_"+current_time_+"_"+interval_string+".stat");
 	create_graph_pairs(avg_nb_degree,"avg_nb_degree_"+current_time_+"_"+interval_string+".stat");
 	create_graph_degree_change(nb_each_degree,diff_nb_each_degree,times_tmp,"degree_change_"+current_time_+"_"+interval_string+".stat");
 	create_graph_pairs(avg_sd_degree,"avg_sd_degree_"+current_time_+"_"+interval_string+".stat");
 	create_graph_float(cc_graph,times,"cc_interval_"+current_time_+"_"+interval_string+".stat");
-	create_graph_float(degree_graph,times,"density_interval_"+current_time_+"_"+interval_string+".stat");
+	create_graph_float(density_graph,times,"density_interval_"+current_time_+"_"+interval_string+".stat");
 	create_graph_string(dist_degree_by_bot,times,"dist_degree_bot_"+current_time_+"_"+interval_string+".stat");
 	create_graph_nb_bot(nb_bot_graph,times,dist_degree_by_top,"nb_bot_interval_"+current_time_+"_"+interval_string+".stat");	
 }

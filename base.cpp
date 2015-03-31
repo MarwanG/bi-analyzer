@@ -16,6 +16,49 @@
 
 using namespace std;
 
+
+
+// Returns list of pairs containing the number of elements as well avg.
+vector<pair<float,float> > avg_nb_for_each (map<string,vector<int> > list){
+	map<string,vector<int> >::iterator it;
+	vector<pair<float,float> > res;
+	for(it = list.begin() ; it != list.end() ; it++){
+		vector<int> values = it->second;
+		float avg = 0;
+		for(int i = 0 ; i < values.size() ; i++){
+			avg = avg + values[i];
+		}
+		avg = avg / (float)values.size();
+		res.push_back(make_pair(values.size(),avg));
+	}
+	return res;
+}
+
+// Returns list of pairs containing the avg of elements as well as the sd.
+vector<pair<float,float> > avg_for_each (map<string,vector<int> > list){	
+	map<string,vector<int> >::iterator it;
+	vector<pair<float,float> > res;
+	for(it = list.begin() ; it != list.end() ; it++){
+		vector<int> values = it->second;
+		float avg = 0;
+		float sd = 0;
+		for(int i = 0 ; i < values.size() ; i++){
+			avg = avg + values[i];
+		}
+		avg = avg / (float)values.size();
+		
+
+		for(int i = 0 ; i < values.size() ; i++){
+			float tmp = pow((values[i]-avg),2);
+			sd = sd + tmp;
+		}
+		sd = sqrt(sd/(float)values.size());
+		res.push_back(make_pair(avg,sd));
+	}
+	return res;
+}
+
+
 // FUNCTION CALCULATES CC/REDUNDANCY BETWEEN TWO NODES.
 
 void calculate_cc(Node* n1,Node* n2){
