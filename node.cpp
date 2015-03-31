@@ -33,19 +33,37 @@ bool Node::addneighbours(Node* son){
 }
 
 
-// void Node::add_pack(Node*son,int size_pack){
-  
-// }
+int Node::get_total_up(){
+  map<int,int>::iterator it;
+  int total = 0;
+  for(it = size_pack_list_total.begin() ; it != size_pack_list_total.end() ; it++){
+    total = total + it->second;
+  }
+  return total;
+}
+
+void Node::add_pack_down(Node*son,int size_pack){
+  size_pack_list_total_down[son->get_index()] = size_pack;
+  size_pack_list_down[son->get_index()].push_back(size_pack);
+  size_pack_list_total_down[son->get_index()] = size_pack_list_total[son->get_index()] + size_pack;
+  size_pack_list_down[son->get_index()].push_back(size_pack);
+}
 
 
-void Node::add_ping(Node *son,string s,int size_pack){ 
+void Node::add_pack_up(Node*son,int size_pack){
+  size_pack_list_total[son->get_index()] = size_pack;
+  size_pack_list[son->get_index()].push_back(size_pack);
+  size_pack_list_total[son->get_index()] = size_pack_list_total[son->get_index()] + size_pack;
+  size_pack_list[son->get_index()].push_back(size_pack);
+}
+
+
+void Node::add_ping(Node *son,string s){ 
   if(freq_ping.find(son->get_index()) == freq_ping.end()){
     vector<double> tmp;
     tmp.push_back(0);
     freq_ping[son->get_index()] = tmp;
     freq_last_time[son->get_index()] = s;
-    size_pack_list_total[son->get_index()] = size_pack;
-    size_pack_list[son->get_index()].push_back(size_pack);
   }else{
 
     // calculating time
@@ -62,20 +80,15 @@ void Node::add_ping(Node *son,string s,int size_pack){
     if(t2_str_milli[0]=='0'){
       t2_str_milli = prev_time.substr(prev_time.find('.')+2,prev_time.length());
     }
-
     int t1_milli = atoi(t1_str_milli.c_str());
     int t2_milli = atoi(t2_str_milli.c_str());
     int diff_milli_tmp = abs(t1_milli-t2_milli);
     t = t * 1000;
     t = t + diff_milli_tmp;
-
     t = t/1000;
-
     //adding the data
     freq_ping[son->get_index()].push_back(t);
     freq_last_time[son->get_index()] = s;
-    size_pack_list_total[son->get_index()] = size_pack_list_total[son->get_index()] + size_pack;
-    size_pack_list[son->get_index()].push_back(size_pack);
   }
 }
 

@@ -40,12 +40,16 @@ public:
 	void set_cc(float cc_new);
 	void set_cc_min(float cc_new);
 	void set_cc_max(float cc_new);
-	void add_ping(Node *son,std::string s,int size_pack);
+	void add_ping(Node *son,std::string s);
+	void add_pack_up(Node*son,int size_pack);
+	void add_pack_down(Node*son,int size_pack);
 	void calculate_ref();
 	void calculate_redundancy();
 	float get_disp();
 	void set_index(int i);
 	int get_index();
+	int get_total_up();
+	
 	std::string get_title();
 
 	int nb_top_neighbours;
@@ -55,12 +59,16 @@ public:
 	std::unordered_map<int,Node*> neighbours;
 
 	std::map<int,std::vector<double> > freq_ping;
-	std::map<int,std::vector<double> > size_pack_list;
+	
 	
 	std::map<int,std::string> freq_last_time;
 	
 	std::map<int,int> size_pack_list_total;
+	std::map<int,std::vector<double> > size_pack_list;
 	
+	std::map<int,int> size_pack_list_total_down;
+	std::map<int,std::vector<double> > size_pack_list_down;
+
 	std::set<std::pair<int,int> > pairs;
 
 

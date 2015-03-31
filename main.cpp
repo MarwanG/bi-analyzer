@@ -89,20 +89,20 @@ int main(int argc, char* argv[]){
 		vector<string> list;
 
 
-    // list.push_back("/data2/ghanem/tmp/test_a.txt"); 
-    // list.push_back("/data2/ghanem/tmp/test_b.txt");
-    // list.push_back("/data2/ghanem/tmp/test_c.txt");
-    // list.push_back("/data2/ghanem/tmp/test_d.txt");
-    // list.push_back("/data2/ghanem/tmp/test_e.txt");
-    // list.push_back("/data2/ghanem/tmp/test_f.txt");
+    list.push_back("/data2/ghanem/tmp/test_a.txt"); 
+    list.push_back("/data2/ghanem/tmp/test_b.txt");
+    list.push_back("/data2/ghanem/tmp/test_c.txt");
+    list.push_back("/data2/ghanem/tmp/test_d.txt");
+    list.push_back("/data2/ghanem/tmp/test_e.txt");
+    list.push_back("/data2/ghanem/tmp/test_f.txt");
 
 
-	list.push_back("/data2/ghanem/video_trace_by_size/video_size_a.txt");
-	list.push_back("/data2/ghanem/video_trace_by_size/video_size_b.txt");
-	list.push_back("/data2/ghanem/video_trace_by_size/video_size_c.txt");
-	list.push_back("/data2/ghanem/video_trace_by_size/video_size_d.txt");
-	list.push_back("/data2/ghanem/video_trace_by_size/video_size_e.txt");
-	list.push_back("/data2/ghanem/video_trace_by_size/video_size_f.txt");
+	// list.push_back("/data2/ghanem/video_trace_by_size/video_size_a.txt");
+	// list.push_back("/data2/ghanem/video_trace_by_size/video_size_b.txt");
+	// list.push_back("/data2/ghanem/video_trace_by_size/video_size_c.txt");
+	// list.push_back("/data2/ghanem/video_trace_by_size/video_size_d.txt");
+	// list.push_back("/data2/ghanem/video_trace_by_size/video_size_e.txt");
+	// list.push_back("/data2/ghanem/video_trace_by_size/video_size_f.txt");
 
 
 	nbChannels.push_back(3);
@@ -112,7 +112,7 @@ int main(int argc, char* argv[]){
 	nbChannels.push_back(1);
 	nbChannels.push_back(3);
 
-	// get_stat_pcap_interval(list,nbChannels,10);
-	get_stat_pcap_batch(list,nbChannels);
+	get_stat_pcap_interval(list,nbChannels,30);
+	// get_stat_pcap_batch(list,nbChannels);
 	}	
 }

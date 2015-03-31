@@ -209,7 +209,7 @@ void file2dataPCAP_interval(ifstream * file,vector<string> channels,int interval
 				continue;
 			}
 		    if(find(channels.begin(), channels.end(), b)!=channels.end()  && find(channels.begin(), channels.end(), t)==channels.end()){
-		    		addlink(g,b,t,NULL,size_pack);
+		    		addlink(g,b,t,NULL,-size_pack);
 		    }else{		
 			    if(find(channels.begin(), channels.end(), t)!=channels.end() && find(channels.begin(), channels.end(), b)==channels.end()){
 			   		addlink(g,t,b,NULL,size_pack);
@@ -286,6 +286,8 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	map<string,set<string> > peer_per_channel;
 	vector<vector<int > > nb_peer_per_channel;
 
+	vector<vector<int> >size_up_per_channel;
+
 
 	// get all channels	
 	for(int i = 0 ; i < names.size() ; i++){
@@ -323,8 +325,13 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 		nb_bot_graph.push_back(g->bots.size());
 		dist_degree_by_top.push_back(g->degrees_to_string());
 		dist_degree_by_bot.push_back(g->degrees_to_string_bot());
-        size_pack_top.push_back(g->packs_to_string_bot());
-	
+       
+
+		vector<int> size_pack_up;
+       	for(int i = 0 ; i < g->tops.size() ; i++){
+       		size_pack_up.push_back(g->tops[i]->get_total_up());
+       	}
+       	size_up_per_channel.push_back(size_pack_up);
 
 		// Getting the degree of each Node and placing is in a list.
 		for(int i = 0 ; i < g->bots.size() ; i++){
@@ -386,6 +393,8 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 
 
 
+
+	create_graph_vector_vector_int(size_up_per_channel,times,"up_stream_per_channel_"+current_time_+"_"+interval_string+".stat");
 	create_graph_vector_vector_int(nb_peer_per_channel,times,"nb_peers_per_channel_"+current_time_+"_"+interval_string+".stat");
 	create_graph_pairs(avg_nb_degree,"avg_nb_degree_"+current_time_+"_"+interval_string+".stat");
 	create_graph_degree_change(nb_each_degree,diff_nb_each_degree,times_tmp,"degree_change_"+current_time_+"_"+interval_string+".stat");
@@ -393,7 +402,6 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	create_graph_float(cc_graph,times,"cc_interval_"+current_time_+"_"+interval_string+".stat");
 	create_graph_float(degree_graph,times,"density_interval_"+current_time_+"_"+interval_string+".stat");
 	create_graph_string(dist_degree_by_bot,times,"dist_degree_bot_"+current_time_+"_"+interval_string+".stat");
-	create_graph_string(size_pack_top,times,"size_pack_top_"+current_time_+"_"+interval_string+".stat");
 	create_graph_nb_bot(nb_bot_graph,times,dist_degree_by_top,"nb_bot_interval_"+current_time_+"_"+interval_string+".stat");	
 }
 
