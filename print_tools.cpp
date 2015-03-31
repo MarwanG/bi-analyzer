@@ -264,6 +264,19 @@ void create_graph_pairs(vector<pair<float,float> > list,string name){
 }
 
 
+void create_graph_vector_vector_int(vector<vector<int> > list,vector<string> times,string name){
+	ofstream myfile;
+	myfile.open(name);
+	for(int i = 0 ; i < times.size() ; i++){
+		myfile << times[i] << " ";
+		for(int j = 0 ; j < list[i].size() ; j++){
+			myfile << list[i][j] << " ";
+		}
+		myfile << "\n";
+	}
+	myfile.close();
+}
+
 void create_graph_degree_change(map<int,vector<int> > nb_each_degree,map<int,vector<int> > diff_nb_each_degree,vector<string> times,string name){
 	ofstream myfile;
 	myfile.open(name);

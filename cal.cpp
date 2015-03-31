@@ -269,19 +269,23 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	vector<int> nb_bot_graph;
 	vector<string> times;
 	vector<string> dist_degree_by_top;
-	vector<int> nb_super_pere;
 	vector<string> dist_degree_by_bot;
 	map<string,vector<int> > variance_degree_each_bot;
 	vector<string> size_pack_top;
 
 
+
+	//for variance each degree >= 6
 	map<int,vector<int> > nb_each_degree;
-	map<int,vector<int> > diff_nb_each_degree;
-	
+	map<int,vector<int> > diff_nb_each_degree;	
 	map<int,set<string> > prev_set_by_degree;
 	map<int,set<string> > current_set_by_degree;
 
-	set<string> diff_bots;
+
+
+	map<string,set<string> > peer_per_channel;
+	vector<vector<int > > nb_peer_per_channel;
+
 
 	// get all channels	
 	for(int i = 0 ; i < names.size() ; i++){
@@ -320,30 +324,28 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 		dist_degree_by_top.push_back(g->degrees_to_string());
 		dist_degree_by_bot.push_back(g->degrees_to_string_bot());
         size_pack_top.push_back(g->packs_to_string_bot());
-		nb_super_pere.push_back(g->degrees_bot[g->max_bot]);
+	
 
 		// Getting the degree of each Node and placing is in a list.
-		if(variance_degree_each_bot.empty()){
-			for(int i = 0 ; i < g->bots.size() ; i++){
-				diff_bots.insert(g->bots[i]->get_title());
-				int degree = g->bots[i]->get_degree();	
-				if(degree >= 6){
-					current_set_by_degree[degree].insert(g->bots[i]->get_title());
-				}
-				vector<int> tmp_;
-				tmp_.push_back(degree);
-				variance_degree_each_bot[g->bots[i]->get_title()] = tmp_;
+		for(int i = 0 ; i < g->bots.size() ; i++){
+			int degree = g->bots[i]->get_degree();	
+			if(degree >= 6){
+				current_set_by_degree[degree].insert(g->bots[i]->get_title());
 			}
-		}else{
-			for(int i = 0 ; i < g->bots.size() ; i++){
-				diff_bots.insert(g->bots[i]->get_title());
-				int degree = g->bots[i]->get_degree();	
-				if(degree >= 6){
-					current_set_by_degree[degree].insert(g->bots[i]->get_title());
-				}
-				variance_degree_each_bot[g->bots[i]->get_title()].push_back(degree);
+			variance_degree_each_bot[g->bots[i]->get_title()].push_back(degree);
+			std::set<int>::iterator it;
+			for (it = g->bots[i]->neighbours_indexs.begin(); it != g->bots[i]->neighbours_indexs.end(); ++it){
+				peer_per_channel[g->tops[*it]->get_title()].insert(g->bots[i]->get_title());
 			}
 		}
+		
+		map<string,set<string> >::iterator it;
+		vector<int> size_now_per_peer;
+		for(it = peer_per_channel.begin() ; it != peer_per_channel.end() ; it++){
+			size_now_per_peer.push_back(it->second.size());
+		}
+		nb_peer_per_channel.push_back(size_now_per_peer);
+
 
 		if(prev_set_by_degree.empty()){
 			prev_set_by_degree = current_set_by_degree;
@@ -377,12 +379,14 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	vector<pair<float,float> > avg_nb_degree = avg_nb_for_each(variance_degree_each_bot);
 
 
-	cout << "NUMBER OF DIFFERENT BOTS  :: " << diff_bots.size() << "\n";
+
 
 	vector<string> times_tmp = times;
 	times_tmp.erase (times_tmp.begin());
 
 
+
+	create_graph_vector_vector_int(nb_peer_per_channel,times,"nb_peers_per_channel_"+current_time_+"_"+interval_string+".stat");
 	create_graph_pairs(avg_nb_degree,"avg_nb_degree_"+current_time_+"_"+interval_string+".stat");
 	create_graph_degree_change(nb_each_degree,diff_nb_each_degree,times_tmp,"degree_change_"+current_time_+"_"+interval_string+".stat");
 	create_graph_pairs(avg_sd_degree,"avg_sd_degree_"+current_time_+"_"+interval_string+".stat");

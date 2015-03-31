@@ -28,5 +28,7 @@ void create_graph_2_map(std::map<std::string,long double> list,std::map<std::str
 void create_graph_map_int_float(std::map<int,float>degrees_bot,std::string name);
 void create_graph_pairs(std::vector<std::pair<float,float> > list,std::string name);
 void create_graph_degree_change(std::map<int,std::vector<int> > nb_each_degree,std::map<int,std::vector<int> > diff_nb_each_degree,std::vector<std::string> times,std::string name);
+void create_graph_vector_vector_int(std::vector<std::vector<int> > list,std::vector<std::string> times,std::string name);
+
 
 #endif
