@@ -264,6 +264,16 @@ void create_graph_pairs(vector<pair<float,float> > list,string name){
 }
 
 
+void create_graph_map_pairs(map<string,pair<float,float> > list,string name){
+	ofstream myfile;
+    myfile.open(name);
+    map<string,pair<float,float> >::iterator it;
+    for(it=list.begin();it!=list.end();it++){
+    	myfile << it->first << "  " << it->second.first << " " << it->second.second << "\n";
+	}
+	myfile.close();
+}
+
 void create_graph_vector_vector_int(vector<vector<int> > list,vector<string> times,string name){
 	ofstream myfile;
 	myfile.open(name);

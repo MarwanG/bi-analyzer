@@ -17,6 +17,31 @@
 using namespace std;
 
 
+long double get_ecart_list(vector<double> list,long double avg){
+	long double sd = 0;
+	for(int i = 0 ; i < list.size() ; i++){
+		long double sd_tmp = pow(list[i]-avg,2);
+		sd = sd + sd_tmp;
+	}
+	sd = sqrt(sd/(long double)list.size());
+	return sd;
+}
+
+long double get_avg_list(vector<double> list){
+	unsigned long long avg = 0;
+	long double res = 0;
+	if(list.size() <= 1){
+		return -1;
+	}
+	for(int i = 0 ; i < list.size() ; i++){
+		avg = avg + list[i];
+	}
+	cout << avg << "\n";
+	res = avg/(long double)list.size();
+	cout << res << "\n";
+	return res;
+}
+
 void file2data_PCAP_batch(string name,vector<string> channels,Graph * g){
 	ifstream file(name.c_str());
 	string str; 
@@ -62,7 +87,7 @@ void file2data_PCAP_batch(string name,vector<string> channels,Graph * g){
 			continue;
 		}
 	    if(find(channels.begin(), channels.end(), b)!=channels.end() && find(channels.begin(), channels.end(), t)==channels.end()){
-	    		addlink(g,b,t,&time_str,size_pack);
+	    		addlink(g,b,t,&time_str,-size_pack);
 	    }else{		
 		    if(find(channels.begin(), channels.end(), t)!=channels.end() && find(channels.begin(), channels.end(), b)==channels.end()){
 		   			addlink(g,t,b,&time_str,size_pack);
@@ -75,30 +100,7 @@ void file2data_PCAP_batch(string name,vector<string> channels,Graph * g){
     file.close();
 }
 
-long double get_ecart_list(vector<double> list,long double avg){
-	long double sd = 0;
-	for(int i = 0 ; i < list.size() ; i++){
-		long double sd_tmp = pow(list[i]-avg,2);
-		sd = sd + sd_tmp;
-	}
-	sd = sqrt(sd/(long double)list.size());
-	return sd;
-}
 
-long double get_avg_list(vector<double> list){
-	unsigned long long avg = 0;
-	long double res = 0;
-	if(list.size() <= 1){
-		return -1;
-	}
-	for(int i = 0 ; i < list.size() ; i++){
-		avg = avg + list[i];
-	}
-	cout << avg << "\n";
-	res = avg/(long double)list.size();
-	cout << res << "\n";
-	return res;
-}
 
 void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 	map<string,int> list;
@@ -137,6 +139,7 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 			if(avg_time_res != -1){
 				avg_time[title] = avg_time_res;
 				ecart_type_time[title]=ecart_time_res;
+
 				avg_pack[title] = avg_pack_res;
 				ecart_type_pack[title] = ecart_pack_res;
 			}
@@ -150,9 +153,9 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 
 	string current_time_ = current_time();
 
-    create_graph_2_map(avg_pack,ecart_type_pack,"avg_ecart_pack_"+current_time_+".stat");
+    create_graph_2_map(avg_pack,ecart_type_pack,"avg_ecart_up_pack_"+current_time_+".stat");
     create_graph_2_map(avg_time,ecart_type_time,"avg_ecart_time_"+current_time_+".stat");
-    create_graph_2_map(ecart_type_time,avg_pack,"ecart_type_time_avg_pack_"+current_time_+".stat");
+    create_graph_2_map(ecart_type_time,avg_pack,"ecart_type_time_avg_pack_up_"+current_time_+".stat");
 	
 	g->free_data();
 	delete(g);
@@ -343,7 +346,7 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	}
 
 	//vectors for peer-degree variance
-	vector<pair<float,float> > avg_sd_degree =  avg_for_each(variance_degree_each_bot);
+	map<string,pair<float,float> > avg_sd_degree =  avg_for_each(variance_degree_each_bot);
 	vector<pair<float,float> > avg_nb_degree = avg_nb_for_each(variance_degree_each_bot);
 
 
@@ -360,7 +363,7 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	create_graph_vector_vector_int(nb_peer_per_channel,times,"nb_peers_per_channel_"+current_time_+"_"+interval_string+".stat");
 	create_graph_pairs(avg_nb_degree,"avg_nb_degree_"+current_time_+"_"+interval_string+".stat");
 	create_graph_degree_change(nb_each_degree,diff_nb_each_degree,times_tmp,"degree_change_"+current_time_+"_"+interval_string+".stat");
-	create_graph_pairs(avg_sd_degree,"avg_sd_degree_"+current_time_+"_"+interval_string+".stat");
+	create_graph_map_pairs(avg_sd_degree,"avg_sd_degree_"+current_time_+"_"+interval_string+".stat");
 	create_graph_float(cc_graph,times,"cc_interval_"+current_time_+"_"+interval_string+".stat");
 	create_graph_float(density_graph,times,"density_interval_"+current_time_+"_"+interval_string+".stat");
 	create_graph_string(dist_degree_by_bot,times,"dist_degree_bot_"+current_time_+"_"+interval_string+".stat");

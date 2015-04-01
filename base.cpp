@@ -36,9 +36,9 @@ vector<pair<float,float> > avg_nb_for_each (map<string,vector<int> > list){
 }
 
 // Returns list of pairs containing the avg of elements as well as the sd.
-vector<pair<float,float> > avg_for_each (map<string,vector<int> > list){	
+map<string,pair<float,float> > avg_for_each (map<string,vector<int> > list){	
 	map<string,vector<int> >::iterator it;
-	vector<pair<float,float> > res;
+	map<string,pair<float,float> > res;
 	for(it = list.begin() ; it != list.end() ; it++){
 		vector<int> values = it->second;
 		float avg = 0;
@@ -54,7 +54,7 @@ vector<pair<float,float> > avg_for_each (map<string,vector<int> > list){
 			sd = sd + tmp;
 		}
 		sd = sqrt(sd/(float)values.size());
-		res.push_back(make_pair(avg,sd));
+		res[it->first]=(make_pair(avg,sd));
 	}
 	return res;
 }
