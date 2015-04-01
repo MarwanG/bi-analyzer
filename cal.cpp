@@ -41,8 +41,11 @@ void file2data_PCAP_batch(string name,vector<string> channels,Graph * g){
   		if(tmp.compare("ip-proto-17")==0){
   			continue;
   		}
-  		size_pack = atoi(tmp.c_str());
-        size_t n = count(b.begin(), b.end(), '.');
+		size_pack = atoi(tmp.c_str());
+		if(size_pack == 0){
+			continue;
+		}
+		size_t n = count(b.begin(), b.end(), '.');
     	if(n==4){
     		unsigned found = b.find_last_of(".");
 	    	b = b.substr(0,found);
@@ -183,6 +186,9 @@ void file2dataPCAP_interval(ifstream * file,vector<string> channels,int interval
   			continue;
   		}
   		size_pack = atoi(tmp2.c_str());
+  		if(size_pack == 0){
+			continue;
+		}
     	if(count(b.begin(), b.end(), '.') > 2 &&  count(t.begin(), t.end(), '.') > 2){
 	    	if(t1 == 4){
 	    		t1 = timestamp_to_ctime(time_str.c_str());
