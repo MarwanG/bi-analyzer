@@ -173,7 +173,7 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 	create_graph_2_map(avg_pack_down,ecart_type_pack_down,"avg_ecart_down_pack_"+current_time_+".stat");
     create_graph_2_map(avg_pack_up,ecart_type_pack_up,"avg_ecart_up_pack_"+current_time_+".stat");
     create_graph_2_map(avg_time,ecart_type_time,"avg_ecart_time_"+current_time_+".stat");
-    create_graph_2_map(ecart_type_time,avg_pack,"ecart_type_time_avg_pack_up_"+current_time_+".stat");
+    // create_graph_2_map(ecart_type_time,avg_pack,"ecart_type_time_avg_pack_up_"+current_time_+".stat");
 	
 	g->free_data();
 	delete(g);
