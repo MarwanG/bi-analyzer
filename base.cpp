@@ -95,6 +95,9 @@ void calculate_cc(Node* n1,Node* n2){
 }
 
 // FUNCTION TO CALCULATES STATS FOR WHOLE GRAPH.
+//loop to each of the top
+//loop for each bot of the current top 
+//(can easily add the size/freq treatement here if needed should be faster)
 void calculate_stat_graph(Graph * g){
 	for(int i = 0 ; i < g->tops.size() ; i++){
 		Node *n = g->tops[i];
@@ -104,9 +107,6 @@ void calculate_stat_graph(Graph * g){
 			Node *bo = n->neighbours[*it];
 			set<int>::iterator it2;
 			for(it2 = bo->neighbours_indexs.begin() ; it2 != bo->neighbours_indexs.end() ; it2++){
-			//	if(bo->get_degree() == 1){
-              //      cout << bo->neighbours[*it2]->get_title() << "\n";
-             //   }
                 Node *tmp = bo->neighbours[*it2];
 				int index_x = g->topsIndex.find(tmp->get_title())->second;
 				if(i < index_x && find(treated.begin(), treated.end(), index_x)==treated.end() && n!= tmp){
@@ -122,14 +122,12 @@ void calculate_stat_graph(Graph * g){
 			g->cc_min+= (n->get_cc_min()/n->nb_top_neighbours);
 			g->cc_max+= (n->get_cc_max()/n->nb_top_neighbours);
 		}
-
 		n->calculate_disp();
 	 	n->calculate_redundancy();
 		g->update_degree_top(n);
 		g->update_redundancy_top(n);
 		g->update_ccs_top(n);
 		g->update_degree_cc(n);
-
 		g->average_degree_top_v = g->average_degree_top_v + n->get_degree();
 		if(n->get_degree() > g->max_top){
 			g->max_top=n->get_degree();
@@ -179,8 +177,7 @@ void addlink(Graph *g,string t , string b,string *t1,int size_pack){
     		}else{
     			top->add_pack_down(bot,size_pack);
     		}
-	}
-	top->total_packs = top->total_packs + size_pack;
+	}	
     if(bTop && bBot){
    	 	g->links = g->links + 1;
    	}

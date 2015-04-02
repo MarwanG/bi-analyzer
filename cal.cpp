@@ -36,9 +36,7 @@ long double get_avg_list(vector<double> list){
 	for(int i = 0 ; i < list.size() ; i++){
 		avg = avg + list[i];
 	}
-	cout << avg << "\n";
 	res = avg/(long double)list.size();
-	cout << res << "\n";
 	return res;
 }
 
@@ -104,10 +102,16 @@ void file2data_PCAP_batch(string name,vector<string> channels,Graph * g){
 
 void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 	map<string,int> list;
+
 	map<string,long double> ecart_type_time;
-	map<string,long double> ecart_type_pack;
-	map<string,long double> avg_pack;
 	map<string,long double> avg_time;
+
+	map<string,long double> ecart_type_pack_up;
+	map<string,long double> avg_pack_up;
+	
+
+	map<string,long double> ecart_type_pack_down;
+	map<string,long double> avg_pack_down;
 
 	Graph * g = new Graph();
 	for(int i = 0 ; i < names.size() ; i++){
@@ -120,6 +124,9 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 
 
 	//PACK/TIME TREATEMENT.
+	// could be added to the calculate_stat in a later step but since
+	// not both are required at the same time 
+	// seperation of code makes it easier to execute the needed.
 	for(int i = 0 ; i < g->tops.size() ; i++){
 		Node * n = g->tops[i];
 		std::map<int,std::vector<double> >::iterator it;
@@ -133,27 +140,38 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 			long double avg_time_res = get_avg_list(v);	
 			long double ecart_time_res = get_ecart_list(v,avg_time_res);
 
-			long double avg_pack_res = get_avg_list(n->size_pack_list[it->first]);
-			long double ecart_pack_res = get_ecart_list(n->size_pack_list[it->first],avg_pack_res);
+			long double avg_pack_res_up = get_avg_list(n->size_pack_list[it->first]);
+			long double ecart_pack_res_up = get_ecart_list(n->size_pack_list[it->first],avg_pack_res_up);
+
+			long double avg_pack_res_down = get_avg_list(n->size_pack_list_down[it->first]);
+			long double ecart_pack_res_down = get_ecart_list(n->size_pack_list_down[it->first],avg_pack_res_down);
+
 
 			if(avg_time_res != -1){
 				avg_time[title] = avg_time_res;
 				ecart_type_time[title]=ecart_time_res;
 
-				avg_pack[title] = avg_pack_res;
-				ecart_type_pack[title] = ecart_pack_res;
+				avg_pack_up[title] = avg_pack_res_up;
+				ecart_type_pack_up[title] = ecart_pack_res_up;
+			
+				avg_pack_down[title] = avg_pack_res_down;
+				ecart_type_pack_down[title] = ecart_pack_res_down;
+			
+
 			}
 		}
 	}	
-	stat_to_stdout(g);
-	calculate_stat_graph(g);
-	stat_to_file(g);
+	
+	// stat_to_stdout(g);
+	// calculate_stat_graph(g);
+	// stat_to_file(g);
     
 
 
 	string current_time_ = current_time();
 
-    create_graph_2_map(avg_pack,ecart_type_pack,"avg_ecart_up_pack_"+current_time_+".stat");
+	create_graph_2_map(avg_pack_down,ecart_type_pack_down,"avg_ecart_down_pack_"+current_time_+".stat");
+    create_graph_2_map(avg_pack_up,ecart_type_pack_up,"avg_ecart_up_pack_"+current_time_+".stat");
     create_graph_2_map(avg_time,ecart_type_time,"avg_ecart_time_"+current_time_+".stat");
     create_graph_2_map(ecart_type_time,avg_pack,"ecart_type_time_avg_pack_up_"+current_time_+".stat");
 	
