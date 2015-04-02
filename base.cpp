@@ -171,6 +171,7 @@ void addlink(Graph *g,string t , string b,string *t1,int size_pack){
 	bool bTop = top->addneighbours(bot);
  	bool bBot = bot->addneighbours(top);
 	if(t1 != NULL){
+			g->add_communication(b,*t1,size_pack);
     		top->add_ping(bot,*t1);
     		if(size_pack < 0 ){
     			top->add_pack_up(bot,-size_pack);

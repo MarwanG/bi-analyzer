@@ -88,7 +88,7 @@ void file2data_PCAP_batch(string name,vector<string> channels,Graph * g){
 	    		addlink(g,b,t,&time_str,-size_pack);
 	    }else{		
 		    if(find(channels.begin(), channels.end(), t)!=channels.end() && find(channels.begin(), channels.end(), b)==channels.end()){
-		   			addlink(g,t,b,&time_str,size_pack);
+		   		addlink(g,t,b,&time_str,size_pack);
 		    }
 		}
     }
@@ -267,6 +267,9 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	map<int,set<string> > prev_set_by_degree;
 	map<int,set<string> > current_set_by_degree;
 
+	map<string,vector< pair<string,int> > > window_result_total;
+	map<string,vector< pair<string,int> > > window_result_current;
+
 
 	//nb of peers
 	map<string,set<string> > peer_per_channel;
@@ -357,6 +360,15 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 			}
 			prev_set_by_degree = current_set_by_degree;
 			current_set_by_degree.clear();
+		}
+		window_result_current = g->calcute_window_peaks(1000);
+
+		map<string,vector<pair<string,int> > >::iterator it2;
+		for(it2 = window_result_current.begin() ; it2 != window_result_current.end() ; it2++){
+			vector<pair<string,int> > list_pairs = it2->second;
+			for(int i = 0 ; i < list_pairs.size() ; i++){
+				cout << list_pairs[i].first << "  " << list_pairs[i].second << "\n";
+			}
 		}
 
 		g->free_data();

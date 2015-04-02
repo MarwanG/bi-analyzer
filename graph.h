@@ -3,7 +3,10 @@
 
 #include <unordered_map>
 #include <vector>
+#include <string>
+#include <utility>
 #include "node.h"
+
 
 class Graph
 {
@@ -22,8 +25,9 @@ public:
 	void update_degree_cc(Node *n);
 	void update_redundancy_bot(Node * n);
 	void update_redundancy_top(Node * n);
+	void add_communication(std::string ip,std::string time_,int size);
+	std::map<std::string,std::vector< std::pair<std::string,int> > > calcute_window_peaks(int delta);
 	std::string packs_to_string_bot();
-
 	std::string degrees_to_string();
 	std::string degrees_to_string_bot();
 
@@ -47,7 +51,13 @@ public:
 	std::map<float,int> ccs_top;
 	std::map<float,int> ccs_bot;
 	std::map<int,float> degree_cc_top; 
-	std::map<int,float> degree_cc_bot; 
+	std::map<int,float> degree_cc_bot;
+
+	std::map<std::string,std::vector<std::string> > time_communications_per_ip;
+	std::map<std::string,std::vector<int> > pack_size_per_ip;
+	
+	// std::map<std::string,std::pair<string,int>> results_time_value_per_ip;
+
 
 	// variables for stat
 	float average_degree_top_v;
