@@ -85,17 +85,17 @@ void Node::add_ping(Node *son,string s){
     int diff_milli_tmp = abs(t1_milli-t2_milli);
     t = t * 1000;
     t = t + diff_milli_tmp;
-    cout << t << "\n";
+    // cout << t << "\n";
     if(t > delta_fix){
       double diff = t - delta_fix;
-      cout << "je suis ici diff := " << diff << "\n";
+      // cout << "je suis ici diff := " << diff << "\n";
       freq_ping[son->get_index()].push_back(delta_fix);
       size_pack_list_total_detail[son->get_index()].push_back(0);
       while(diff > delta_fix){
         freq_ping[son->get_index()].push_back(delta_fix);
         size_pack_list_total_detail[son->get_index()].push_back(0);
         diff = diff - delta_fix;
-        cout << "I AM I PUSHING := " << diff << "\n";
+        // cout << "I AM I PUSHING := " << diff << "\n";
       }
       freq_ping[son->get_index()].push_back(diff);
     }else{

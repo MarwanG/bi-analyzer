@@ -53,7 +53,7 @@ void file2data_PCAP_batch(string name,vector<string> channels,Graph * g){
 	int z =  0;
 	while (getline(file, str))
     {
-    	cout << str << "\n";
+    	// cout << str << "\n";
     	istringstream iss(str);
     	iss >> time_str;
     	iss >> tmp;
@@ -148,7 +148,7 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 			while(j < v.size()){
 				while(sum_time < 10 && end < v.size()){
 					if(sum_time + v[end] > 10){
-						cout << "i passed ::: " << (sum_time + v[end])  <<"  "<< v[j] <<" "<< v[end] << "\n";
+						// cout << "i passed ::: " << (sum_time + v[end])  <<"  "<< v[j] <<" "<< v[end] << "\n";
 						break;
 					}else{
 						sum_time = sum_time + v[end];
