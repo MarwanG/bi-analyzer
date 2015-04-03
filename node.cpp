@@ -7,7 +7,7 @@
 #include "print_tools.h"
 
 
-double delta_fix = 50;
+double delta_fix = 1000;
 
 using namespace std;
 Node::Node(string name){

@@ -128,6 +128,7 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 	// not both are required at the same time 
 	// seperation of code makes it easier to execute the needed.
 
+	cout << "i am here 3 \n";
 	ofstream myfile;
 	myfile.open("TESTING.stat");
 	for(int i = 0 ; i < g->tops.size() ; i++){
@@ -142,8 +143,8 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 			int j = 0;
 			int end = 0;
 			while(j < v.size()){
-				while(sum_time < 100 && end < v.size()){
-					if(sum_time + v[end] > 100){
+				while(sum_time < 1000 && end < v.size()){
+					if(sum_time + v[end] > 1000){
 						break;
 					}else{
 						sum_time = sum_time + v[end];
