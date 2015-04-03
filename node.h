@@ -69,6 +69,8 @@ public:
 	std::map<int,int> size_pack_list_total_down;
 	std::map<int,std::vector<double> > size_pack_list_down;
 
+	std::map<int,std::vector<double> > size_pack_list_total_detail;
+
 	std::set<std::pair<int,int> > pairs;
 
 

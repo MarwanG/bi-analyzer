@@ -133,39 +133,42 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 		for(it = n->freq_ping.begin() ; it != n->freq_ping.end() ; it++){
 			std::vector<double> v = it->second;		
 			
-		
-			string tmp_string =  n->neighbours[it->first]->get_title();
-			string title = n->get_title() + " " + tmp_string;
+			for(int j = 0 ; j < v.size() ; j++){
+				cout << v[i] << "  " <<  n->size_pack_list_total_detail[it->first][i] << "\n"; 
+			}
+			// string tmp_string =  n->neighbours[it->first]->get_title();
+			// string title = n->get_title() + " " + tmp_string;
 			
-			long double avg_time_res = get_avg_list(v);	
-			long double ecart_time_res = get_ecart_list(v,avg_time_res);
+			// long double avg_time_res = get_avg_list(v);	
+			// long double ecart_time_res = get_ecart_list(v,avg_time_res);
 
-			long double avg_pack_res_up = get_avg_list(n->size_pack_list[it->first]);
-			long double ecart_pack_res_up = get_ecart_list(n->size_pack_list[it->first],avg_pack_res_up);
+			// long double avg_pack_res_up = get_avg_list(n->size_pack_list[it->first]);
+			// long double ecart_pack_res_up = get_ecart_list(n->size_pack_list[it->first],avg_pack_res_up);
 
-			long double avg_pack_res_down = get_avg_list(n->size_pack_list_down[it->first]);
-			long double ecart_pack_res_down = get_ecart_list(n->size_pack_list_down[it->first],avg_pack_res_down);
+			// long double avg_pack_res_down = get_avg_list(n->size_pack_list_down[it->first]);
+			// long double ecart_pack_res_down = get_ecart_list(n->size_pack_list_down[it->first],avg_pack_res_down);
 
 
-			if(avg_time_res != -1){
-				avg_time[title] = avg_time_res;
-				ecart_type_time[title]=ecart_time_res;
+			// if(avg_time_res != -1){
+			// 	avg_time[title] = avg_time_res;
+			// 	ecart_type_time[title]=ecart_time_res;
 
-				avg_pack_up[title] = avg_pack_res_up;
-				ecart_type_pack_up[title] = ecart_pack_res_up;
+			// 	avg_pack_up[title] = avg_pack_res_up;
+			// 	ecart_type_pack_up[title] = ecart_pack_res_up;
 			
-				avg_pack_down[title] = avg_pack_res_down;
-				ecart_type_pack_down[title] = ecart_pack_res_down;
+			// 	avg_pack_down[title] = avg_pack_res_down;
+			// 	ecart_type_pack_down[title] = ecart_pack_res_down;
 			
 
 			}
 		}
-	}	
+		
 	
 	// stat_to_stdout(g);
 	// calculate_stat_graph(g);
 	// stat_to_file(g);
     
+
 
 
 	string current_time_ = current_time();
@@ -361,16 +364,7 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 			prev_set_by_degree = current_set_by_degree;
 			current_set_by_degree.clear();
 		}
-		window_result_current = g->calcute_window_peaks(1000);
-
-		map<string,vector<pair<string,int> > >::iterator it2;
-		for(it2 = window_result_current.begin() ; it2 != window_result_current.end() ; it2++){
-			vector<pair<string,int> > list_pairs = it2->second;
-			for(int i = 0 ; i < list_pairs.size() ; i++){
-				cout << list_pairs[i].first << "  " << list_pairs[i].second << "\n";
-			}
-		}
-
+	
 		g->free_data();
 		delete(g);
 	}

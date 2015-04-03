@@ -2,8 +2,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
+#include <algorithm>
 
 #include "print_tools.h"
+
+
+double delta_fix = 1000;
 
 using namespace std;
 Node::Node(string name){
@@ -44,12 +48,14 @@ int Node::get_total_up(){
 
 void Node::add_pack_down(Node*son,int size_pack){
   size_pack_list_down[son->get_index()].push_back(size_pack);
+  size_pack_list_total_detail[son->get_index()].push_back(size_pack);
   size_pack_list_total_down[son->get_index()] = size_pack_list_total[son->get_index()] + size_pack;
 }
 
 
 void Node::add_pack_up(Node*son,int size_pack){
   size_pack_list[son->get_index()].push_back(size_pack);
+  size_pack_list_total_detail[son->get_index()].push_back(size_pack);
   size_pack_list_total[son->get_index()] = size_pack_list_total[son->get_index()] + size_pack;
 }
 
@@ -81,8 +87,16 @@ void Node::add_ping(Node *son,string s){
     int diff_milli_tmp = abs(t1_milli-t2_milli);
     t = t * 1000;
     t = t + diff_milli_tmp;
-    t = t/1000;
+    // t = t/1000;
     //adding the data
+    if(t > delta_fix){
+      double diff = t - delta_fix;
+      while(diff > 0){
+        freq_ping[son->get_index()].push_back(min(diff,delta_fix));
+        size_pack_list_total_detail[son->get_index()].push_back(0);
+        diff = diff - delta_fix;
+      }
+    }
     freq_ping[son->get_index()].push_back(t);
     freq_last_time[son->get_index()] = s;
   }
