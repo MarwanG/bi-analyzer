@@ -7,7 +7,7 @@
 #include "print_tools.h"
 
 
-double delta_fix = 1000;
+double delta_fix = 50;
 
 using namespace std;
 Node::Node(string name){
@@ -62,9 +62,7 @@ void Node::add_pack_up(Node*son,int size_pack){
 
 void Node::add_ping(Node *son,string s){ 
   if(freq_ping.find(son->get_index()) == freq_ping.end()){
-    vector<double> tmp;
-    tmp.push_back(0);
-    freq_ping[son->get_index()] = tmp;
+    freq_ping[son->get_index()].push_back(0);
     freq_last_time[son->get_index()] = s;
   }else{
 
@@ -87,17 +85,17 @@ void Node::add_ping(Node *son,string s){
     int diff_milli_tmp = abs(t1_milli-t2_milli);
     t = t * 1000;
     t = t + diff_milli_tmp;
-    // t = t/1000;
-    //adding the data
     if(t > delta_fix){
       double diff = t - delta_fix;
-      while(diff > 0){
+      while(diff > delta_fix){
         freq_ping[son->get_index()].push_back(min(diff,delta_fix));
         size_pack_list_total_detail[son->get_index()].push_back(0);
         diff = diff - delta_fix;
       }
-    }
-    freq_ping[son->get_index()].push_back(t);
+      freq_ping[son->get_index()].push_back(delta_fix);
+    }else{
+      freq_ping[son->get_index()].push_back(t);
+    } 
     freq_last_time[son->get_index()] = s;
   }
 }

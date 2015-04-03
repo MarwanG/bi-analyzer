@@ -90,9 +90,9 @@ int main(int argc, char* argv[]){
 
 
 
-	list.push_back("/data2/ghanem/tmp/short_a.txt");
+	// list.push_back("short_a.txt");
     // list.push_back("/data2/ghanem/tmp/test_a.txt"); 
-    // list.push_back("/data2/ghanem/tmp/test_b.txt");
+    list.push_back("/data2/ghanem/tmp/test_b.txt");
     // list.push_back("/data2/ghanem/tmp/test_c.txt");
     // list.push_back("/data2/ghanem/tmp/test_d.txt");
     // list.push_back("/data2/ghanem/tmp/test_e.txt");
@@ -107,14 +107,14 @@ int main(int argc, char* argv[]){
 	// list.push_back("/data2/ghanem/video_trace_by_size/video_size_f.txt");
 
 
-	nbChannels.push_back(3);
-	// nbChannels.push_back(1);
+	// nbChannels.push_back(3);
+	nbChannels.push_back(1);
 	// nbChannels.push_back(3);
 	// nbChannels.push_back(1);
 	// nbChannels.push_back(1);
 	// nbChannels.push_back(3);
 
-	get_stat_pcap_interval(list,nbChannels,30);
-	// get_stat_pcap_batch(list,nbChannels);
+	// get_stat_pcap_interval(list,nbChannels,30);
+	get_stat_pcap_batch(list,nbChannels);
 	}	
 }

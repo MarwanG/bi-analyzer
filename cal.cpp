@@ -127,15 +127,46 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 	// could be added to the calculate_stat in a later step but since
 	// not both are required at the same time 
 	// seperation of code makes it easier to execute the needed.
+
+	ofstream myfile;
+	myfile.open("TESTING.stat");
 	for(int i = 0 ; i < g->tops.size() ; i++){
 		Node * n = g->tops[i];
 		std::map<int,std::vector<double> >::iterator it;
-		for(it = n->freq_ping.begin() ; it != n->freq_ping.end() ; it++){
+		// for(it = n->freq_ping.begin() ; it != n->freq_ping.end() ; it++){
+			it = n->freq_ping.begin();
 			std::vector<double> v = it->second;		
 			
-			for(int j = 0 ; j < v.size() ; j++){
-				cout << v[i] << "  " <<  n->size_pack_list_total_detail[it->first][i] << "\n"; 
+			int sum_time = 0;
+			int sum_pack = 0;
+			int j = 0;
+			int end = 0;
+			while(j < v.size()){
+				while(sum_time < 100 && end < v.size()){
+					if(sum_time + v[end] > 100){
+						break;
+					}else{
+						sum_time = sum_time + v[end];
+						sum_pack = sum_pack + n->size_pack_list_total_detail[it->first][end];
+						end++;
+					}						
+				}
+				if(end >= v.size()){
+					myfile << sum_time << "  " << sum_pack << "\n";
+					break;
+				}else{
+					myfile << sum_time << "  " << sum_pack << "\n";
+					j++;
+					end = j;
+					sum_time = 0;
+					sum_pack = 0;
+				}
 			}
+				// cout << v[j] << "  " <<  n->size_pack_list_total_detail[it->first][j] << "\n"; 
+			// }
+
+			break;
+
 			// string tmp_string =  n->neighbours[it->first]->get_title();
 			// string title = n->get_title() + " " + tmp_string;
 			
@@ -160,10 +191,10 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 			// 	ecart_type_pack_down[title] = ecart_pack_res_down;
 			
 
-			}
+			// }
 		}
 		
-	
+	myfile.close();
 	// stat_to_stdout(g);
 	// calculate_stat_graph(g);
 	// stat_to_file(g);
