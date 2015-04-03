@@ -90,7 +90,7 @@ int main(int argc, char* argv[]){
 
 
 
-	// list.push_back("short_a.txt");
+	// list.push_back("heading.txt");
     // list.push_back("/data2/ghanem/tmp/test_a.txt"); 
     list.push_back("/data2/ghanem/tmp/test_b.txt");
     // list.push_back("/data2/ghanem/tmp/test_c.txt");

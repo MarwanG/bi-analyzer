@@ -53,6 +53,7 @@ void file2data_PCAP_batch(string name,vector<string> channels,Graph * g){
 	int z =  0;
 	while (getline(file, str))
     {
+    	cout << str << "\n";
     	istringstream iss(str);
     	iss >> time_str;
     	iss >> tmp;
@@ -140,11 +141,14 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 			
 			int sum_time = 0;
 			int sum_pack = 0;
+			int ylabel = 0;
 			int j = 0;
 			int end = 0;
+			j = 0;
 			while(j < v.size()){
-				while(sum_time < 1000 && end < v.size()){
-					if(sum_time + v[end] > 1000){
+				while(sum_time < 10 && end < v.size()){
+					if(sum_time + v[end] > 10){
+						cout << "i passed ::: " << (sum_time + v[end])  <<"  "<< v[j] <<" "<< v[end] << "\n";
 						break;
 					}else{
 						sum_time = sum_time + v[end];
@@ -153,15 +157,19 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 					}						
 				}
 				if(end >= v.size()){
-					myfile << sum_time << "  " << sum_pack << "\n";
+					ylabel = v[j] + ylabel;
+					myfile << (ylabel+10) << "  " << sum_pack << "\n";
 					break;
 				}else{
-					myfile << sum_time << "  " << sum_pack << "\n";
+					ylabel = v[j] + ylabel;
+					myfile << (ylabel+10) << "  " << sum_pack << "\n";
 					j++;
 					end = j;
 					sum_time = 0;
 					sum_pack = 0;
 				}
+				// myfile << v[j] << "  " << n->size_pack_list_total_detail[it->first][j] << "\n";
+				// j++;
 			}
 				// cout << v[j] << "  " <<  n->size_pack_list_total_detail[it->first][j] << "\n"; 
 			// }

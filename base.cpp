@@ -223,7 +223,7 @@ vector<string> get_channels(string name,int nbChannels,map<string,int> list){
 	string b;
 	vector<string> tmp;
 	string time_str;
-	int limit = 70;
+	int limit = 10;
 	while (getline(file, str) && tmp.size() < nbChannels)
     {
         istringstream iss(str);
