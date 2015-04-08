@@ -128,88 +128,42 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 	// could be added to the calculate_stat in a later step but since
 	// not both are required at the same time 
 	// seperation of code makes it easier to execute the needed.
-
-	cout << "i am here 3 \n";
-	ofstream myfile;
-	myfile.open("TESTING.stat");
 	for(int i = 0 ; i < g->tops.size() ; i++){
 		Node * n = g->tops[i];
 		std::map<int,std::vector<double> >::iterator it;
-		// for(it = n->freq_ping.begin() ; it != n->freq_ping.end() ; it++){
-			it = n->freq_ping.begin();
+		for(it = n->freq_ping.begin() ; it != n->freq_ping.end() ; it++){
 			std::vector<double> v = it->second;		
+			string tmp_string =  n->neighbours[it->first]->get_title();
+			string title = n->get_title() + " " + tmp_string;
 			
-			int sum_time = 0;
-			int sum_pack = 0;
-			int ylabel = 0;
-			int j = 0;
-			int end = 0;
-			j = 0;
-			while(j < v.size()){
-				while(sum_time < 10 && end < v.size()){
-					if(sum_time + v[end] > 10){
-						// cout << "i passed ::: " << (sum_time + v[end])  <<"  "<< v[j] <<" "<< v[end] << "\n";
-						break;
-					}else{
-						sum_time = sum_time + v[end];
-						sum_pack = sum_pack + n->size_pack_list_total_detail[it->first][end];
-						end++;
-					}						
-				}
-				if(end >= v.size()){
-					ylabel = v[j] + ylabel;
-					myfile << (ylabel+10) << "  " << sum_pack << "\n";
-					break;
-				}else{
-					ylabel = v[j] + ylabel;
-					myfile << (ylabel+10) << "  " << sum_pack << "\n";
-					j++;
-					end = j;
-					sum_time = 0;
-					sum_pack = 0;
-				}
-				// myfile << v[j] << "  " << n->size_pack_list_total_detail[it->first][j] << "\n";
-				// j++;
+			long double avg_time_res = get_avg_list(v);	
+			long double ecart_time_res = get_ecart_list(v,avg_time_res);
+
+			long double avg_pack_res_up = get_avg_list(n->size_pack_list[it->first]);
+			long double ecart_pack_res_up = get_ecart_list(n->size_pack_list[it->first],avg_pack_res_up);
+
+			long double avg_pack_res_down = get_avg_list(n->size_pack_list_down[it->first]);
+			long double ecart_pack_res_down = get_ecart_list(n->size_pack_list_down[it->first],avg_pack_res_down);
+
+
+			if(avg_time_res != -1){
+				avg_time[title] = avg_time_res;
+				ecart_type_time[title]=ecart_time_res;
+
+				avg_pack_up[title] = avg_pack_res_up;
+				ecart_type_pack_up[title] = ecart_pack_res_up;
+			
+				avg_pack_down[title] = avg_pack_res_down;
+				ecart_type_pack_down[title] = ecart_pack_res_down;
+			
+
 			}
-				// cout << v[j] << "  " <<  n->size_pack_list_total_detail[it->first][j] << "\n"; 
-			// }
-
-			break;
-
-			// string tmp_string =  n->neighbours[it->first]->get_title();
-			// string title = n->get_title() + " " + tmp_string;
-			
-			// long double avg_time_res = get_avg_list(v);	
-			// long double ecart_time_res = get_ecart_list(v,avg_time_res);
-
-			// long double avg_pack_res_up = get_avg_list(n->size_pack_list[it->first]);
-			// long double ecart_pack_res_up = get_ecart_list(n->size_pack_list[it->first],avg_pack_res_up);
-
-			// long double avg_pack_res_down = get_avg_list(n->size_pack_list_down[it->first]);
-			// long double ecart_pack_res_down = get_ecart_list(n->size_pack_list_down[it->first],avg_pack_res_down);
-
-
-			// if(avg_time_res != -1){
-			// 	avg_time[title] = avg_time_res;
-			// 	ecart_type_time[title]=ecart_time_res;
-
-			// 	avg_pack_up[title] = avg_pack_res_up;
-			// 	ecart_type_pack_up[title] = ecart_pack_res_up;
-			
-			// 	avg_pack_down[title] = avg_pack_res_down;
-			// 	ecart_type_pack_down[title] = ecart_pack_res_down;
-			
-
-			// }
 		}
+	}
 		
-	myfile.close();
-	// stat_to_stdout(g);
-	// calculate_stat_graph(g);
-	// stat_to_file(g);
-    
-
-
+	stat_to_stdout(g);
+	calculate_stat_graph(g);
+	stat_to_file(g);
 
 	string current_time_ = current_time();
 
@@ -407,6 +361,19 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	
 		g->free_data();
 		delete(g);
+	}
+
+
+	vector<string> two_min_degree_ips;
+	map<string,vector<int> >::iterator it;
+	for(it = variance_degree_each_bot.begin() ; it != variance_degree_each_bot.end() ; it++){
+		int min = *std::min_element(it->second.begin(),it->second.end());
+		if(min > 1){
+			two_min_degree_ips.push_back(it->first);
+		}
+	}
+	for(int i = 0 ; i < two_min_degree_ips.size() ; i++){
+		cout << two_min_degree_ips[i] << "\n";
 	}
 
 	//vectors for peer-degree variance

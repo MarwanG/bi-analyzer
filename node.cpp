@@ -7,7 +7,6 @@
 #include "print_tools.h"
 
 
-double delta_fix = 10;
 
 using namespace std;
 Node::Node(string name){
@@ -62,7 +61,9 @@ void Node::add_pack_up(Node*son,int size_pack){
 
 void Node::add_ping(Node *son,string s){ 
   if(freq_ping.find(son->get_index()) == freq_ping.end()){
-    freq_ping[son->get_index()].push_back(0);
+    vector<double> tmp;
+    tmp.push_back(0);
+    freq_ping[son->get_index()] = tmp;
     freq_last_time[son->get_index()] = s;
   }else{
 
@@ -85,22 +86,9 @@ void Node::add_ping(Node *son,string s){
     int diff_milli_tmp = abs(t1_milli-t2_milli);
     t = t * 1000;
     t = t + diff_milli_tmp;
-    // cout << t << "\n";
-    if(t > delta_fix){
-      double diff = t - delta_fix;
-      // cout << "je suis ici diff := " << diff << "\n";
-      freq_ping[son->get_index()].push_back(delta_fix);
-      size_pack_list_total_detail[son->get_index()].push_back(0);
-      while(diff > delta_fix){
-        freq_ping[son->get_index()].push_back(delta_fix);
-        size_pack_list_total_detail[son->get_index()].push_back(0);
-        diff = diff - delta_fix;
-        // cout << "I AM I PUSHING := " << diff << "\n";
-      }
-      freq_ping[son->get_index()].push_back(diff);
-    }else{
-      freq_ping[son->get_index()].push_back(t);
-    } 
+    t = t/1000;
+    //adding the data
+    freq_ping[son->get_index()].push_back(t);
     freq_last_time[son->get_index()] = s;
   }
 }
