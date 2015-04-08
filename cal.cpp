@@ -364,17 +364,22 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	}
 
 
-	vector<string> two_min_degree_ips;
+	vector<pair<string,int> > two_min_degree_ips;
 	map<string,vector<int> >::iterator it;
 	for(it = variance_degree_each_bot.begin() ; it != variance_degree_each_bot.end() ; it++){
 		int min = *std::min_element(it->second.begin(),it->second.end());
 		if(min > 1){
-			two_min_degree_ips.push_back(it->first);
+			two_min_degree_ips.push_back(make_pair(it->first,min));
 		}
 	}
+
+	ofstream myfile;
+	myfile.open ("2_degree_min");
 	for(int i = 0 ; i < two_min_degree_ips.size() ; i++){
-		cout << two_min_degree_ips[i] << "\n";
+		myfile << two_min_degree_ips[i].first << "  " << two_min_degree_ips[i].second << "\n";
 	}
+	myfile.close();
+
 
 	//vectors for peer-degree variance
 	map<string,pair<float,float> > avg_sd_degree =  avg_for_each(variance_degree_each_bot);
@@ -390,15 +395,15 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	vector<string> times_tmp = times;
 	times_tmp.erase (times_tmp.begin());
 	//creating graph
-	create_graph_vector_vector_int(size_up_per_channel,times,"up_stream_per_channel_"+current_time_+"_"+interval_string+".stat");
-	create_graph_vector_vector_int(nb_peer_per_channel,times,"nb_peers_per_channel_"+current_time_+"_"+interval_string+".stat");
-	create_graph_pairs(avg_nb_degree,"avg_nb_degree_"+current_time_+"_"+interval_string+".stat");
-	create_graph_degree_change(nb_each_degree,diff_nb_each_degree,times_tmp,"degree_change_"+current_time_+"_"+interval_string+".stat");
-	create_graph_map_pairs(avg_sd_degree,"avg_sd_degree_"+current_time_+"_"+interval_string+".stat");
-	create_graph_float(cc_graph,times,"cc_interval_"+current_time_+"_"+interval_string+".stat");
-	create_graph_float(density_graph,times,"density_interval_"+current_time_+"_"+interval_string+".stat");
-	create_graph_string(dist_degree_by_bot,times,"dist_degree_bot_"+current_time_+"_"+interval_string+".stat");
-	create_graph_nb_bot(nb_bot_graph,times,dist_degree_by_top,"nb_bot_interval_"+current_time_+"_"+interval_string+".stat");	
+	// create_graph_vector_vector_int(size_up_per_channel,times,"up_stream_per_channel_"+current_time_+"_"+interval_string+".stat");
+	// create_graph_vector_vector_int(nb_peer_per_channel,times,"nb_peers_per_channel_"+current_time_+"_"+interval_string+".stat");
+	// create_graph_pairs(avg_nb_degree,"avg_nb_degree_"+current_time_+"_"+interval_string+".stat");
+	// create_graph_degree_change(nb_each_degree,diff_nb_each_degree,times_tmp,"degree_change_"+current_time_+"_"+interval_string+".stat");
+	// create_graph_map_pairs(avg_sd_degree,"avg_sd_degree_"+current_time_+"_"+interval_string+".stat");
+	// create_graph_float(cc_graph,times,"cc_interval_"+current_time_+"_"+interval_string+".stat");
+	// create_graph_float(density_graph,times,"density_interval_"+current_time_+"_"+interval_string+".stat");
+	// create_graph_string(dist_degree_by_bot,times,"dist_degree_bot_"+current_time_+"_"+interval_string+".stat");
+	// create_graph_nb_bot(nb_bot_graph,times,dist_degree_by_top,"nb_bot_interval_"+current_time_+"_"+interval_string+".stat");	
 }
 
 
