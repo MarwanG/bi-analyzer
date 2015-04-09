@@ -373,18 +373,21 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 		}
 	}
 
-	ofstream myfile;
-	myfile.open ("2_degree_min");
-	for(int i = 0 ; i < two_min_degree_ips.size() ; i++){
-		myfile << two_min_degree_ips[i].first << "  " << two_min_degree_ips[i].second << "\n";
-	}
-	myfile.close();
+	
 
 
 	//vectors for peer-degree variance
 	map<string,pair<float,float> > avg_sd_degree =  avg_for_each(variance_degree_each_bot);
 	vector<pair<float,float> > avg_nb_degree = avg_nb_for_each(variance_degree_each_bot);
 
+
+	ofstream myfile;
+	myfile.open ("2_degree_min");
+	for(int i = 0 ; i < two_min_degree_ips.size() ; i++){
+		pair<float,float> avg_sd = avg_sd_degree[two_min_degree_ips[i].first];
+		myfile << two_min_degree_ips[i].first << "  " << two_min_degree_ips[i].second << " " << avg_sd.first << "  " << avg_sd.second <<"\n";
+	}
+	myfile.close();
 
 	//current time/interval to add to file names.
 	stringstream stream1;
