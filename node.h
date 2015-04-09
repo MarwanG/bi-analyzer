@@ -74,6 +74,10 @@ public:
 	std::set<std::pair<int,int> > pairs;
 
 
+	std::string first_appear; 
+	std::string last_appear;
+
+
 	private:
 		double degree;
 		float cc;
