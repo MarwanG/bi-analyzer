@@ -165,11 +165,19 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 	calculate_stat_graph(g);
 	stat_to_file(g);
 
-	string current_time_ = current_time();
+	ofstream myfile;
+	myfile.open ("start_end_per_ip");
 
-	create_graph_2_map(avg_pack_down,ecart_type_pack_down,"avg_ecart_down_pack_"+current_time_+".stat");
-    create_graph_2_map(avg_pack_up,ecart_type_pack_up,"avg_ecart_up_pack_"+current_time_+".stat");
-    create_graph_2_map(avg_time,ecart_type_time,"avg_ecart_time_"+current_time_+".stat");
+	for(int i  = 0 ; i < g->bots.size() ; i++){
+		myfile << g->bots[i]->get_title() << " " << g->bots[i]->first_appear << " " << g->bots[i]->last_appear << "\n";
+	}
+	myfile.close();
+
+	// string current_time_ = current_time();
+
+	// create_graph_2_map(avg_pack_down,ecart_type_pack_down,"avg_ecart_down_pack_"+current_time_+".stat");
+ //    create_graph_2_map(avg_pack_up,ecart_type_pack_up,"avg_ecart_up_pack_"+current_time_+".stat");
+ //    create_graph_2_map(avg_time,ecart_type_time,"avg_ecart_time_"+current_time_+".stat");
     // create_graph_2_map(ecart_type_time,avg_pack,"ecart_type_time_avg_pack_up_"+current_time_+".stat");
 	
 	g->free_data();

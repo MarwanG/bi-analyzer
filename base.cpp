@@ -162,15 +162,17 @@ void addlink(Graph *g,string t , string b,string *t1,int size_pack){
 	Node * bot;
 	if(p2 == g->botsIndex.end()){
 		bot = new Node(b);
+		bot->first_appear = *t1;
 		g->bots.push_back(bot);
 		bot->set_index(g->bots.size() -1);
 		g->botsIndex[b] = g->bots.size()-1;
 	}else{
 		bot = g->bots[p2->second];
+		bot->last_appear = *t1;
 	}
 	bool bTop = top->addneighbours(bot);
  	bool bBot = bot->addneighbours(top);
-	if(t1 != NULL && b.compare("123.4.104.101")==0){
+	if(t1 != NULL){
     		top->add_ping(bot,*t1);
     		if(size_pack < 0 ){
     			top->add_pack_up(bot,-size_pack);
