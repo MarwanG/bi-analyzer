@@ -12,7 +12,7 @@ do
 	touch $d.txt
 	for i in *.pcap
 	do
-		tcpdump -tttt -n -q -r $i ip | awk {print $1,$2,$4,$6,$7,$9}'| sed 's/\(.*\):/\1/' >> $d.txt'
+		/usr/sbin/tcpdump -tttt -n -q -r $i | awk '{print $1,$2,$4,$6,$7,$9,$8}' | sed  's/\(.*\):/\1/' |  sed 's/length//g' >>  $d.txt
 	done
 	echo "exiting $d"
 	cd ..
