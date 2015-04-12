@@ -125,43 +125,43 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 		file2data_PCAP_batch(names[i],v,g);
 	}
 
-
+	// NEED TO FIX
 	//PACK/TIME TREATEMENT.
 	// could be added to the calculate_stat in a later step but since
 	// not both are required at the same time 
 	// seperation of code makes it easier to execute the needed.
-	for(int i = 0 ; i < g->tops.size() ; i++){
-		Node * n = g->tops[i];
-		std::map<int,std::vector<double> >::iterator it;
-		for(it = n->freq_ping.begin() ; it != n->freq_ping.end() ; it++){
-			std::vector<double> v = it->second;		
-			string tmp_string =  n->neighbours[it->first]->get_title();
-			string title = n->get_title() + " " + tmp_string;
+	// for(int i = 0 ; i < g->tops.size() ; i++){
+	// 	Node * n = g->tops[i];
+	// 	std::map<int,std::vector<double> >::iterator it;
+	// 	for(it = n->freq_ping.begin() ; it != n->freq_ping.end() ; it++){
+	// 		std::vector<double> v = it->second;		
+	// 		string tmp_string =  n->neighbours[it->first]->get_title();
+	// 		string title = n->get_title() + " " + tmp_string;
 			
-			long double avg_time_res = get_avg_list(v);	
-			long double ecart_time_res = get_ecart_list(v,avg_time_res);
+	// 		long double avg_time_res = get_avg_list(v);	
+	// 		long double ecart_time_res = get_ecart_list(v,avg_time_res);
 
-			long double avg_pack_res_up = get_avg_list(n->size_pack_list[it->first]);
-			long double ecart_pack_res_up = get_ecart_list(n->size_pack_list[it->first],avg_pack_res_up);
+	// 		long double avg_pack_res_up = get_avg_list(n->size_pack_list[it->first]);
+	// 		long double ecart_pack_res_up = get_ecart_list(n->size_pack_list[it->first],avg_pack_res_up);
 
-			long double avg_pack_res_down = get_avg_list(n->size_pack_list_down[it->first]);
-			long double ecart_pack_res_down = get_ecart_list(n->size_pack_list_down[it->first],avg_pack_res_down);
+	// 		long double avg_pack_res_down = get_avg_list(n->size_pack_list_down[it->first]);
+	// 		long double ecart_pack_res_down = get_ecart_list(n->size_pack_list_down[it->first],avg_pack_res_down);
 
 
-			if(avg_time_res != -1){
-				avg_time[title] = avg_time_res;
-				ecart_type_time[title]=ecart_time_res;
+	// 		if(avg_time_res != -1){
+	// 			avg_time[title] = avg_time_res;
+	// 			ecart_type_time[title]=ecart_time_res;
 
-				avg_pack_up[title] = avg_pack_res_up;
-				ecart_type_pack_up[title] = ecart_pack_res_up;
+	// 			avg_pack_up[title] = avg_pack_res_up;
+	// 			ecart_type_pack_up[title] = ecart_pack_res_up;
 			
-				avg_pack_down[title] = avg_pack_res_down;
-				ecart_type_pack_down[title] = ecart_pack_res_down;
+	// 			avg_pack_down[title] = avg_pack_res_down;
+	// 			ecart_type_pack_down[title] = ecart_pack_res_down;
 			
 
-			}
-		}
-	}
+	// 		}
+	// 	}
+	// }
 		
 	stat_to_stdout(g);
 	// calculate_stat_graph(g);
@@ -171,13 +171,12 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 	myfile.open ("start_end_per_ip");
 
 	for(int i  = 0 ; i < g->bots.size() ; i++){
-		cout << i << "\n";
 		string time_1_str = g->bots[i]->first_appear;
 		string time_2_str =  g->bots[i]->last_appear;
-		myfile << g->bots[i]->get_title() << " " <<  time_1_str << " " << time_2_str << " ";
-		time_t time_1 = timestamp_to_ctime(time_2_str.substr(0,19).c_str());
-		time_t t2 = timestamp_to_ctime(time_1_str.substr(0,19).c_str());
-		double time_all = difftime(time_1,t2);
+		time_t time_1_t = timestamp_to_ctime(time_1_str.c_str());
+		time_t time_2_t = timestamp_to_ctime(time_2_str.c_str());
+		double time_all = difftime(time_2_t,time_1_t)-3600;
+		myfile << g->bots[i]->get_title() << " " <<  time_1_str << " " << time_2_str << " ";	
 		myfile << time_all << " " << g->bots[i]->max_interval << "\n";
 	}
 	myfile.close();

@@ -163,8 +163,8 @@ void addlink(Graph *g,string t , string b,string *t1,int size_pack){
 	string new_t1 = t1->substr(0,19);
 	if(p2 == g->botsIndex.end()){
 		bot = new Node(b);
-		bot->first_appear = *t1;
-		bot->last_appear = *t1;
+		bot->first_appear = new_t1;
+		bot->last_appear = new_t1;
 		g->bots.push_back(bot);
 		bot->set_index(g->bots.size() -1);
 		g->botsIndex[b] = g->bots.size()-1;
@@ -176,7 +176,7 @@ void addlink(Graph *g,string t , string b,string *t1,int size_pack){
 		if(new_interval > bot->max_interval){
 			bot->max_interval = new_interval;
 		}
-		bot->last_appear = *t1;
+		bot->last_appear = new_t1;
 	}
 	bool bTop = top->addneighbours(bot);
  	bool bBot = bot->addneighbours(top);
