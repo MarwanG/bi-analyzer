@@ -47,17 +47,19 @@ void file2data_PCAP_batch(string name,vector<string> channels,Graph * g){
 	string b;
 	string time_str;
 	string tmp;
+	string hours;
 	struct tm tm;
 	time_t t1 = 4;
 	int size_pack = 0;
 	int z =  0;
 	while (getline(file, str))
     {
-    	// cout << str << "\n";
+    	z++;
+    	cout << z << "\n";
     	istringstream iss(str);
     	iss >> time_str;
-    	iss >> tmp;
-    	time_str.append(" " + tmp);
+    	iss >> hours;
+    	time_str.append(" " + hours);
     	iss >> b;
     	iss >> t;
         iss >> tmp;
@@ -169,8 +171,14 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 	myfile.open ("start_end_per_ip");
 
 	for(int i  = 0 ; i < g->bots.size() ; i++){
-		myfile << g->bots[i]->get_title() << " " << g->bots[i]->first_appear << " " << g->bots[i]->last_appear << " ";
-		myfile << g->bots[i]->dur << " " << g->bots[i]->max_interval << "\n";
+		cout << i << "\n";
+		string time_1_str = g->bots[i]->first_appear;
+		string time_2_str =  g->bots[i]->last_appear;
+		myfile << g->bots[i]->get_title() << " " <<  time_1_str << " " << time_2_str << " ";
+		time_t time_1 = timestamp_to_ctime(time_2_str.substr(0,19).c_str());
+		time_t t2 = timestamp_to_ctime(time_1_str.substr(0,19).c_str());
+		double time_all = difftime(time_1,t2);
+		myfile << time_all << " " << g->bots[i]->max_interval << "\n";
 	}
 	myfile.close();
 

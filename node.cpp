@@ -19,6 +19,7 @@ Node::Node(string name){
   neighbours_indexs = set<int>();
   freq_ping = map<int,vector<double> >();
   total_packs=0;
+  max_interval=0;
 }
 
  

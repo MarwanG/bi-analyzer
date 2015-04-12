@@ -160,25 +160,28 @@ void addlink(Graph *g,string t , string b,string *t1,int size_pack){
 	unordered_map<string, int>::const_iterator p2;
 	p2 = g->botsIndex.find(b);
 	Node * bot;
+	string new_t1 = t1->substr(0,19);
 	if(p2 == g->botsIndex.end()){
 		bot = new Node(b);
 		bot->first_appear = *t1;
+		bot->last_appear = *t1;
 		g->bots.push_back(bot);
 		bot->set_index(g->bots.size() -1);
 		g->botsIndex[b] = g->bots.size()-1;
 	}else{
 		bot = g->bots[p2->second];
-		unsigned long new_interval = (unsigned long) time_diff(bot->last_appear,*t1);
+		time_t time_1 = timestamp_to_ctime(bot->last_appear.c_str());
+		time_t t2 = timestamp_to_ctime(new_t1.c_str());
+		double new_interval = difftime(t2,time_1);
 		if(new_interval > bot->max_interval){
 			bot->max_interval = new_interval;
 		}
-		bot->dur = time_diff(bot->first_appear,*t1);
 		bot->last_appear = *t1;
 	}
 	bool bTop = top->addneighbours(bot);
  	bool bBot = bot->addneighbours(top);
 	if(t1 != NULL){
-    		top->add_ping(bot,*t1);
+    		// top->add_ping(bot,*t1);
     		if(size_pack < 0 ){
     			top->add_pack_up(bot,-size_pack);
     		}else{

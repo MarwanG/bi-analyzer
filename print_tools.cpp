@@ -16,7 +16,7 @@ using namespace std;
 time_t timestamp_to_ctime(const char* time_stamp ){
    time_t _return;
    struct tm tm_struct ; 
-   strptime(time_stamp ,"%H:%M:%S",&tm_struct);
+   strptime(time_stamp ,"%Y-%m-%d %H:%M:%S",&tm_struct);
    _return  = mktime(&tm_struct);   
    return _return;
 }
@@ -24,7 +24,8 @@ time_t timestamp_to_ctime(const char* time_stamp ){
 double time_diff(string prev_time,string s){
 	string t1_new = prev_time.substr(0,prev_time.find('.'));
 	string t2_new = s.substr(0,s.find('.'));
-	// cout << t1_new << "  " << t2_new << "\n";
+	cout << prev_time << "  " << s << "\n";
+
 	time_t t1 = timestamp_to_ctime(prev_time.c_str());
 	time_t t2 = timestamp_to_ctime(s.c_str());
 	double t = difftime(t2,t1);
@@ -41,9 +42,10 @@ double time_diff(string prev_time,string s){
 	int t1_milli = atoi(t1_str_milli.c_str());
 	int t2_milli = atoi(t2_str_milli.c_str());
 	int diff_milli_tmp = abs(t1_milli-t2_milli);
- 	// cout << t << "  " << diff_milli_tmp << "\n";
+ 	cout << t << "  " << diff_milli_tmp << "\n";
 	t = t * 1000000;
 	t = t + diff_milli_tmp;
+	cout << "final t : " << t << "\n";
 	return t;
 }
 
