@@ -185,56 +185,56 @@ void Graph::add_communication(string ip,string time_,int size){
 }
 
 
-double time_diff(string prev_time,string s){
-	time_t t1 = timestamp_to_ctime(prev_time.c_str());
-	time_t t2 = timestamp_to_ctime(s.c_str());
-	double t = difftime(t1,t2);
+// double time_diff(string prev_time,string s){
+// 	time_t t1 = timestamp_to_ctime(prev_time.c_str());
+// 	time_t t2 = timestamp_to_ctime(s.c_str());
+// 	double t = difftime(t1,t2);
 
-	string t1_str_milli = s.substr(s.find('.')+1,s.length());
-	if(t1_str_milli[0]=='0'){
-	  t1_str_milli = s.substr(s.find('.')+2,s.length());
-	}
-	string t2_str_milli = prev_time.substr(prev_time.find('.')+1,prev_time.length());
-	if(t2_str_milli[0]=='0'){
-	  t2_str_milli = prev_time.substr(prev_time.find('.')+2,prev_time.length());
-	}
-	int t1_milli = atoi(t1_str_milli.c_str());
-	int t2_milli = atoi(t2_str_milli.c_str());
-	int diff_milli_tmp = abs(t1_milli-t2_milli);
-	t = t * 1000;
-	t = t + diff_milli_tmp;
-	return t;
-}
+// 	string t1_str_milli = s.substr(s.find('.')+1,s.length());
+// 	if(t1_str_milli[0]=='0'){
+// 	  t1_str_milli = s.substr(s.find('.')+2,s.length());
+// 	}
+// 	string t2_str_milli = prev_time.substr(prev_time.find('.')+1,prev_time.length());
+// 	if(t2_str_milli[0]=='0'){
+// 	  t2_str_milli = prev_time.substr(prev_time.find('.')+2,prev_time.length());
+// 	}
+// 	int t1_milli = atoi(t1_str_milli.c_str());
+// 	int t2_milli = atoi(t2_str_milli.c_str());
+// 	int diff_milli_tmp = abs(t1_milli-t2_milli);
+// 	t = t * 1000;
+// 	t = t + diff_milli_tmp;
+// 	return t;
+// }
 
 
-map<string,vector<pair<string,int> > > Graph::calcute_window_peaks(int delta){
-	map<string,vector< pair<string,int> > > res;
-	map<string,vector<string> >::iterator it;
-	for(it = time_communications_per_ip.begin() ; it != time_communications_per_ip.end() ; it++){
-		string ip = it->first;
-		vector<string> times = it->second;
-		vector<int> packs = pack_size_per_ip[ip];
+// map<string,vector<pair<string,int> > > Graph::calcute_window_peaks(int delta){
+// 	map<string,vector< pair<string,int> > > res;
+// 	map<string,vector<string> >::iterator it;
+// 	for(it = time_communications_per_ip.begin() ; it != time_communications_per_ip.end() ; it++){
+// 		string ip = it->first;
+// 		vector<string> times = it->second;
+// 		vector<int> packs = pack_size_per_ip[ip];
 	
-		int index = 0;
+// 		int index = 0;
 
-		string start_time = times[index];
-		string end_time ;
-		int total_size = packs[index];
-		while(index < packs.size()){
-			index++;
-			string current_time = times[index];
-			if(time_diff(start_time,current_time) <= delta){
-				total_size = total_size + packs[index];
-				end_time = current_time;
-			}else{
-				res[ip].push_back(make_pair(end_time,total_size));
-				start_time = current_time;
-				total_size = packs[index];
-			}
-		}
-	}
-	return res;
-}
+// 		string start_time = times[index];
+// 		string end_time ;
+// 		int total_size = packs[index];
+// 		while(index < packs.size()){
+// 			index++;
+// 			string current_time = times[index];
+// 			if(time_diff(start_time,current_time) <= delta){
+// 				total_size = total_size + packs[index];
+// 				end_time = current_time;
+// 			}else{
+// 				res[ip].push_back(make_pair(end_time,total_size));
+// 				start_time = current_time;
+// 				total_size = packs[index];
+// 			}
+// 		}
+// 	}
+// 	return res;
+// }
 
 
 

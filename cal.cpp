@@ -162,14 +162,15 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 	}
 		
 	stat_to_stdout(g);
-	calculate_stat_graph(g);
-	stat_to_file(g);
+	// calculate_stat_graph(g);
+	// stat_to_file(g);
 
 	ofstream myfile;
 	myfile.open ("start_end_per_ip");
 
 	for(int i  = 0 ; i < g->bots.size() ; i++){
-		myfile << g->bots[i]->get_title() << " " << g->bots[i]->first_appear << " " << g->bots[i]->last_appear << "\n";
+		myfile << g->bots[i]->get_title() << " " << g->bots[i]->first_appear << " " << g->bots[i]->last_appear << " ";
+		myfile << g->bots[i]->dur << " " << g->bots[i]->max_interval << "\n";
 	}
 	myfile.close();
 

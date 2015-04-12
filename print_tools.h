@@ -3,11 +3,11 @@
 
 
 #include "graph.h"
-#include "node.h"
 
 time_t timestamp_to_ctime(const char* time_stamp );
 void split(const std::string& s, char c,std::vector<std::string>& v);
 bool my_own_regex(std::string s);
+double time_diff(std::string prev_time,std::string s);
 std::string current_time();
 
 

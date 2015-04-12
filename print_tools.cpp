@@ -13,6 +13,40 @@ using namespace std;
 
 
 
+time_t timestamp_to_ctime(const char* time_stamp ){
+   time_t _return;
+   struct tm tm_struct ; 
+   strptime(time_stamp ,"%H:%M:%S",&tm_struct);
+   _return  = mktime(&tm_struct);   
+   return _return;
+}
+
+double time_diff(string prev_time,string s){
+	string t1_new = prev_time.substr(0,prev_time.find('.'));
+	string t2_new = s.substr(0,s.find('.'));
+	// cout << t1_new << "  " << t2_new << "\n";
+	time_t t1 = timestamp_to_ctime(prev_time.c_str());
+	time_t t2 = timestamp_to_ctime(s.c_str());
+	double t = difftime(t2,t1);
+
+	string t1_str_milli = s.substr(s.find('.')+1,s.length());
+	if(t1_str_milli[0]=='0'){
+	  t1_str_milli = s.substr(s.find('.')+2,s.length());
+	}
+	string t2_str_milli = prev_time.substr(prev_time.find('.')+1,prev_time.length());
+	if(t2_str_milli[0]=='0'){
+	  t2_str_milli = prev_time.substr(prev_time.find('.')+2,prev_time.length());
+	}
+
+	int t1_milli = atoi(t1_str_milli.c_str());
+	int t2_milli = atoi(t2_str_milli.c_str());
+	int diff_milli_tmp = abs(t1_milli-t2_milli);
+ 	// cout << t << "  " << diff_milli_tmp << "\n";
+	t = t * 1000000;
+	t = t + diff_milli_tmp;
+	return t;
+}
+
 string current_time(){
 	time_t rawtime;
 	struct tm * timeinfo;
@@ -51,13 +85,6 @@ bool my_own_regex(string s){
 	return false;
 }
 
-time_t timestamp_to_ctime(const char* time_stamp ){
-   time_t _return;
-   struct tm tm_struct ; 
-   strptime(time_stamp ,"%Y-%m-%d %H:%M:%S",&tm_struct);
-   _return  = mktime(&tm_struct);   
-   return _return;
-}
 
 void stat_each_node(vector<Node*> data,string name){
 	ofstream myfile;

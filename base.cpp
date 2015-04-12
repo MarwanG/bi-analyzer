@@ -168,6 +168,11 @@ void addlink(Graph *g,string t , string b,string *t1,int size_pack){
 		g->botsIndex[b] = g->bots.size()-1;
 	}else{
 		bot = g->bots[p2->second];
+		unsigned long new_interval = (unsigned long) time_diff(bot->last_appear,*t1);
+		if(new_interval > bot->max_interval){
+			bot->max_interval = new_interval;
+		}
+		bot->dur = time_diff(bot->first_appear,*t1);
 		bot->last_appear = *t1;
 	}
 	bool bTop = top->addneighbours(bot);

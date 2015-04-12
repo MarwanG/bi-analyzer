@@ -26,7 +26,7 @@ public:
 	void update_redundancy_bot(Node * n);
 	void update_redundancy_top(Node * n);
 	void add_communication(std::string ip,std::string time_,int size);
-	std::map<std::string,std::vector< std::pair<std::string,int> > > calcute_window_peaks(int delta);
+	// std::map<std::string,std::vector< std::pair<std::string,int> > > calcute_window_peaks(int delta);
 	std::string packs_to_string_bot();
 	std::string degrees_to_string();
 	std::string degrees_to_string_bot();
