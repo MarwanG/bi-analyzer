@@ -40,7 +40,7 @@ public:
 	void set_cc(float cc_new);
 	void set_cc_min(float cc_new);
 	void set_cc_max(float cc_new);
-	void add_ping(Node *son,std::string s);
+	// void add_ping(Node *son,std::string s);
 	void add_pack_up(Node*son,int size_pack);
 	void add_pack_down(Node*son,int size_pack);
 	void calculate_ref();

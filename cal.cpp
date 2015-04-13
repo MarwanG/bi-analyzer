@@ -175,9 +175,9 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 		string time_2_str =  g->bots[i]->last_appear;
 		time_t time_1_t = timestamp_to_ctime(time_1_str.c_str());
 		time_t time_2_t = timestamp_to_ctime(time_2_str.c_str());
-		double time_all = difftime(time_2_t,time_1_t)-3600;
+		double time_all = difftime(time_2_t,time_1_t);
 		myfile << g->bots[i]->get_title() << " " <<  time_1_str << " " << time_2_str << " ";	
-		myfile << time_all << " " << g->bots[i]->max_interval << "\n";
+		myfile << time_all << " " << g->bots[i]->max_interval << " "<< (time_all/49620)*100 << "\n";
 	}
 	myfile.close();
 

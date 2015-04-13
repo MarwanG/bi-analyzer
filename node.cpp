@@ -60,39 +60,7 @@ void Node::add_pack_up(Node*son,int size_pack){
 }
 
 
-void Node::add_ping(Node *son,string s){ 
-  if(freq_ping.find(son->get_index()) == freq_ping.end()){
-    vector<double> tmp;
-    tmp.push_back(0);
-    freq_ping[son->get_index()] = tmp;
-    freq_last_time[son->get_index()] = s;
-  }else{
 
-    // calculating time
-    string prev_time = freq_last_time[son->get_index()];
-    time_t t1 = timestamp_to_ctime(prev_time.c_str());
-    time_t t2 = timestamp_to_ctime(s.c_str());
-    double t = difftime(t1,t2);
-   
-    string t1_str_milli = s.substr(s.find('.')+1,s.length());
-    if(t1_str_milli[0]=='0'){
-      t1_str_milli = s.substr(s.find('.')+2,s.length());
-    }
-    string t2_str_milli = prev_time.substr(prev_time.find('.')+1,prev_time.length());
-    if(t2_str_milli[0]=='0'){
-      t2_str_milli = prev_time.substr(prev_time.find('.')+2,prev_time.length());
-    }
-    int t1_milli = atoi(t1_str_milli.c_str());
-    int t2_milli = atoi(t2_str_milli.c_str());
-    int diff_milli_tmp = abs(t1_milli-t2_milli);
-    t = t * 1000;
-    t = t + diff_milli_tmp;
-    t = t/1000;
-    //adding the data
-    freq_ping[son->get_index()].push_back(t);
-    freq_last_time[son->get_index()] = s;
-  }
-}
 
 
 void Node::calculate_redundancy(){
