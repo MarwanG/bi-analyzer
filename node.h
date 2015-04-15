@@ -78,6 +78,7 @@ public:
 	std::string last_appear;
 	unsigned long dur;
 	unsigned long max_interval;
+	int max_packet;
 
 
 	private:

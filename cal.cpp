@@ -55,7 +55,7 @@ void file2data_PCAP_batch(string name,vector<string> channels,Graph * g){
 	while (getline(file, str))
     {
     	z++;
-    	cout << z << "\n";
+    	// cout << z << "\n";
     	istringstream iss(str);
     	iss >> time_str;
     	iss >> hours;
@@ -208,6 +208,7 @@ void file2dataPCAP_interval(ifstream * file,vector<string> channels,int interval
 	int size_pack = 0;
 	while (getline(*file, str))
     {
+    	// cout << "LINE << " << str << "\n";
     	istringstream iss(str);
     	iss >> time_str;
     	iss >> tmp;
@@ -284,6 +285,9 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	map<string,vector< pair<string,int> > > window_result_current;
 
 
+	map<string,int> biggest_pack_per_ip;
+
+
 	//nb of peers
 	map<string,set<string> > peer_per_channel;
 	vector<vector<int > > nb_peer_per_channel;
@@ -291,6 +295,8 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	// size of packets UP
 	vector<vector<int> >size_up_per_channel;
 
+
+	cout << "HERE !! " << "\n";
 
 	// get all channels	
 	for(int i = 0 ; i < names.size() ; i++){
@@ -304,6 +310,7 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 		ifstream * file = new ifstream(names[i].c_str());
 		files.push_back(file);
 	}
+
 
 	//going through each file for interval seconds.
 	bool keep = true;
@@ -319,6 +326,7 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 				break;
 			}
 		}
+		cout << g->time_ << "\n";
 		calculate_stat_graph(g);
 		stat_to_stdout(g);
     
@@ -342,7 +350,10 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 			if(degree >= 6){
 				current_set_by_degree[degree].insert(g->bots[i]->get_title());
 			}
+			
 			variance_degree_each_bot[g->bots[i]->get_title()].push_back(degree);
+			biggest_pack_per_ip[g->bots[i]->get_title()]=g->bots[i]->max_packet;
+
 			std::set<int>::iterator it;
 			for (it = g->bots[i]->neighbours_indexs.begin(); it != g->bots[i]->neighbours_indexs.end(); ++it){
 				peer_per_channel[g->tops[*it]->get_title()].insert(g->bots[i]->get_title());
@@ -394,16 +405,16 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 
 	//vectors for peer-degree variance
 	map<string,pair<float,float> > avg_sd_degree =  avg_for_each(variance_degree_each_bot);
-	vector<pair<float,float> > avg_nb_degree = avg_nb_for_each(variance_degree_each_bot);
+	// vector<pair<float,float> > avg_nb_degree = avg_nb_for_each(variance_degree_each_bot);
 
 
-	ofstream myfile;
-	myfile.open ("2_degree_min");
-	for(int i = 0 ; i < two_min_degree_ips.size() ; i++){
-		pair<float,float> avg_sd = avg_sd_degree[two_min_degree_ips[i].first];
-		myfile << two_min_degree_ips[i].first << "  " << two_min_degree_ips[i].second << " " << avg_sd.first << "  " << avg_sd.second <<"\n";
-	}
-	myfile.close();
+	// ofstream myfile;
+	// myfile.open ("2_degree_min");
+	// for(int i = 0 ; i < two_min_degree_ips.size() ; i++){
+	// 	pair<float,float> avg_sd = avg_sd_degree[two_min_degree_ips[i].first];
+	// 	myfile << two_min_degree_ips[i].first << "  " << two_min_degree_ips[i].second << " " << avg_sd.first << "  " << avg_sd.second <<"\n";
+	// }
+	// myfile.close();
 
 	//current time/interval to add to file names.
 	stringstream stream1;
@@ -418,7 +429,7 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	// create_graph_vector_vector_int(nb_peer_per_channel,times,"nb_peers_per_channel_"+current_time_+"_"+interval_string+".stat");
 	// create_graph_pairs(avg_nb_degree,"avg_nb_degree_"+current_time_+"_"+interval_string+".stat");
 	// create_graph_degree_change(nb_each_degree,diff_nb_each_degree,times_tmp,"degree_change_"+current_time_+"_"+interval_string+".stat");
-	// create_graph_map_pairs(avg_sd_degree,"avg_sd_degree_"+current_time_+"_"+interval_string+".stat");
+	create_graph_map_pairs(avg_sd_degree,biggest_pack_per_ip,"avg_sd_degree_max_pack_"+current_time_+"_"+interval_string+".stat");
 	// create_graph_float(cc_graph,times,"cc_interval_"+current_time_+"_"+interval_string+".stat");
 	// create_graph_float(density_graph,times,"density_interval_"+current_time_+"_"+interval_string+".stat");
 	// create_graph_string(dist_degree_by_bot,times,"dist_degree_bot_"+current_time_+"_"+interval_string+".stat");

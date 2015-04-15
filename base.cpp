@@ -174,7 +174,7 @@ void addlink(Graph *g,string t , string b,string *t1,int size_pack){
 		time_t t2 = timestamp_to_ctime(new_t1.c_str());
 		double new_interval = difftime(t2,time_1);
 		if(new_interval > bot->max_interval){
-			bot->max_interval = new_interval-360;
+			bot->max_interval = new_interval-3600;
 		}
 		bot->last_appear = new_t1;
 	}
