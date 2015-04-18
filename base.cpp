@@ -103,8 +103,12 @@ void calculate_stat_graph(Graph * g){
 		Node *n = g->tops[i];
 		set<int> treated;
 		set<int>::iterator it;
+		int nb_multi_peers =0;;
 		for(it =  n->neighbours_indexs.begin() ; it != n->neighbours_indexs.end() ; it++){
 			Node *bo = n->neighbours[*it];
+			if(bo->get_degree() > 1){
+				nb_multi_peers++;
+			}
 			set<int>::iterator it2;
 			for(it2 = bo->neighbours_indexs.begin() ; it2 != bo->neighbours_indexs.end() ; it2++){
                 Node *tmp = bo->neighbours[*it2];
@@ -115,7 +119,7 @@ void calculate_stat_graph(Graph * g){
 				}
 			}
 		}
-		
+		g->nb_multi_peers_per_channel[n->get_title()] = nb_multi_peers ;
 		if(n->nb_top_neighbours > 0){
 			n->set_cc(n->get_cc()/n->nb_top_neighbours);			
 			g->cc += n->get_cc();
@@ -146,6 +150,10 @@ void calculate_stat_graph(Graph * g){
 
 // FUNCTION ADD CONNECTION
 void addlink(Graph *g,string t , string b,string *t1,int size_pack){
+	if(b.compare("239.255.255.250")==0){
+		cout << t << "  " << b << "\n";
+		return;
+	}
 	unordered_map<string, int>::const_iterator p;
 	p = g->topsIndex.find(t);
 	Node *top;
@@ -221,7 +229,7 @@ void get_stat(string name){
 	file2data(name,g);
 	calculate_stat_graph(g);
 	stat_to_stdout(g);
- 	stat_to_file(g);
+ 	stat_to_file(g,"testing_stat");
  	g->free_data();
  	delete(g);
 }

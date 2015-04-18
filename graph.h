@@ -41,6 +41,8 @@ public:
 	std::unordered_map<int,std::set<std::string> > distr_by_degree;
 
 
+	std::unordered_map<std::string,int> nb_multi_peers_per_channel;
+
 	// STATS MIGHT BE GOOD IDEA TO PASS THEM NOT SO SURE YET.
 	std::map<int,int> degrees_top;
 	std::map<int,int> degrees_bot;

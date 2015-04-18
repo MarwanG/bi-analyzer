@@ -28,15 +28,15 @@ void Graph::set_time(string s){
 
 
 void Graph::update_distr(Node * n){
-	unordered_map<int, set<string> >::const_iterator p;
-	p = distr_by_degree.find(n->get_degree());
-	if(p == distr_by_degree.end()){
-		set<string> list;
-		list.insert(n->get_title());
-		distr_by_degree[n->get_degree()] = list;
-	}else{
+	// unordered_map<int, set<string> >::const_iterator p;
+	// p = distr_by_degree.find(n->get_degree());
+	// if(p == distr_by_degree.end()){
+	// 	set<string> list;
+	// 	list.insert(n->get_title());
+	// 	distr_by_degree[n->get_degree()] = list;
+	// }else{
 		distr_by_degree[n->get_degree()].insert(n->get_title());
-	}
+	// }
 }
 
 void Graph::final_calculation(){

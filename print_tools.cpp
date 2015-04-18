@@ -166,10 +166,10 @@ void graph_cc(map<float,int> data,int size,string name){
 }
 
 
-void stat_to_file(Graph *g){
+void stat_to_file(Graph *g,string name){
 	int nb_top = g->degrees_top[g->max_top];
 	ofstream myfile;
-	myfile.open ("global_test.txt");
+	myfile.open (name);
 	myfile.precision(6);
 	if(!g->time_.empty()){
 		myfile << "Start Time : " << g->time_ << "\n";
@@ -187,6 +187,15 @@ void stat_to_file(Graph *g){
 	myfile << "Clustering coefficient cc_max_top : " << g->cc_max << "\n";
 	myfile << "Redundancy coefficient (top) : " << g->red << "\n";
 	myfile << "Dispersion coefficient (top) : " << g->disp << "\n";
+	for(int i = 0 ; i < g->tops.size() ; i++){
+		myfile << "Degree : " << i << "  " << g->distr_by_degree[i].size() << "\n";
+	}
+	for(int i = 0 ; i < g->tops.size() ; i++){
+		myfile << "Number of multi-peers : " << g->tops[i]->get_title() << " " << g->nb_multi_peers_per_channel[g->tops[i]->get_title()] << "\n";
+	}
+	for(int i = 0 ; i < g->tops.size() ; i++){
+		myfile << "Number of peers : " << g->tops[i]->get_title() << " " << g->tops[i]->get_degree() << "\n";
+	}
 	myfile.close();
 }
 
