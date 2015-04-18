@@ -151,7 +151,6 @@ void calculate_stat_graph(Graph * g){
 // FUNCTION ADD CONNECTION
 void addlink(Graph *g,string t , string b,string *t1,int size_pack){
 	if(b.compare("239.255.255.250")==0){
-		cout << t << "  " << b << "\n";
 		return;
 	}
 	unordered_map<string, int>::const_iterator p;
