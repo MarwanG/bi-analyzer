@@ -174,6 +174,3 @@ float Node::get_disp(){
   return disp;
 }
 
-// float Node::get_red_norm(){
-//   return red_norm;
-// }

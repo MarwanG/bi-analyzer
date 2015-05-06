@@ -338,8 +338,7 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	create_graph_map_pairs(avg_sd_degree,biggest_pack_per_ip,"avg_sd_degree_max_pack_"+current_time_+"_"+interval_string+".stat");
 	create_graph_float(total_packet_exchange,times,"total_packets_"+current_time_+"_"+interval_string+".stat");
 	create_graph_nb_bot(nb_bot_graph,times,dist_degree_by_top,"nb_bot_interval_"+current_time_+"_"+interval_string+".stat");	
-
-
+	create_graph_map_pairs_pairs(avg_sd_degree,avg_sd_packet,"avg_sd_degree_avg_sd_packet_"+current_time_+"_"+interval_string+".stat");
 
 	// create_graph_vector_vector_int(size_up_per_channel,times,"up_stream_per_channel_"+current_time_+"_"+interval_string+".stat");
 	// create_graph_pairs(avg_nb_degree,"avg_nb_degree_"+current_time_+"_"+interval_string+".stat");
