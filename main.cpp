@@ -91,14 +91,21 @@ int main(int argc, char* argv[]){
 
 
 	// list.push_back("../Data/test_a_short.txt");
-    list.push_back("/data2/ghanem/tmp/test_a.txt"); 
-    list.push_back("/data2/ghanem/tmp/test_b.txt");
-    list.push_back("/data2/ghanem/tmp/test_c.txt");
-    list.push_back("/data2/ghanem/tmp/test_d.txt");
-    list.push_back("/data2/ghanem/tmp/test_e.txt");
-    list.push_back("/data2/ghanem/tmp/test_f.txt");
+    // list.push_back("/data2/ghanem/tmp/test_a.txt"); 
+    // list.push_back("/data2/ghanem/tmp/test_b.txt");
+    // list.push_back("/data2/ghanem/tmp/test_c.txt");
+    // list.push_back("/data2/ghanem/tmp/test_d.txt");
+    // list.push_back("/data2/ghanem/tmp/test_e.txt");
+    // list.push_back("/data2/ghanem/tmp/test_f.txt");
 
 
+	list.push_back("/data2/ghanem/tmp/proper_a.txt"); 
+	list.push_back("/data2/ghanem/tmp/proper_b.txt");
+	list.push_back("/data2/ghanem/tmp/proper_c.txt");
+	list.push_back("/data2/ghanem/tmp/proper_d.txt");
+	list.push_back("/data2/ghanem/tmp/proper_e.txt");
+	list.push_back("/data2/ghanem/tmp/test_f.txt");
+	
 	// list.push_back("/data2/ghanem/video_trace_by_size/video_size_a.txt");
 	// list.push_back("/data2/ghanem/video_trace_by_size/video_size_b.txt");
 	// list.push_back("/data2/ghanem/video_trace_by_size/video_size_c.txt");

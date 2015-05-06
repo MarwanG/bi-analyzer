@@ -49,6 +49,7 @@ public:
 	void set_index(int i);
 	int get_index();
 	int get_total_up();
+	int get_total_down();
 	
 	std::string get_title();
 
@@ -69,7 +70,7 @@ public:
 	std::map<int,int> size_pack_list_total_down;
 	std::map<int,std::vector<double> > size_pack_list_down;
 
-	std::map<int,std::vector<double> > size_pack_list_total_detail;
+	std::map<int,std::vector<int> > size_pack_list_total_detail;
 
 	std::set<std::pair<int,int> > pairs;
 

@@ -47,6 +47,16 @@ int Node::get_total_up(){
   return total;
 }
 
+
+int Node::get_total_down(){
+  map<int,int>::iterator it;
+  int total = 0;
+  for(it = size_pack_list_total_down.begin() ; it != size_pack_list_total_down.end() ; it++){
+    total = total + it->second;
+  }
+  return total;
+}
+
 void Node::add_pack_down(Node*son,int size_pack){
   size_pack_list_down[son->get_index()].push_back(size_pack);
   size_pack_list_total_detail[son->get_index()].push_back(size_pack);
