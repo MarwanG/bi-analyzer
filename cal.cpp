@@ -239,6 +239,7 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 
 
 	map<string,int> biggest_pack_per_ip;
+	map<string,int> video_packs_per_ip;
 
 	map<string,vector<int> > total_packets_per_peer;
 
@@ -307,6 +308,7 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 			
 			variance_degree_each_bot[g->bots[i]->get_title()].push_back(degree);
 			biggest_pack_per_ip[g->bots[i]->get_title()]=g->bots[i]->max_packet;			
+			video_packs_per_ip[g->bots[i]->get_title()]=g->bots[i]->nb_video_packs;
 
 			std::set<int>::iterator it;
 			for (it = g->bots[i]->neighbours_indexs.begin(); it != g->bots[i]->neighbours_indexs.end(); ++it){
@@ -335,6 +337,7 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	times_tmp.erase (times_tmp.begin());
 	//creating graph
 	
+	create_graph_map_pairs(avg_sd_degree,video_packs_per_ip,"avg_sd_degree_nb_video_"+current_time_+"_"+interval_string+".stat");
 	create_graph_map_pairs(avg_sd_degree,biggest_pack_per_ip,"avg_sd_degree_max_pack_"+current_time_+"_"+interval_string+".stat");
 	create_graph_float(total_packet_exchange,times,"total_packets_"+current_time_+"_"+interval_string+".stat");
 	create_graph_nb_bot(nb_bot_graph,times,dist_degree_by_top,"nb_bot_interval_"+current_time_+"_"+interval_string+".stat");	

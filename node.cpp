@@ -21,6 +21,7 @@ Node::Node(string name){
   total_packs=0;
   max_interval=0;
   max_packet = 0;
+  nb_video_packs=0;
 }
 
  
@@ -64,6 +65,9 @@ void Node::add_pack_down(Node*son,int size_pack){
   if(son->max_packet < size_pack){
     son->max_packet = size_pack;
   }
+  if(size_pack > 999){
+    son->nb_video_packs++;
+  }
 }
 
 
@@ -73,6 +77,9 @@ void Node::add_pack_up(Node*son,int size_pack){
   size_pack_list_total[son->get_index()] = size_pack_list_total[son->get_index()] + size_pack;
   if(son->max_packet < size_pack){
     son->max_packet = size_pack;
+  }
+  if(size_pack > 999){
+    son->nb_video_packs++;
   }
 }
 
