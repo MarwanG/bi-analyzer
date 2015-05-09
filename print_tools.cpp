@@ -289,6 +289,15 @@ void create_graph_2_map(map<string,long double> list,map<string,long double> lis
     myfile.close();
 }
 
+void create_graph_2_map_int(map<string,int> list,map<string,int> list2,string name){
+    ofstream myfile;
+    myfile.open(name);
+    map<string,int>::iterator it;
+    for(it=list.begin();it!=list.end();it++){
+        myfile << it->first << "  " << fixed << it->second << "  " << fixed << list2[it->first] << "\n";
+    }
+    myfile.close();
+}
 
 
 void create_graph_pairs(vector<pair<float,float> > list,string name){

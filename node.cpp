@@ -67,6 +67,8 @@ void Node::add_pack_down(Node*son,int size_pack){
   }
   if(size_pack > 999){
     son->nb_video_packs++;
+  }else{
+    son->nb_signalling_packs++;
   }
 }
 
@@ -80,6 +82,8 @@ void Node::add_pack_up(Node*son,int size_pack){
   }
   if(size_pack > 999){
     son->nb_video_packs++;
+  }else{
+    son->nb_signalling_packs++;
   }
 }
 

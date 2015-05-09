@@ -81,6 +81,7 @@ public:
 	unsigned long max_interval;
 	int max_packet;
 	int nb_video_packs;
+	int nb_signalling_packs;
 
 
 	private:
