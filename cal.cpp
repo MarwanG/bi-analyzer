@@ -239,8 +239,8 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 
 
 	map<string,int> biggest_pack_per_ip;
-	map<string,int> video_packs_per_ip;
-	map<string,int> signalling_packs_per_ip;
+	map<string,long long> video_packs_per_ip;
+	map<string,long long> signalling_packs_per_ip;
 
 
 	map<string,vector<int> > total_packets_per_peer;

@@ -80,8 +80,8 @@ public:
 	unsigned long dur;
 	unsigned long max_interval;
 	int max_packet;
-	int nb_video_packs;
-	int nb_signalling_packs;
+	long long nb_video_packs;
+	long long nb_signalling_packs;
 
 
 	private:
