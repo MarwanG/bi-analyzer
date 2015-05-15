@@ -99,11 +99,11 @@ int main(int argc, char* argv[]){
     // list.push_back("/data2/ghanem/tmp/test_f.txt");
 
 
-	list.push_back("/data2/ghanem/tmp/proper_a.txt"); 
-	list.push_back("/data2/ghanem/tmp/proper_b.txt");
-	list.push_back("/data2/ghanem/tmp/proper_c.txt");
-	list.push_back("/data2/ghanem/tmp/proper_d.txt");
-	list.push_back("/data2/ghanem/tmp/proper_e.txt");
+	// list.push_back("/data2/ghanem/tmp/proper_a.txt"); 
+	// list.push_back("/data2/ghanem/tmp/proper_b.txt");
+	// list.push_back("/data2/ghanem/tmp/proper_c.txt");
+	// list.push_back("/data2/ghanem/tmp/proper_d.txt");
+	// list.push_back("/data2/ghanem/tmp/proper_e.txt");
 	list.push_back("/data2/ghanem/tmp/test_f.txt");
 
 
@@ -122,11 +122,11 @@ int main(int argc, char* argv[]){
 	// list.push_back("/data2/ghanem/video_trace_by_size/video_size_f.txt");
 
 
-	nbChannels.push_back(3);
-	nbChannels.push_back(1);
-	nbChannels.push_back(3);
-	nbChannels.push_back(1);
-	nbChannels.push_back(1);
+	// nbChannels.push_back(3);
+	// nbChannels.push_back(1);
+	// nbChannels.push_back(3);
+	// nbChannels.push_back(1);
+	// nbChannels.push_back(1);
 	nbChannels.push_back(3);
 
 	get_stat_pcap_interval(list,nbChannels,60);
