@@ -62,9 +62,6 @@ void Node::add_pack_down(Node*son,int size_pack){
   size_pack_list_down[son->get_index()].push_back(size_pack);
   size_pack_list_total_detail[son->get_index()].push_back(size_pack);
   size_pack_list_total_down[son->get_index()] = size_pack_list_total[son->get_index()] + size_pack;
-  if(son->get_title().compare("1.180.112.60")==0){
-    cout << son->get_title() << "  " << son->max_packet << "  " << size << "\n";
-  }
   if(son->max_packet < size_pack){
     son->max_packet = size_pack;
   }
@@ -80,9 +77,6 @@ void Node::add_pack_up(Node*son,int size_pack){
   size_pack_list[son->get_index()].push_back(size_pack);
   size_pack_list_total_detail[son->get_index()].push_back(size_pack);
   size_pack_list_total[son->get_index()] = size_pack_list_total[son->get_index()] + size_pack;
-  if(son->get_title().compare("1.180.112.60")==0){
-    cout << son->get_title() << "  " << son->max_packet << "  " << size << "\n";
-  }
   if(son->max_packet < size_pack){
     son->max_packet = size_pack;
   }

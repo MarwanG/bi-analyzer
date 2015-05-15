@@ -309,9 +309,11 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 
 			
 			variance_degree_each_bot[g->bots[i]->get_title()].push_back(degree);
-			biggest_pack_per_ip[g->bots[i]->get_title()]=g->bots[i]->max_packet;			
-			video_packs_per_ip[g->bots[i]->get_title()]=g->bots[i]->nb_video_packs;
-			signalling_packs_per_ip[g->bots[i]->get_title()]=g->bots[i]->nb_signalling_packs;
+			if(biggest_pack_per_ip[g->bots[i]->get_title()]<g->bots[i]->max_packet){
+				biggest_pack_per_ip[g->bots[i]->get_title()]=g->bots[i]->max_packet;
+			}			
+			video_packs_per_ip[g->bots[i]->get_title()]=+g->bots[i]->nb_video_packs;
+			signalling_packs_per_ip[g->bots[i]->get_title()]=+g->bots[i]->nb_signalling_packs;
 
 			std::set<int>::iterator it;
 			for (it = g->bots[i]->neighbours_indexs.begin(); it != g->bots[i]->neighbours_indexs.end(); ++it){
