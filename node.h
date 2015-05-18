@@ -83,6 +83,11 @@ public:
 	long long nb_video_packs;
 	long long nb_signalling_packs;
 
+	long long video_packs;
+	long long signal_packs;
+
+
+
 
 	private:
 		double degree;

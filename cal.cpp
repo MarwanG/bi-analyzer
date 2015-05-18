@@ -252,6 +252,9 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 
 	vector<float> total_packet_exchange;
 
+	vector<float> video_packs;
+	vector<float> signalling_packs;
+
 
 	
 
@@ -298,10 +301,17 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 
 		
 		int total_packets = 0;
+		int video_packets = 0;
+		int signalling_packets = 0;
        	for(int i = 0 ; i < g->tops.size() ; i++){
        		total_packets+=g->tops[i]->get_total_up() + g->tops[i]->get_total_down();
+       		video_packets+=g->tops[i]->video_packs;
+       		signalling_packets+=g->tops[i]->nb_signalling_packs;
        	}
        	total_packet_exchange.push_back(total_packets);
+       	video_packs.push_back(video_packets);
+       	signalling_packs.push_back(signalling_packets);
+
 
 		// Getting the degree of each Node and placing is in a list.
 		for(int i = 0 ; i < g->bots.size() ; i++){
@@ -344,6 +354,8 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	create_graph_2_map_int(video_packs_per_ip,signalling_packs_per_ip,"nb_video_signalling"+current_time_+"_"+interval_string+".stat");
 	create_graph_map_pairs(avg_sd_degree,biggest_pack_per_ip,"avg_sd_degree_max_pack_"+current_time_+"_"+interval_string+".stat");
 	create_graph_float(total_packet_exchange,times,"total_packets_"+current_time_+"_"+interval_string+".stat");
+	create_graph_float(video_packs,times,"video_packs_"+current_time_+"_"+interval_string+".stat");
+	create_graph_float(signalling_packs,times,"signalling_packs_"+current_time_+"_"+interval_string+".stat");
 	create_graph_nb_bot(nb_bot_graph,times,dist_degree_by_top,"nb_bot_interval_"+current_time_+"_"+interval_string+".stat");	
 	create_graph_map_pairs_pairs(avg_sd_degree,avg_sd_packet,"avg_sd_degree_avg_sd_packet_"+current_time_+"_"+interval_string+".stat");
 
