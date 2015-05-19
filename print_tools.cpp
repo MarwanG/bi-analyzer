@@ -229,6 +229,16 @@ void create_graph_float(vector<float> v,vector<string> s,string name){
 }
 
 
+void create_graph_long_long(vector<long long> v,vector<string> s,string name){
+	ofstream myfile;
+	myfile.open (name);
+	for(int i = 0 ; i < v.size() ; i++){
+		myfile << s[i] << " " << v[i] << "\n";
+	}
+	myfile.close();
+}
+
+
 void create_graph_string(vector<string> v,vector<string> s,string name){
 	ofstream myfile;
 	myfile.open (name);
