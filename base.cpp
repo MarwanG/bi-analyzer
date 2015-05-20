@@ -89,7 +89,8 @@ map<string,pair<float,float> > avg_for_each (map<string,vector<int> > list){
 
 vector<string> list_to_check(string filename){
 	vector<string> filter;
-	string str ip; 
+	string str;
+	string ip; 
 	ifstream * file = new ifstream(filename.c_str());
 
 	while (getline(*file, str))
@@ -98,7 +99,7 @@ vector<string> list_to_check(string filename){
     	iss >> ip;
     	filter.push_back(ip);
     }
-    file.close();
+    file->close();
     return filter;
 }
 

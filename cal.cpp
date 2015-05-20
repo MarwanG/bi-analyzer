@@ -298,7 +298,7 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
        	int nb_signalling_peers_count = 0;
 		for(int i = 0 ; i < g->bots.size() ; i++){
 			int degree = g->bots[i]->get_degree();	
-			if(g->bots[i]-max_packet < 1000){
+			if(g->bots[i]->max_packet < 1000){
 				nb_signalling_peers_count++;
 			}else{
 				nb_video_peers_count++;
