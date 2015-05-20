@@ -19,6 +19,31 @@ using namespace std;
 
 
 
+
+long double get_ecart_list(vector<double> list,long double avg){
+	long double sd = 0;
+	for(int i = 0 ; i < list.size() ; i++){
+		long double sd_tmp = pow(list[i]-avg,2);
+		sd = sd + sd_tmp;
+	}
+	sd = sqrt(sd/(long double)list.size());
+	return sd;
+}
+
+long double get_avg_list(vector<double> list){
+	unsigned long long avg = 0;
+	long double res = 0;
+	if(list.size() <= 1){
+		return -1;
+	}
+	for(int i = 0 ; i < list.size() ; i++){
+		avg = avg + list[i];
+	}
+	res = avg/(long double)list.size();
+	return res;
+}
+
+
 // Returns list of pairs containing the number of elements as well avg.
 vector<pair<float,float> > avg_nb_for_each (map<string,vector<int> > list){
 	map<string,vector<int> >::iterator it;
@@ -58,6 +83,25 @@ map<string,pair<float,float> > avg_for_each (map<string,vector<int> > list){
 	}
 	return res;
 }
+
+
+
+
+vector<string> list_to_check(string filename){
+	vector<string> filter;
+	string str ip; 
+	ifstream * file = new ifstream(filename.c_str());
+
+	while (getline(*file, str))
+    {
+    	istringstream iss(str);
+    	iss >> ip;
+    	filter.push_back(ip);
+    }
+    file.close();
+    return filter;
+}
+
 
 
 // FUNCTION CALCULATES CC/REDUNDANCY BETWEEN TWO NODES.

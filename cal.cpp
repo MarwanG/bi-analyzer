@@ -17,29 +17,6 @@
 using namespace std;
 
 
-long double get_ecart_list(vector<double> list,long double avg){
-	long double sd = 0;
-	for(int i = 0 ; i < list.size() ; i++){
-		long double sd_tmp = pow(list[i]-avg,2);
-		sd = sd + sd_tmp;
-	}
-	sd = sqrt(sd/(long double)list.size());
-	return sd;
-}
-
-long double get_avg_list(vector<double> list){
-	unsigned long long avg = 0;
-	long double res = 0;
-	if(list.size() <= 1){
-		return -1;
-	}
-	for(int i = 0 ; i < list.size() ; i++){
-		avg = avg + list[i];
-	}
-	res = avg/(long double)list.size();
-	return res;
-}
-
 void file2data_PCAP_batch(string name,vector<string> channels,Graph * g){
 	ifstream file(name.c_str());
 	string str; 
@@ -321,6 +298,239 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
        	int nb_signalling_peers_count = 0;
 		for(int i = 0 ; i < g->bots.size() ; i++){
 			int degree = g->bots[i]->get_degree();	
+			if(g->bots[i]-max_packet < 1000){
+				nb_signalling_peers_count++;
+			}else{
+				nb_video_peers_count++;
+			}
+			variance_degree_each_bot[g->bots[i]->get_title()].push_back(degree);
+			if(biggest_pack_per_ip[g->bots[i]->get_title()]<g->bots[i]->max_packet){
+				biggest_pack_per_ip[g->bots[i]->get_title()]=g->bots[i]->max_packet;
+			}
+						
+			video_packs_per_ip[g->bots[i]->get_title()]=+g->bots[i]->nb_video_packs;
+			signalling_packs_per_ip[g->bots[i]->get_title()]=+g->bots[i]->nb_signalling_packs;
+
+			std::set<int>::iterator it;
+			for (it = g->bots[i]->neighbours_indexs.begin(); it != g->bots[i]->neighbours_indexs.end(); ++it){
+				peer_per_channel[g->tops[*it]->get_title()].insert(g->bots[i]->get_title());
+				total_packets_per_peer[g->bots[i]->get_title()].insert(total_packets_per_peer[g->bots[i]->get_title()].begin(),
+					g->tops[*it]->size_pack_list_total_detail[g->bots[i]->get_index()].begin(),
+					g->tops[*it]->size_pack_list_total_detail[g->bots[i]->get_index()].end());
+			}
+		}
+		nb_video_peers.push_back(nb_video_peers_count);
+		nb_signalling_peers.push_back(nb_signalling_peers_count);
+		g->free_data();
+		delete(g);
+	}
+
+	map<string,pair<float,float> > avg_sd_degree =  avg_for_each(variance_degree_each_bot);
+
+	map<string,pair<float,float> > avg_sd_packet = avg_for_each(total_packets_per_peer);
+
+
+	//current time/interval to add to file names.
+	stringstream stream1;
+	stream1 << interval;
+	string interval_string = stream1.str();
+	string current_time_ = current_time();
+	//tmp list of times without the last time
+	vector<string> times_tmp = times;
+	times_tmp.erase (times_tmp.begin());
+	//creating graph
+
+	create_graph_int(nb_video_peers,times,"nb_video_peers_"+current_time_+"_"+interval_string+".stat");
+	create_graph_int(nb_signalling_peers,times,"nb_signalling_peers_"+current_time_+"_"+interval_string+".stat");
+	create_graph_2_map_int(video_packs_per_ip,signalling_packs_per_ip,"nb_video_signalling"+current_time_+"_"+interval_string+".stat");
+	create_graph_map_pairs(avg_sd_degree,biggest_pack_per_ip,"avg_sd_degree_max_pack_"+current_time_+"_"+interval_string+".stat");
+	create_graph_float(total_packet_exchange,times,"total_packets_"+current_time_+"_"+interval_string+".stat");
+	create_graph_long_long(video_packs,times,"video_packs_"+current_time_+"_"+interval_string+".stat");
+	create_graph_long_long(signalling_packs,times,"signalling_packs_"+current_time_+"_"+interval_string+".stat");
+	create_graph_nb_bot(nb_bot_graph,times,dist_degree_by_top,"nb_bot_interval_"+current_time_+"_"+interval_string+".stat");	
+	create_graph_map_pairs_pairs(avg_sd_degree,avg_sd_packet,"avg_sd_degree_avg_sd_packet_"+current_time_+"_"+interval_string+".stat");
+
+	// create_graph_vector_vector_int(size_up_per_channel,times,"up_stream_per_channel_"+current_time_+"_"+interval_string+".stat");
+	// create_graph_pairs(avg_nb_degree,"avg_nb_degree_"+current_time_+"_"+interval_string+".stat");
+	// create_graph_degree_change(nb_each_degree,diff_nb_each_degree,times_tmp,"degree_change_"+current_time_+"_"+interval_string+".stat");
+	// create_graph_float(cc_graph,times,"cc_interval_"+current_time_+"_"+interval_string+".stat");
+	// create_graph_float(density_graph,times,"density_interval_"+current_time_+"_"+interval_string+".stat");
+	// create_graph_string(dist_degree_by_bot,times,"dist_degree_bot_"+current_time_+"_"+interval_string+".stat");
+
+}	
+
+
+
+void file2dataPCAP_interval_filter(ifstream * file,vector<string> channels,int interval,vector<string> filter,Graph *g){
+	string str; 
+	string t;
+	string b;
+	string time_str;
+	string tmp;
+	string tmp2;
+	struct tm tm;
+	time_t t1 = 4;
+	time_t t2 = 4;
+	int size_pack = 0;
+	while (getline(*file, str))
+    {
+    	// cout << "LINE << " << str << "\n";
+    	istringstream iss(str);
+    	iss >> time_str;
+    	iss >> tmp;
+    	time_str.append(" " + tmp);
+    	iss >> b;
+    	iss >> t; 
+    	iss >> tmp2;
+  		iss >> tmp2;
+  		if(tmp2.compare("ip-proto-17")==0){
+  			continue;
+  		}
+  		size_pack = atoi(tmp2.c_str());
+  		if(size_pack == 0){
+			continue;
+		}
+    	if(count(b.begin(), b.end(), '.') > 2 &&  count(t.begin(), t.end(), '.') > 2){
+	    	if(t1 == 4){
+	    		t1 = timestamp_to_ctime(time_str.c_str());
+	    		g->set_time(tmp);
+	    	}else{    		
+	    		t2 = timestamp_to_ctime(time_str.c_str());
+	    		double diff = difftime(t2,t1);
+	    		if(diff > interval){
+	    			break;
+	    		}
+	    	}
+	    	size_t n = count(b.begin(), b.end(), '.');
+	    	if(n==4){
+	    		unsigned found = b.find_last_of(".");
+		    	b = b.substr(0,found);
+	    	}
+	    	n = std::count(t.begin(), t.end(), '.');
+			if(n==4){
+				unsigned found = t.find_last_of(".");
+		    	t = t.substr(0,found);
+			}
+			if(my_own_regex(b)&&find(channels.begin(), channels.end(), b) == channels.end()){
+            	continue;
+			}
+			if(my_own_regex(t)&&find(channels.begin(), channels.end(), t) == channels.end()){
+				continue;
+			}
+		    if(find(channels.begin(), channels.end(), b)!=channels.end()  && find(channels.begin(), channels.end(), t)==channels.end()){
+		    		if(find(filter.begin(),filter.end(),t)!=filter.end())
+		    			addlink(g,b,t,&time_str,-size_pack);
+		    }else{		
+			    if(find(channels.begin(), channels.end(), t)!=channels.end() && find(channels.begin(), channels.end(), b)==channels.end()){
+			   		if(find(filter.begin(),filter.end(),b)!=filter.end())
+			   			addlink(g,t,b,&time_str,size_pack);
+			    }
+			}
+	    }
+	}
+	g->density = g->links / (float)(g->tops.size()*g->bots.size());
+}
+
+void get_stat_pcap_interval_filter(vector<string> names,vector<int> nbChannels,vector<string> filter,int interval){
+	vector<string> channels;			//list of channels
+	map<string,int> list; 				// map each channel's occurance
+	vector<float> cc_graph;				//cc per time graph
+	vector<float> density_graph;		//density per time graph
+	vector<int> nb_bot_graph;			//nb of total peers
+	vector<string> times;				//list of times	
+	vector<string> dist_degree_by_top;	//nb of degree for top/bot ??
+	vector<string> dist_degree_by_bot;
+
+	map<string,vector<int> > variance_degree_each_bot;
+
+
+	map<string,vector< pair<string,int> > > window_result_total;
+	map<string,vector< pair<string,int> > > window_result_current;
+
+
+	map<string,int> biggest_pack_per_ip;
+	map<string,long long> video_packs_per_ip;
+	map<string,long long> signalling_packs_per_ip;
+
+
+	map<string,vector<int> > total_packets_per_peer;
+
+
+	//nb of peers
+	map<string,set<string> > peer_per_channel; // ???
+	
+
+	vector<float> total_packet_exchange;
+
+	vector<long long> video_packs;
+	vector<long long> signalling_packs;
+
+	vector<int> nb_video_peers;
+	vector<int> nb_signalling_peers;
+
+
+	
+
+	// get all channels	
+	for(int i = 0 ; i < names.size() ; i++){
+		vector<string> tmp = get_channels(names[i],nbChannels[i],list);
+		channels.insert(channels.end(), tmp.begin(), tmp.end());
+	}
+
+	//opening all the files.
+	vector<ifstream*> files;
+	for(int i = 0 ; i < names.size() ; i++){
+		ifstream * file = new ifstream(names[i].c_str());
+		files.push_back(file);
+	}
+
+
+	//going through each file for interval seconds.
+	bool keep = true;
+    set<string> prev;
+    int nb_interval = 0;
+	while(keep){
+		nb_interval++;
+		Graph * g = new Graph();
+		for(int i = 0 ; i < files.size() ; i++){
+			file2dataPCAP_interval_filter(files[i],channels,interval,filter,g);
+			if(files[i]->eof() != 0){
+				keep = false;
+				break;
+			}
+		}
+		cout << g->time_ << "\n";
+		calculate_stat_graph(g);
+		stat_to_stdout(g);
+    
+		times.push_back(g->time_);
+		cc_graph.push_back(g->cc);
+		density_graph.push_back(g->density);
+		nb_bot_graph.push_back(g->bots.size());
+		
+		dist_degree_by_top.push_back(g->degrees_to_string());
+		dist_degree_by_bot.push_back(g->degrees_to_string_bot());
+       
+
+		
+		int total_packets = 0;
+		int video_packets = 0;
+		int signalling_packets = 0;
+       	for(int i = 0 ; i < g->tops.size() ; i++){
+       		total_packets+=g->tops[i]->get_total_up() + g->tops[i]->get_total_down();
+       		video_packets+=g->tops[i]->video_packs;
+       		signalling_packets+=g->tops[i]->nb_signalling_packs;
+       	}
+       	total_packet_exchange.push_back(total_packets);
+       	video_packs.push_back(video_packets);
+       	signalling_packs.push_back(signalling_packets);
+
+
+		// Getting the degree of each Node and placing is in a list.
+       	int nb_video_peers_count = 0;
+       	int nb_signalling_peers_count = 0;
+		for(int i = 0 ; i < g->bots.size() ; i++){
+			int degree = g->bots[i]->get_degree();	
 
 			
 			variance_degree_each_bot[g->bots[i]->get_title()].push_back(degree);
@@ -373,16 +583,7 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	create_graph_long_long(signalling_packs,times,"signalling_packs_"+current_time_+"_"+interval_string+".stat");
 	create_graph_nb_bot(nb_bot_graph,times,dist_degree_by_top,"nb_bot_interval_"+current_time_+"_"+interval_string+".stat");	
 	create_graph_map_pairs_pairs(avg_sd_degree,avg_sd_packet,"avg_sd_degree_avg_sd_packet_"+current_time_+"_"+interval_string+".stat");
-
-	// create_graph_vector_vector_int(size_up_per_channel,times,"up_stream_per_channel_"+current_time_+"_"+interval_string+".stat");
-	// create_graph_pairs(avg_nb_degree,"avg_nb_degree_"+current_time_+"_"+interval_string+".stat");
-	// create_graph_degree_change(nb_each_degree,diff_nb_each_degree,times_tmp,"degree_change_"+current_time_+"_"+interval_string+".stat");
-	// create_graph_float(cc_graph,times,"cc_interval_"+current_time_+"_"+interval_string+".stat");
-	// create_graph_float(density_graph,times,"density_interval_"+current_time_+"_"+interval_string+".stat");
-	// create_graph_string(dist_degree_by_bot,times,"dist_degree_bot_"+current_time_+"_"+interval_string+".stat");
-
-}	
-
+}
 
 
 
