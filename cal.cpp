@@ -363,6 +363,9 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	vector<string> times_tmp = times;
 	times_tmp.erase (times_tmp.begin());
 	//creating graph
+
+	create_graph_int(nb_video_peers,times,"nb_video_peers_"+current_time_+"_"+interval_string+".stat");
+	create_graph_int(nb_signalling_peers,times,"nb_signalling_peers_"+current_time_+"_"+interval_string+".stat");
 	create_graph_2_map_int(video_packs_per_ip,signalling_packs_per_ip,"nb_video_signalling"+current_time_+"_"+interval_string+".stat");
 	create_graph_map_pairs(avg_sd_degree,biggest_pack_per_ip,"avg_sd_degree_max_pack_"+current_time_+"_"+interval_string+".stat");
 	create_graph_float(total_packet_exchange,times,"total_packets_"+current_time_+"_"+interval_string+".stat");
