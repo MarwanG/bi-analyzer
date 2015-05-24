@@ -161,7 +161,7 @@ void file2dataPCAP_interval(ifstream * file,vector<string> channels,int interval
     	if(count(b.begin(), b.end(), '.') > 2 &&  count(t.begin(), t.end(), '.') > 2){
 	    	if(t1 == 4){
 	    		t1 = timestamp_to_ctime(time_str.c_str());
-	    		g->set_time(tmp);
+	    		g->set_time(time_str);
 	    	}else{    		
 	    		t2 = timestamp_to_ctime(time_str.c_str());
 	    		double diff = difftime(t2,t1);
@@ -337,8 +337,6 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	string interval_string = stream1.str();
 	string current_time_ = current_time();
 	//tmp list of times without the last time
-	vector<string> times_tmp = times;
-	times_tmp.erase (times_tmp.begin());
 	//creating graph
 
 	create_graph_int(nb_video_peers,times,"nb_video_peers_"+current_time_+"_"+interval_string+".stat");
