@@ -6,6 +6,7 @@
 #include <map>
 #include <vector>
 #include <time.h>
+#include <ctype.h>
 
 #include "graph.h"
 
@@ -82,6 +83,8 @@ bool my_own_regex(string s){
 	split(s,'.',v);
 	if(v.size() > 2){
 		if((v[0].compare("192") == 0) && (v[1].compare("168")==0))
+			return true;
+		if(isalpha(*v[v.size()-1].c_str()))
 			return true;
 	}
 	return false;

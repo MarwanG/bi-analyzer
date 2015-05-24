@@ -291,14 +291,9 @@ vector<string> get_channels(string name,int nbChannels,map<string,int> list){
     	iss >> time_str;
     	iss >> time_str;
     	iss >> b;  
-    	size_t n = count(b.begin(), b.end(), '.');
-    	if(n==4){
-    		unsigned found = b.find_last_of(".");
-	    	b = b.substr(0,found);
-    	}
     	if (my_own_regex(b) && (find(tmp.begin(), tmp.end(), b)==tmp.end())){
     		size_t n = std::count(b.begin(), b.end(), '.');
-    		if(n == 3){
+    		if(n > 2){
     			map<string,int>::iterator it = list.find(b);
     			if(it != list.end()){
 					list[b]=list[b] +1;

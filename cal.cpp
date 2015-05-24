@@ -49,12 +49,12 @@ void file2data_PCAP_batch(string name,vector<string> channels,Graph * g){
 			continue;
 		}
 		size_t n = count(b.begin(), b.end(), '.');
-    	if(n==4){
-    		unsigned found = b.find_last_of(".");
-	    	b = b.substr(0,found);
+    	if(n==4 && find(channels.begin(), channels.end(), b) == channels.end()){
+	    		unsigned found = b.find_last_of(".");
+		    	b = b.substr(0,found);
     	}
     	n = std::count(t.begin(), t.end(), '.');
-		if(n==4){
+		if(n==4 && find(channels.begin(), channels.end(), t) == channels.end()){
 			unsigned found = t.find_last_of(".");
 	    	t = t.substr(0,found);
 		}
@@ -170,12 +170,12 @@ void file2dataPCAP_interval(ifstream * file,vector<string> channels,int interval
 	    		}
 	    	}
 	    	size_t n = count(b.begin(), b.end(), '.');
-	    	if(n==4){
+	    	if(n==4 && find(channels.begin(), channels.end(), b) == channels.end()){
 	    		unsigned found = b.find_last_of(".");
 		    	b = b.substr(0,found);
 	    	}
 	    	n = std::count(t.begin(), t.end(), '.');
-			if(n==4){
+			if(n==4 && find(channels.begin(), channels.end(), t) == channels.end()){
 				unsigned found = t.find_last_of(".");
 		    	t = t.substr(0,found);
 			}
@@ -250,6 +250,7 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 		ifstream * file = new ifstream(names[i].c_str());
 		files.push_back(file);
 	}
+
 
 
 	//going through each file for interval seconds.
@@ -484,6 +485,10 @@ void get_stat_pcap_interval_filter(vector<string> names,vector<int> nbChannels,v
 		files.push_back(file);
 	}
 
+
+	for(int i = 0 ; i < channels.size() ; i++){
+		cout << channels[i] << "\n";
+	}
 
 	//going through each file for interval seconds.
 	bool keep = true;
