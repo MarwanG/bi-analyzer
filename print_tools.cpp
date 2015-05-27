@@ -256,10 +256,21 @@ void create_graph_int_map(map<int,int>degrees_bot,string name){
 	myfile.open(name);
     map<int,int>::iterator it;
     for(it=degrees_bot.begin();it!=degrees_bot.end();it++){
-       cout << it->first << "  " << it->second << "\n";
        myfile << it->first << "  " << it->second << "\n";
     }
     myfile.close();
+}
+
+
+void create_graph_map_long_long(map<string,long long> list,string name){
+	ofstream myfile;
+	myfile.open(name);
+  	map<string,long long>::iterator it;
+	for(it=list.begin();it!=list.end();it++){
+       myfile << it->first << "  " << it->second << "\n";
+    }
+    myfile.close();
+
 }
 
 void create_graph_map_int_float(map<int,float>degrees_bot,string name){
