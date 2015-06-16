@@ -346,6 +346,20 @@ void create_graph_map_pairs(map<string,pair<float,float> > list,map<string,int> 
 }
 
 
+void create_graph_map_string_set(map<string,set<string> > list, string name){
+	ofstream myfile;
+	myfile.open(name);
+	map<string,set<string> >::iterator it;
+	for(it=list.begin();it!=list.end();it++){
+		myfile << it->first << " ";
+		set<string>::iterator it2;
+		for(it2 = it->second.begin() ; it2 != it->second.end() ; it2++){
+			myfile << *it2 << "  ";
+		}
+		myfile << "\n";
+	}
+}
+
 void create_graph_map_pairs_pairs(map<string,pair<float,float> > list,map<string,pair<float,float> >list2,string name){
 	ofstream myfile;
     myfile.open(name);

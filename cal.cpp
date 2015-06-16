@@ -155,7 +155,7 @@ void file2dataPCAP_interval(ifstream * file,vector<string> channels,int interval
   			continue;
   		}
   		size_pack = atoi(tmp2.c_str());
-  		if(size_pack == 0){
+  		if(size_pack == 0){						// WHEN ITS A TEXT SIZE_PACK IS = 0.
 			continue;
 		}
     	if(count(b.begin(), b.end(), '.') > 2 &&  count(t.begin(), t.end(), '.') > 2){
@@ -224,10 +224,7 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 
 	map<string,vector<int> > total_packets_per_peer;
 
-
-	//nb of peers
-	map<string,set<string> > peer_per_channel; // ???
-	
+	map<string,set<string> > channels_for_each_peer;
 
 	vector<float> total_packet_exchange;
 
@@ -278,22 +275,7 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 		nb_bot_graph.push_back(g->bots.size());
 		
 		dist_degree_by_top.push_back(g->degrees_to_string());
-		dist_degree_by_bot.push_back(g->degrees_to_string_bot());
-       
-
-		
-		// int total_packets = 0;
-		// int video_packets = 0;
-		// int signalling_packets = 0;
-  //      	for(int i = 0 ; i < g->tops.size() ; i++){
-  //      		total_packets+=g->tops[i]->get_total_up() + g->tops[i]->get_total_down();
-  //      		video_packets+=g->tops[i]->video_packs;
-  //      		signalling_packets+=g->tops[i]->nb_signalling_packs;
-  //      	}
-  //      	total_packet_exchange.push_back(total_packets);
-  //      	video_packs.push_back(video_packets);
-  //      	signalling_packs.push_back(signalling_packets);
-
+	 
 
 		// Getting the degree of each Node and placing is in a list.
        	int nb_video_peers_count = 0;
@@ -317,7 +299,8 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 
 			std::set<int>::iterator it;
 			for (it = g->bots[i]->neighbours_indexs.begin(); it != g->bots[i]->neighbours_indexs.end(); ++it){
-				peer_per_channel[g->tops[*it]->get_title()].insert(g->bots[i]->get_title());
+				channels_for_each_peer[g->bots[i]->get_title()].insert(g->tops[*it]->get_title());
+
 				total_packets_per_peer[g->bots[i]->get_title()].insert(total_packets_per_peer[g->bots[i]->get_title()].begin(),
 					g->tops[*it]->size_pack_list_total_detail[g->bots[i]->get_index()].begin(),
 					g->tops[*it]->size_pack_list_total_detail[g->bots[i]->get_index()].end());
@@ -353,20 +336,18 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	// nb of active peers per channel per time.
 	create_graph_nb_bot(nb_bot_graph,times,dist_degree_by_top,"nb_bot_interval_"+current_time_+"_"+interval_string+".stat");	
 	
-
-	create_graph_2_map_int(video_packs_per_ip,signalling_packs_per_ip,"nb_video_signalling"+current_time_+"_"+interval_string+".stat");
-	
-
+	// nb of packs per ip
+	create_graph_2_map_int(video_packs_per_ip,signalling_packs_per_ip,"nb_video_signalling_"+current_time_+"_"+interval_string+".stat");
 	create_graph_map_long_long(nb_packets_per_ip,"nb_packets_per_ip_"+current_time_+"_"+interval_string+".stat");
 
-	// create_graph_map_pairs_pairs(avg_sd_degree,avg_sd_packet,"avg_sd_degree_avg_sd_packet_"+current_time_+"_"+interval_string+".stat");
-	// create_graph_vector_vector_int(size_up_per_channel,times,"up_stream_per_channel_"+current_time_+"_"+interval_string+".stat");
-	// create_graph_pairs(avg_nb_degree,"avg_nb_degree_"+current_time_+"_"+interval_string+".stat");
-	// create_graph_degree_change(nb_each_degree,diff_nb_each_degree,times_tmp,"degree_change_"+current_time_+"_"+interval_string+".stat");
-	// create_graph_float(cc_graph,times,"cc_interval_"+current_time_+"_"+interval_string+".stat");
-	// create_graph_float(density_graph,times,"density_interval_"+current_time_+"_"+interval_string+".stat");
-	// create_graph_string(dist_degree_by_bot,times,"dist_degree_bot_"+current_time_+"_"+interval_string+".stat");
+	//grouping servers
 
+	create_graph_map_string_set(channels_for_each_peer,"channels_for_each_peer_"+current_time_+"_"+interval_string+".stat");
+
+	// bi-partite analysis.
+	create_graph_float(cc_graph,times,"cc_interval_"+current_time_+"_"+interval_string+".stat");
+	create_graph_float(density_graph,times,"density_interval_"+current_time_+"_"+interval_string+".stat");
+	
 }	
 
 

@@ -34,4 +34,7 @@ void create_graph_map_pairs(std::map<std::string,std::pair<float,float> > list,s
 void create_graph_map_pairs_pairs(std::map<std::string,std::pair<float,float> > list,std::map<std::string,std::pair<float,float> >list2,std::string name);
 void create_graph_2_map_int(std::map<std::string,long long> list,std::map<std::string,long long> list2,std::string name);
 void create_graph_map_long_long(std::map<std::string,long long> list,std::string name);
+
+void create_graph_map_string_set(std::map<std::string,std::set<std::string> > list,std::string name);
+
 #endif
