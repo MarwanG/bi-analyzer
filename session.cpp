@@ -35,7 +35,7 @@ bool Session::check_end(string end,double delta){
 		return false;
 	}else{
 		duration = fmod(difftime(t2,t3),3600);
-		end_ = end;
+		end_ = last;
 		return true;
 	}
 }	
