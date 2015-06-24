@@ -91,7 +91,7 @@ int main(int argc, char* argv[]){
 
 	// COMPUTER FILE TO TEST
 
-	// list.push_back("../Data/a_5000000.txt");
+	list.push_back("../Data/a_5000000.txt");
 	// list.push_back("../Data/proper_a.txt");
 
 	// 	JAPAN FILES (COMPLETE)
@@ -121,21 +121,21 @@ int main(int argc, char* argv[]){
 
 	
 	nbChannels.push_back(3);
-	nbChannels.push_back(1);
-	nbChannels.push_back(3);
-	nbChannels.push_back(1);
-	nbChannels.push_back(1);
-	nbChannels.push_back(3);
+	// nbChannels.push_back(1);
+	// nbChannels.push_back(3);
+	// nbChannels.push_back(1);
+	// nbChannels.push_back(1);
+	// nbChannels.push_back(3);
 
 	// vector<string> filter = list_to_check("ip_filters.stat");
 	// get_stat_pcap_interval_filter(list,nbChannels,filter,60);
 	// get_stat_pcap_interval(list,nbChannels,60);
 	// get_stat_pcap_batch(list,nbChannels);
 
-	detect_(list,nbChannels,60);
-	detect_(list,nbChannels,120);
-	detect_(list,nbChannels,90);
-	detect_(list,nbChannels,180);
-	detect_(list,nbChannels,150);
+	detect_(list,nbChannels,10);
+	// detect_(list,nbChannels,120);
+	// detect_(list,nbChannels,90);
+	// detect_(list,nbChannels,180);
+	// detect_(list,nbChannels,150);
 	}	
 }
