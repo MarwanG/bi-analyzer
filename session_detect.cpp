@@ -37,8 +37,8 @@ void detect_session(string name,vector<string> channels,double delta){
 
 	int z = 0;
 
-	map<pair<string,string>,Session> current_sessions;
-	map<pair<string,string>,vector<Session> > sessions;
+	map<pair<string,string>,Session *> current_sessions;
+	map<pair<string,string>,vector<Session *> > sessions;
 
 
 	while (getline(file, str))
@@ -79,31 +79,33 @@ void detect_session(string name,vector<string> channels,double delta){
 		if(my_own_regex(t)&&find(channels.begin(), channels.end(), t) == channels.end()){
 			continue;
 		}
+		// T IS THE CHANNEL
+		// B IS THE IP
 		if(find(channels.begin(), channels.end(), t)!=channels.end() && find(channels.begin(), channels.end(), b)==channels.end()){
-		   	map<pair<string,string>,Session>::iterator it;
+		   	map<pair<string,string>,Session *>::iterator it;
 		   	it = current_sessions.find(make_pair(t,b));
 		   	if(it != current_sessions.end()){
-		   		Session s = it->second;
-		   		bool is_end = s.check_end(time_str,delta);
+		   		Session * s = it->second;
+		   		bool is_end = s->check_end(time_str,delta);
 		   		if(is_end){
 		   			sessions[make_pair(t,b)].push_back(s);
-		   			s = Session(t,b,time_str);
+		   			s = new Session(b,t,time_str);
 		   			current_sessions.erase(it);
 		   			current_sessions.insert(make_pair(make_pair(t,b),s));
 		   		}
 		   	}else{
-		   		Session s = Session(t,b,time_str);
+		   		Session * s = new Session(b,t,time_str);
 		   		current_sessions.insert(make_pair(make_pair(t,b),s));
 		   	}
 		}
 	}
 	file.close();
 
-	map<pair<string,string>,Session>::iterator it;
+	map<pair<string,string>,Session *>::iterator it;
 	for(it = current_sessions.begin() ; it != current_sessions.end() ; it++){
-		Session s = it->second;
-		s.force_end();
-		sessions[make_pair(s.ip_,s.channel_)].push_back(s);
+		Session * s = it->second;
+		s->force_end();
+		sessions[make_pair(s->ip_,s->channel_)].push_back(s);
 	}
 
 
@@ -117,11 +119,11 @@ void detect_session(string name,vector<string> channels,double delta){
 
 	myfile.open("sessions_"+delta_string+"_"+current_time_+".stat");
 
-	map<pair<string,string>,vector<Session> >::iterator it_total;
+	map<pair<string,string>,vector<Session *> >::iterator it_total;
 	for(it_total = sessions.begin() ; it_total != sessions.end() ; it_total++){
-		vector<Session> tmp = it_total->second;
+		vector<Session*> tmp = it_total->second;
 		for(int i = 0 ; i < tmp.size() ; i++){
-			myfile << tmp[i].ip_ << "  " << tmp[i].channel_ << " " << tmp[i].start_ << "  " << tmp[i].end_ << "  " << tmp[i].duration <<"\n";
+			myfile << tmp[i]->ip_ << "  " << tmp[i]->channel_ << " " << tmp[i]->start_ << "  " << tmp[i]->end_ << "  " << tmp[i]->duration <<"\n";
 		}
 	}
 	myfile.close();

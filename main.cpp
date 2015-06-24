@@ -95,12 +95,12 @@ int main(int argc, char* argv[]){
 	// list.push_back("../Data/proper_a.txt");
 
 	// 	JAPAN FILES (COMPLETE)
-	list.push_back("/data2/ghanem/tmp/proper_a.txt"); 
-	list.push_back("/data2/ghanem/tmp/proper_b.txt");
-	list.push_back("/data2/ghanem/tmp/proper_c.txt");
-	list.push_back("/data2/ghanem/tmp/proper_d.txt");
-	list.push_back("/data2/ghanem/tmp/proper_e.txt");
-	list.push_back("/data2/ghanem/tmp/test_f.txt");
+	// list.push_back("/data2/ghanem/tmp/proper_a.txt"); 
+	// list.push_back("/data2/ghanem/tmp/proper_b.txt");
+	// list.push_back("/data2/ghanem/tmp/proper_c.txt");
+	// list.push_back("/data2/ghanem/tmp/proper_d.txt");
+	// list.push_back("/data2/ghanem/tmp/proper_e.txt");
+	// list.push_back("/data2/ghanem/tmp/test_f.txt");
 
 	// JAPAN FILES (VIDEO)
 	// list.push_back("/data2/ghanem/tmp/video_a.txt"); 
