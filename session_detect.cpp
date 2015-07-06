@@ -124,7 +124,7 @@ void detect_session(string name,vector<string> channels,double delta){
 	map<pair<string,string>,vector<Session *> >::iterator it_total;
 	for(it_total = sessions.begin() ; it_total != sessions.end() ; it_total++){
 		string ip = it_total->first.first;
-		if(channels_per_pair[ip].size() > 0){
+		if(channels_per_pair[ip].size() > 1){
 			vector<Session*> tmp = it_total->second;
 			for(int i = 0 ; i < tmp.size() ; i++){
 				myfile << tmp[i]->ip_ << "  " << tmp[i]->channel_ << " " << tmp[i]->start_ << "  " << tmp[i]->end_ << "  " << tmp[i]->duration <<"\n";
