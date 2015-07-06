@@ -40,6 +40,7 @@ void detect_session(string name,vector<string> channels,double delta){
 	map<pair<string,string>,Session *> current_sessions;
 	map<pair<string,string>,vector<Session *> > sessions;
 
+	map<string,set<string> > channels_per_pair;
 
 	while (getline(file, str))
     {
@@ -84,6 +85,7 @@ void detect_session(string name,vector<string> channels,double delta){
 		if(find(channels.begin(), channels.end(), t)!=channels.end() && find(channels.begin(), channels.end(), b)==channels.end()){
 		   	map<pair<string,string>,Session *>::iterator it;
 		   	it = current_sessions.find(make_pair(t,b));
+		   	channels_per_pair[b].insert(t);
 		   	if(it != current_sessions.end()){
 		   		Session * s = it->second;
 		   		bool is_end = s->check_end(time_str,delta);
@@ -121,9 +123,12 @@ void detect_session(string name,vector<string> channels,double delta){
 
 	map<pair<string,string>,vector<Session *> >::iterator it_total;
 	for(it_total = sessions.begin() ; it_total != sessions.end() ; it_total++){
-		vector<Session*> tmp = it_total->second;
-		for(int i = 0 ; i < tmp.size() ; i++){
-			myfile << tmp[i]->ip_ << "  " << tmp[i]->channel_ << " " << tmp[i]->start_ << "  " << tmp[i]->end_ << "  " << tmp[i]->duration <<"\n";
+		string ip = it_total->first.first;
+		if(channels_per_pair[ip].size() > 0){
+			vector<Session*> tmp = it_total->second;
+			for(int i = 0 ; i < tmp.size() ; i++){
+				myfile << tmp[i]->ip_ << "  " << tmp[i]->channel_ << " " << tmp[i]->start_ << "  " << tmp[i]->end_ << "  " << tmp[i]->duration <<"\n";
+			}
 		}
 	}
 	myfile.close();
