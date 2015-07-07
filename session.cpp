@@ -15,6 +15,7 @@ Session::Session(string ip,string channel,string start){
 	last_ = start;
 	end_ = "";
 	duration = 0;
+	nbofpackets=0;
 }
 
 
@@ -36,6 +37,7 @@ bool Session::check_end(string end,double delta){
 	double diff = fmod(difftime(t2,t1),3600);
 	
 	if(diff < delta){
+		nbofpackets++;
 		last_ = end;
 		return false;
 	}else{

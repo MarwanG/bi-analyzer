@@ -21,6 +21,7 @@ public:
 	std::string start_;
 	std::string last_;
 	std::string end_;	
+	int nbofpackets;
 
 	double duration;	
 
