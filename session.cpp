@@ -15,7 +15,7 @@ Session::Session(string ip,string channel,string start){
 	last_ = start;
 	end_ = "";
 	duration = 0;
-	nbofpackets=0;
+	nbofpackets=1;
 }
 
 
@@ -32,11 +32,13 @@ bool Session::check_end(string end,double delta){
 
 
 
-	// cout << ip_ << " " << start_ << "  " << last_ << "  " << end << "\n";
+	cout << ip_ << " " << start_ << "  " << last_ << "  " << end << "\n";
 
 	double diff = fmod(difftime(t2,t1),3600);
+
+	cout << ip_ << "  " << diff << "\n";
 	
-	if(diff < delta){
+	if(diff >= 0 && diff < delta){
 		nbofpackets++;
 		last_ = end;
 		return false;

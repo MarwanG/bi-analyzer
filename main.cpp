@@ -91,7 +91,7 @@ int main(int argc, char* argv[]){
 
 	// COMPUTER FILE TO TEST
 
-	list.push_back("../Data/a_5000000.txt");
+	// list.push_back("../Data/a_5000000.txt");
 	// list.push_back("../Data/proper_a.txt");
 
 	// 	JAPAN FILES (COMPLETE)
@@ -103,7 +103,7 @@ int main(int argc, char* argv[]){
 	// list.push_back("/data2/ghanem/tmp/test_f.txt");
 
 	// JAPAN FILES (VIDEO)
-	// list.push_back("/data2/ghanem/tmp/video_a.txt"); 
+	list.push_back("/data2/ghanem/tmp/video_a.txt"); 
 	// list.push_back("/data2/ghanem/tmp/video_b.txt");
 	// list.push_back("/data2/ghanem/tmp/video_c.txt");
 	// list.push_back("/data2/ghanem/tmp/video_d.txt");
@@ -132,10 +132,10 @@ int main(int argc, char* argv[]){
 	// get_stat_pcap_interval(list,nbChannels,60);
 	// get_stat_pcap_batch(list,nbChannels);
 
-	detect_(list,nbChannels,10);
+	// detect_(list,nbChannels,10);
 	// detect_(list,nbChannels,120);
 	// detect_(list,nbChannels,90);
-	// detect_(list,nbChannels,180);
+	detect_(list,nbChannels,180);
 	// detect_(list,nbChannels,150);
 	}	
 }
