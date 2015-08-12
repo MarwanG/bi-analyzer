@@ -30,15 +30,23 @@ bool Session::check_end(string end,double delta){
 	time_t t2 =	timestamp_to_ctime(end.c_str());
 	time_t t3 = timestamp_to_ctime(start_.c_str());
 
-
+// -       cout << ip_ << " " << start_ << "  " << last_ << "  " << end << "\n";
+ 
+// -       double diff = fmod(difftime(t2,t1),3600);
+// -	
+	    // cout << ip_ << "  " << diff << "\n";
+     double diff = difftime(t2,t1);
+        
+// -       if(diff >= 0 && diff < delta){
 
 	cout << ip_ << " " << start_ << "  " << last_ << "  " << end << "\n";
 
-	double diff = fmod(difftime(t2,t1),3600);
+	// double diff = fmod(difftime(t2,t1),3600);
 
 	cout << ip_ << "  " << diff << "\n";
 	
-	if(diff >= 0 && diff < delta){
+	// if(diff >= 0 && diff < delta){
+   	if(diff < delta){
 		nbofpackets++;
 		last_ = end;
 		return false;
