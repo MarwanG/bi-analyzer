@@ -136,12 +136,13 @@ void detect_(vector<string> names,vector<int> nbChannels,double delta){
 	vector<string> channels;			//list of channels
 	map<string,int> list; 
 
+	// for(int i = 0 ; i < names.size() ; i++){
+		
+	// 	channels.insert(channels.end(), tmp.begin(), tmp.end());
+	// }
+
 	for(int i = 0 ; i < names.size() ; i++){
 		vector<string> tmp = get_channels(names[i],nbChannels[i],list);
-		channels.insert(channels.end(), tmp.begin(), tmp.end());
+		detect_session(names[i],tmp,delta);
 	}
-
-	for(int i = 0 ; i < names.size() ; i++)
-		detect_session(names[i],channels,delta);
-
 }
