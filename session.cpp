@@ -39,11 +39,11 @@ bool Session::check_end(string end,double delta){
         
 // -       if(diff >= 0 && diff < delta){
 
-	cout << ip_ << " " << start_ << "  " << last_ << "  " << end << "\n";
+	// cout << ip_ << " " << start_ << "  " << last_ << "  " << end << "\n";
 
 	// double diff = fmod(difftime(t2,t1),3600);
 
-	cout << ip_ << "  " << diff << "\n";
+	// cout << ip_ << "  " << diff << "\n";
 	
 	// if(diff >= 0 && diff < delta){
    	if(diff < delta){
