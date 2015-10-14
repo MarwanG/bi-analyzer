@@ -40,13 +40,7 @@ void Graph::update_distr(Node * n){
 }
 
 void Graph::final_calculation(){
-	cc = cc/tops.size();
-	cc_min = cc_min/tops.size();
- 	cc_max = cc_max/tops.size();
- 	average_degree_top_v = average_degree_top_v/tops.size();
- 	disp = disp / nb_disp;
- 	red = red / nb_red;
- 	for(int i = 0 ; i < bots.size() ; i++){
+	for(int i = 0 ; i < bots.size() ; i++){
  		update_degree_bot(bots[i]);
  		int degree_tmp = bots[i]->get_degree();
  		if(min_bot > degree_tmp){

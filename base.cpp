@@ -191,7 +191,6 @@ void calculate_stat_graph(Graph * g){
 			g->nb_red = g->nb_red + 1;
 		}
 	}
-	g->final_calculation();
 }
 
 // FUNCTION ADD CONNECTION
@@ -253,7 +252,7 @@ void addlink(Graph *g,string t , string b,string *t1,int size_pack){
 void file2data(string name,Graph *g){
 	ifstream file(name.c_str());
 	string str; 
-	string t;
+	string t;tops
 	string b;
 
 	while (getline(file, str))

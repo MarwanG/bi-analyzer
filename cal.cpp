@@ -90,22 +90,7 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 		file2data_PCAP_batch(names[i],v,g);
 	}
 
-	
-
-	/*ofstream myfile;
-	myfile.open ("start_end_per_ip");
-
-	for(int i  = 0 ; i < g->bots.size() ; i++){
-		string time_1_str = g->bots[i]->first_appear;
-		string time_2_str =  g->bots[i]->last_appear;
-		time_t time_1_t = timestamp_to_ctime(time_1_str.c_str());
-		time_t time_2_t = timestamp_to_ctime(time_2_str.c_str());
-		double time_all = difftime(time_2_t,time_1_t);
-		myfile << g->bots[i]->get_title() << " " <<  time_1_str << " " << time_2_str << " ";	
-		myfile << time_all << " " << g->bots[i]->max_interval << " "<< (time_all/49620)*100 << "\n";
-	}
-	myfile.close();
-	*/
+	g->final_calculation();
 
 	string current_time_ = current_time();
 	stat_to_file(g,"global_stats_"+current_time_+".stat");
