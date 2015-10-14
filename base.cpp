@@ -294,7 +294,7 @@ vector<string> get_channels(string name,int nbChannels,map<string,int> list){
     	iss >> b;  
     	if (my_own_regex(b) && (find(tmp.begin(), tmp.end(), b)==tmp.end())){
     		size_t n = std::count(b.begin(), b.end(), '.');
-    		if(n > 2){
+    		if(n > 2 && n < 4){ // add the n<4 for port need to look more into tht
     			map<string,int>::iterator it = list.find(b);
     			if(it != list.end()){
 					list[b]=list[b] +1;
