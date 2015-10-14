@@ -143,6 +143,7 @@ void calculate_cc(Node* n1,Node* n2){
 //loop to each of the top
 //loop for each bot of the current top 
 //(can easily add the size/freq treatement here if needed should be faster)
+// calculates complex graph metrics not called in simplified version
 void calculate_stat_graph(Graph * g){
 	for(int i = 0 ; i < g->tops.size() ; i++){
 		Node *n = g->tops[i];

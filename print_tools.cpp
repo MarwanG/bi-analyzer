@@ -180,16 +180,10 @@ void stat_to_file(Graph *g,string name){
 	myfile << "Number of tops : " << g->tops.size() << "\n";
 	myfile << "Number of bots : " << g->bots.size() << "\n";
 	myfile << "Number of edges : " << fixed << g->links << "\n";
-	myfile << "Density : " << fixed << g->density << "\n";
 	myfile << "average_degree_top_v :" << g->average_degree_top_v << "\n";
 	myfile << "average_degree_bot_v :" << g->average_degree_bot_v << "\n";
 	myfile << "Max degree (top) : " << g->max_top << " (" << nb_top << ")\n";
 	myfile << "Min degree (bot) : " << g->min_bot << "\n";
-	myfile << "Clustering coefficient cc_top : " << g->cc << "\n";
-	myfile << "Clustering coefficient cc_min_top : " << g->cc_min << "\n";
-	myfile << "Clustering coefficient cc_max_top : " << g->cc_max << "\n";
-	myfile << "Redundancy coefficient (top) : " << g->red << "\n";
-	myfile << "Dispersion coefficient (top) : " << g->disp << "\n";
 	for(int i = 0 ; i < g->tops.size() ; i++){
 		myfile << "Degree : " << i << "  " << g->distr_by_degree[i].size() << "\n";
 	}

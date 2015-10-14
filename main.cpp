@@ -40,43 +40,6 @@ void print_config(){
 	cout << interval << "\n";
 }
 
-// int main(int argc, char* argv[]){
-// 	if(argc == 1){
-// 		cout << "please enter options or add -help for more details \n";	
-// 		return 0;
-// 	}else{
-// 		int i = 1;
-// 		while(i < argc){
-// 			string cmd = argv[i];
-// 			if(cmd.compare("-help")==0){
-// 				help();
-// 				i++;
-// 			}else if(cmd.compare("-f")==0){
-// 				i++;
-// 				folder = argv[i];
-// 				i++;
-// 			}else if(cmd.compare("-mode")==0){
-// 				i++;
-// 				string cmd2 = argv[i];
-// 				if(cmd2.compare("b")==0){
-// 					mode = 0;
-// 				}else{
-// 					mode = 1;
-// 				}
-// 				i++;
-// 			}else if(cmd.compare("-t")==0){
-// 				i++;
-// 				string tmp = argv[i];
-// 				interval = atoi(tmp.c_str());
-// 				i++;
-// 			}
-// 		}
-// 	}
-// 	print_config();
-// 	getdir(folder);
-// 	return 0;
-// }
-
 int main(int argc, char* argv[]){
 
 
@@ -95,15 +58,15 @@ int main(int argc, char* argv[]){
 	// list.push_back("../Data/proper_a.txt");
 
 	// 	JAPAN FILES (COMPLETE)
-	// list.push_back("/data2/ghanem/tmp/proper_a.txt"); 
-	// list.push_back("/data2/ghanem/tmp/proper_b.txt");
-	// list.push_back("/data2/ghanem/tmp/proper_c.txt");
-	// list.push_back("/data2/ghanem/tmp/proper_d.txt");
-	// list.push_back("/data2/ghanem/tmp/proper_e.txt");
-	// list.push_back("/data2/ghanem/tmp/test_f.txt");
+	list.push_back("/data2/ghanem/tmp/proper_a.txt"); 
+	list.push_back("/data2/ghanem/tmp/proper_b.txt");
+	list.push_back("/data2/ghanem/tmp/proper_c.txt");
+	list.push_back("/data2/ghanem/tmp/proper_d.txt");
+	list.push_back("/data2/ghanem/tmp/proper_e.txt");
+	list.push_back("/data2/ghanem/tmp/test_f.txt");
 
 	// JAPAN FILES (VIDEO)
-	list.push_back("/data2/ghanem/tmp/video_a.txt"); 
+	//list.push_back("/data2/ghanem/tmp/video_a.txt"); 
 	// list.push_back("/data2/ghanem/tmp/video_b.txt");
 	// list.push_back("/data2/ghanem/tmp/video_c.txt");
 	// list.push_back("/data2/ghanem/tmp/video_d.txt");
@@ -121,21 +84,21 @@ int main(int argc, char* argv[]){
 
 	
 	nbChannels.push_back(3);
-	// nbChannels.push_back(1);
-	// nbChannels.push_back(3);
-	// nbChannels.push_back(1);
-	// nbChannels.push_back(1);
-	// nbChannels.push_back(3);
+	nbChannels.push_back(1);
+	nbChannels.push_back(3);
+	nbChannels.push_back(1);
+	nbChannels.push_back(1);
+	nbChannels.push_back(3);
 
 	// vector<string> filter = list_to_check("ip_filters.stat");
 	// get_stat_pcap_interval_filter(list,nbChannels,filter,60);
 	// get_stat_pcap_interval(list,nbChannels,60);
-	// get_stat_pcap_batch(list,nbChannels);
+	get_stat_pcap_batch(list,nbChannels);
 
 	// detect_(list,nbChannels,10);
 	// detect_(list,nbChannels,120);
 	// detect_(list,nbChannels,90);
-	detect_(list,nbChannels,180);
+	//detect_(list,nbChannels,180);
 	// detect_(list,nbChannels,150);
 	}	
 }

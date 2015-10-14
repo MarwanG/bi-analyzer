@@ -32,7 +32,6 @@ void file2data_PCAP_batch(string name,vector<string> channels,Graph * g){
 	while (getline(file, str))
     {
     	z++;
-    	// cout << z << "\n";
     	istringstream iss(str);
     	iss >> time_str;
     	iss >> hours;
@@ -74,7 +73,6 @@ void file2data_PCAP_batch(string name,vector<string> channels,Graph * g){
     }
     cout << "nb of links : " << g->links  << " \n";
     cout << "size*size   : " << (float)(g->tops.size()*g->bots.size()) << "\n";
-    g->density = g->links / (float)(g->tops.size()*g->bots.size());
     file.close();
 }
 
@@ -82,16 +80,6 @@ void file2data_PCAP_batch(string name,vector<string> channels,Graph * g){
 
 void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 	map<string,int> list;
-
-	map<string,long double> ecart_type_time;
-	map<string,long double> avg_time;
-
-	map<string,long double> ecart_type_pack_up;
-	map<string,long double> avg_pack_up;
-	
-
-	map<string,long double> ecart_type_pack_down;
-	map<string,long double> avg_pack_down;
 
 	Graph * g = new Graph();
 	for(int i = 0 ; i < names.size() ; i++){
@@ -101,12 +89,10 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 		}
 		file2data_PCAP_batch(names[i],v,g);
 	}
-	
-	stat_to_stdout(g);
-	calculate_stat_graph(g);
+
 	
 
-	ofstream myfile;
+	/*ofstream myfile;
 	myfile.open ("start_end_per_ip");
 
 	for(int i  = 0 ; i < g->bots.size() ; i++){
@@ -119,6 +105,7 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 		myfile << time_all << " " << g->bots[i]->max_interval << " "<< (time_all/49620)*100 << "\n";
 	}
 	myfile.close();
+	*/
 
 	string current_time_ = current_time();
 	stat_to_file(g,"global_stats_"+current_time_+".stat");
