@@ -90,7 +90,7 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 		file2data_PCAP_batch(names[i],v,g);
 	}
 
-	g->final_calculation();
+	calculate_stat_graph(g)
 
 	string current_time_ = current_time();
 	stat_to_file(g,"global_stats_"+current_time_+".stat");

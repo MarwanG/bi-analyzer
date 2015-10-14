@@ -155,41 +155,14 @@ void calculate_stat_graph(Graph * g){
 			if(bo->get_degree() > 1){
 				nb_multi_peers++;
 			}
-			set<int>::iterator it2;
-			for(it2 = bo->neighbours_indexs.begin() ; it2 != bo->neighbours_indexs.end() ; it2++){
-                Node *tmp = bo->neighbours[*it2];
-				int index_x = g->topsIndex.find(tmp->get_title())->second;
-				if(i < index_x && find(treated.begin(), treated.end(), index_x)==treated.end() && n!= tmp){
-					calculate_cc(n,tmp);
-					treated.insert(index_x);
-				}
-			}
-		}
-		g->nb_multi_peers_per_channel[n->get_title()] = nb_multi_peers ;
-		if(n->nb_top_neighbours > 0){
-			n->set_cc(n->get_cc()/n->nb_top_neighbours);			
-			g->cc += n->get_cc();
-			g->cc_min+= (n->get_cc_min()/n->nb_top_neighbours);
-			g->cc_max+= (n->get_cc_max()/n->nb_top_neighbours);
-		}
-		n->calculate_disp();
-	 	n->calculate_redundancy();
-		g->update_degree_top(n);
-		g->update_redundancy_top(n);
-		g->update_ccs_top(n);
-		g->update_degree_cc(n);
-		g->average_degree_top_v = g->average_degree_top_v + n->get_degree();
-		if(n->get_degree() > g->max_top){
+			if(n->get_degree() > g->max_top){
 			g->max_top=n->get_degree();
 		}
-	 	if(n->get_disp() != -1){
-	 		g->disp = g->disp + n->get_disp();
-	 		g->nb_disp = g->nb_disp + 1;
+			g->update_degree_bot(bo);
+ 			g->update_distr(bo);
 		}
-		if(n->get_red() != -1){
-			g->red = g->red + n->get_red();
-			g->nb_red = g->nb_red + 1;
-		}
+		g->nb_multi_peers_per_channel[n->get_title()] = nb_multi_peers ;
+		
 	}
 }
 
