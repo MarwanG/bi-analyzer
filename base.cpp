@@ -252,7 +252,7 @@ void addlink(Graph *g,string t , string b,string *t1,int size_pack){
 void file2data(string name,Graph *g){
 	ifstream file(name.c_str());
 	string str; 
-	string t;tops
+	string t;
 	string b;
 
 	while (getline(file, str))
