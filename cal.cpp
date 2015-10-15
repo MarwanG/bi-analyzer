@@ -79,7 +79,7 @@ void file2data_PCAP_batch(string name,vector<string> channels,Graph * g){
 
 
 void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
-	map<string,int> list;
+	map<string,int> * list;
 
 	Graph * g = new Graph();
 	for(int i = 0 ; i < names.size() ; i++){
@@ -90,7 +90,7 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 		file2data_PCAP_batch(names[i],v,g);
 	}
 
-	calculate_stat_graph(g)
+	calculate_stat_graph(g);
 
 	string current_time_ = current_time();
 	stat_to_file(g,"global_stats_"+current_time_+".stat");
@@ -172,7 +172,7 @@ void file2dataPCAP_interval(ifstream * file,vector<string> channels,int interval
 
 void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int interval){
 	vector<string> channels;			//list of channels
-	map<string,int> list; 				// map each channel's occurance
+	map<string,int> *list; 				// map each channel's occurance
 	vector<float> cc_graph;				//cc per time graph
 	vector<float> density_graph;		//density per time graph
 	vector<int> nb_bot_graph;			//nb of total peers
@@ -396,7 +396,7 @@ void file2dataPCAP_interval_filter(ifstream * file,vector<string> channels,int i
 
 void get_stat_pcap_interval_filter(vector<string> names,vector<int> nbChannels,vector<string> filter,int interval){
 	vector<string> channels;			//list of channels
-	map<string,int> list; 				// map each channel's occurance
+	map<string,int> * list; 				// map each channel's occurance
 	vector<float> cc_graph;				//cc per time graph
 	vector<float> density_graph;		//density per time graph
 	vector<int> nb_bot_graph;			//nb of total peers

@@ -52,20 +52,16 @@ int main(int argc, char* argv[]){
 		vector<int> nbChannels;
 		vector<string> list;
 
-	// COMPUTER FILE TO TEST
 
-	// list.push_back("../Data/a_5000000.txt");
-	// list.push_back("../Data/proper_a.txt");
-
-	// 	JAPAN FILES (COMPLETE)
-	list.push_back("/data2/ghanem/tmp/proper_a.txt"); 
+	// 	JAPAN 2013 FILES (COMPLETE)
+	//list.push_back("/data2/ghanem/tmp/proper_a.txt"); 
 	//list.push_back("/data2/ghanem/tmp/proper_b.txt");
 	//list.push_back("/data2/ghanem/tmp/proper_c.txt");
 	//list.push_back("/data2/ghanem/tmp/proper_d.txt");
 	//list.push_back("/data2/ghanem/tmp/proper_e.txt");
 	//list.push_back("/data2/ghanem/tmp/test_f.txt");
 
-	// JAPAN FILES (VIDEO)
+	// JAPAN FILES 2013 (VIDEO)
 	//list.push_back("/data2/ghanem/tmp/video_a.txt"); 
 	// list.push_back("/data2/ghanem/tmp/video_b.txt");
 	// list.push_back("/data2/ghanem/tmp/video_c.txt");
@@ -74,12 +70,11 @@ int main(int argc, char* argv[]){
 	// list.push_back("/data2/ghanem/tmp/video_f.txt");
 	
 
-	// TEST LONG (COMPLETE DAY 1)
-	// list.push_back("/data2/ghanem/long/PC_A.txt");
-	// list.push_back("/data2/ghanem/long/PC_B.txt");
-	// list.push_back("/data2/ghanem/long/PC_C.txt");
-	// list.push_back("/data2/ghanem/long/PC_D.txt");
-	// list.push_back("/data2/ghanem/long/PC_E.txt");
+    // JAPAN FILES 2015
+    list.push_back("/data2/ghanem/Japan2015/AB.txt");
+    list.push_back("/data2/ghanem/Japan2015/CD.txt");
+    list.push_back("/data2/ghanem/Japan2015/EFG.txt");
+    list.push_back("/data2/ghanem/Japan2015/HIJ.txt");
 
 
 	
@@ -99,6 +94,8 @@ int main(int argc, char* argv[]){
 	// detect_(list,nbChannels,120);
 	// detect_(list,nbChannels,90);
 	//detect_(list,nbChannels,180);
-	// detect_(list,nbChannels,150);
+	// detect_(list,nbChannels,150);	
+
+
 	}	
 }

@@ -251,7 +251,7 @@ void get_stat(string name){
 }
 
 // GETTING LIST OF CHANNELS FROM FILE.
-vector<string> get_channels(string name,int nbChannels,map<string,int> list){
+vector<string> get_channels(string name,int nbChannels,map<string,int> * list){
 	ifstream file(name.c_str());
 	string str;
 	string b;
@@ -267,13 +267,13 @@ vector<string> get_channels(string name,int nbChannels,map<string,int> list){
     	if (my_own_regex(b) && (find(tmp.begin(), tmp.end(), b)==tmp.end())){
     		size_t n = std::count(b.begin(), b.end(), '.');
     		if(n > 2 && n < 4){ // add the n<4 for port need to look more into tht
-    			map<string,int>::iterator it = list.find(b);
-    			if(it != list.end()){
-					list[b]=list[b] +1;
+    			map<string,int>::iterator it = list->find(b);
+    			if(it != list->end()){
+					list->at(b)=list->at(b) +1;
 				}else{
-					list[b]=1;
+					list->at(b)=1;
 				}
-				if (list[b] > limit){
+				if (list->at(b) > limit){
 					tmp.push_back(b);
 				}
     		}

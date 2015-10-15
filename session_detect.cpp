@@ -134,7 +134,7 @@ void detect_session(string name,vector<string> channels,double delta){
 
 void detect_(vector<string> names,vector<int> nbChannels,double delta){
 	vector<string> channels;			//list of channels
-	map<string,int> list; 
+	map<string,int> *list; 
 
 	// for(int i = 0 ; i < names.size() ; i++){
 		
