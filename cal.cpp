@@ -81,21 +81,21 @@ void file2data_PCAP_batch(string name,vector<string> channels,Graph * g){
 void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 	map<string,int> * list;
 
-	Graph * g = new Graph();
+//	Graph * g = new Graph();
 	for(int i = 0 ; i < names.size() ; i++){
 		vector<string> v =  get_channels(names[i],nbChannels[i],list);
 		for(int z = 0 ; z < v.size() ; z++){
 			cout << v[z] << "\n";
 		}
-		file2data_PCAP_batch(names[i],v,g);
+	//	file2data_PCAP_batch(names[i],v,g);
 	}
 
-	calculate_stat_graph(g);
+	//calculate_stat_graph(g);
 
-	string current_time_ = current_time();
-	stat_to_file(g,"global_stats_"+current_time_+".stat");
-	g->free_data();
-	delete(g);
+//	string current_time_ = current_time();
+//	stat_to_file(g,"global_stats_"+current_time_+".stat");
+//	g->free_data();
+//	delete(g);
 }
 
 //Reads the file till interval is reached and returns the graph g with the new data that

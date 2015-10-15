@@ -258,6 +258,14 @@ vector<string> get_channels(string name,int nbChannels,map<string,int> * list){
 	vector<string> tmp;
 	string time_str;
 	int limit = 70;
+	map<string,int> *original = new map<string,int>(*list);
+	map<string,int>::iterator it2;
+
+	for(it2=original->begin();it2!=original->end();it2++){
+		cout << it2->first << "  " << it2->second << "\n";
+	}
+
+
 	while (getline(file, str) && tmp.size() < nbChannels)
     {
         istringstream iss(str);
@@ -279,5 +287,10 @@ vector<string> get_channels(string name,int nbChannels,map<string,int> * list){
     		}
     	}	
     }
+
+    for(it2=list->begin();it2!=list->end();it2++){
+		cout << it2->first << "  " << it2->second << "\n";
+	}
+
  	return tmp;
 }
