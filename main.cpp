@@ -78,10 +78,10 @@ int main(int argc, char* argv[]){
 
 
 	
+	nbChannels.push_back(2);
+	nbChannels.push_back(2);
 	nbChannels.push_back(3);
-	//nbChannels.push_back(1);
-	//nbChannels.push_back(3);
-	//nbChannels.push_back(1);
+	nbChannels.push_back(3);
 	//nbChannels.push_back(1);
 	//nbChannels.push_back(3);
 

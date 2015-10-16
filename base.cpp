@@ -258,12 +258,9 @@ vector<string> get_channels(string name,int nbChannels,map<string,int> * list){
 	vector<string> tmp;
 	string time_str;
 	int limit = 70;
-	map<string,int> *original = new map<string,int>(*list);
+	
+    map<string,int> *original = new map<string,int>(*list);
 	map<string,int>::iterator it2;
-
-	for(it2=original->begin();it2!=original->end();it2++){
-		cout << it2->first << "  " << it2->second << "\n";
-	}
 
 
 	while (getline(file, str) && tmp.size() < nbChannels)
@@ -274,23 +271,36 @@ vector<string> get_channels(string name,int nbChannels,map<string,int> * list){
     	iss >> b;  
     	if (my_own_regex(b) && (find(tmp.begin(), tmp.end(), b)==tmp.end())){
     		size_t n = std::count(b.begin(), b.end(), '.');
-    		if(n > 2 && n < 4){ // add the n<4 for port need to look more into tht
+    		if(b.compare("192.168.12.1")==0){
+                continue;
+            }
+            if(n > 2 && n < 4){ // add the n<4 for port need to look more into tht
     			map<string,int>::iterator it = list->find(b);
     			if(it != list->end()){
 					list->at(b)=list->at(b) +1;
 				}else{
-					list->at(b)=1;
-				}
-				if (list->at(b) > limit){
-					tmp.push_back(b);
-				}
+                    list->insert(std::make_pair(b,1));
+                }
+                it = original->find(b);
+                if(it == original->end() && list->at(b) > limit){
+                    tmp.push_back(b);
+                }else if(it != original->end() && original->at(b) < limit && list->at(b) > limit){
+                    tmp.push_back(b);
+                }
+              }
     		}
     	}	
-    }
-
+/*
     for(it2=list->begin();it2!=list->end();it2++){
 		cout << it2->first << "  " << it2->second << "\n";
 	}
 
- 	return tmp;
+    cout << "======================================== \n";
+
+	for(it2=original->begin();it2!=original->end();it2++){
+		cout << it2->first << "  " << it2->second << "\n";
+	}
+    cout << "============================= \n";
+ */	
+    return tmp;
 }
