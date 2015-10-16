@@ -115,7 +115,6 @@ void file2dataPCAP_interval(ifstream * file,vector<string> channels,int interval
 	int size_pack = 0;
 	while (getline(*file, str))
     {
-    	// cout << "LINE << " << str << "\n";
     	istringstream iss(str);
     	iss >> time_str;
     	iss >> tmp;
@@ -167,26 +166,18 @@ void file2dataPCAP_interval(ifstream * file,vector<string> channels,int interval
 			}
 	    }
 	}
-	g->density = g->links / (float)(g->tops.size()*g->bots.size());
 }
 
 
 void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int interval){
 	vector<string> channels;			//list of channels
 	map<string,int> *list; 				// map each channel's occurance
-	vector<float> cc_graph;				//cc per time graph
-	vector<float> density_graph;		//density per time graph
 	vector<int> nb_bot_graph;			//nb of total peers
 	vector<string> times;				//list of times	
 	vector<string> dist_degree_by_top;	//nb of degree for top/bot ??
 	vector<string> dist_degree_by_bot;
 
 	map<string,vector<int> > variance_degree_each_bot;
-
-
-	map<string,vector< pair<string,int> > > window_result_total;
-	map<string,vector< pair<string,int> > > window_result_current;
-
 
 	map<string,int> biggest_pack_per_ip;
 	map<string,long long> video_packs_per_ip;
@@ -243,8 +234,6 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 		calculate_stat_graph(g);
 		
 		times.push_back(g->time_);
-		cc_graph.push_back(g->cc);
-		density_graph.push_back(g->density);
 		nb_bot_graph.push_back(g->bots.size());
 		
 		dist_degree_by_top.push_back(g->degrees_to_string());
@@ -317,9 +306,6 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 
 	create_graph_map_string_set(channels_for_each_peer,"channels_for_each_peer_"+current_time_+"_"+interval_string+".stat");
 
-	// bi-partite analysis.
-	create_graph_float(cc_graph,times,"cc_interval_"+current_time_+"_"+interval_string+".stat");
-	create_graph_float(density_graph,times,"density_interval_"+current_time_+"_"+interval_string+".stat");
 	
 }	
 

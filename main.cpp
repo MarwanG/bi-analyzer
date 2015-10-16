@@ -87,8 +87,8 @@ int main(int argc, char* argv[]){
 
 	// vector<string> filter = list_to_check("ip_filters.stat");
 	// get_stat_pcap_interval_filter(list,nbChannels,filter,60);
-	// get_stat_pcap_interval(list,nbChannels,60);
-	get_stat_pcap_batch(list,nbChannels);
+	get_stat_pcap_interval(list,nbChannels,60);
+	//get_stat_pcap_batch(list,nbChannels);
 
 	// detect_(list,nbChannels,10);
 	// detect_(list,nbChannels,120);
