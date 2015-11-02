@@ -84,9 +84,15 @@ void Node::add_pack_up(Node*son,int size_pack){
   }
   if(size_pack > 999){
     video_packs+=size_pack/1000000;
+    if(video_packs > 1000000){
+      video_packs = video_packs / 1000;
+    }
     son->nb_video_packs++;
   }else{
     signal_packs+=size_pack/1000000;
+    if(signal_packs > 1000000){
+      signal_packs = signal_packs / 1000;
+    }
     son->nb_signalling_packs++;
   }
 }
