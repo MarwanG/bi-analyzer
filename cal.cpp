@@ -1,4 +1,3 @@
-
 #include "cal.h"
 
 #include <iostream>
@@ -171,7 +170,7 @@ void file2dataPCAP_interval(ifstream * file,vector<string> channels,int interval
 
 void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int interval){
 	vector<string> channels;			//list of channels
-	map<string,int> *list; 				// map each channel's occurance
+	map<string,int> *list = new map<string,int>(); 				// map each channel's occurance
 	vector<int> nb_bot_graph;			//nb of total peers
 	vector<string> times;				//list of times	
 	vector<string> dist_degree_by_top;	//nb of degree for top/bot ??
@@ -279,6 +278,22 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	map<string,pair<float,float> > avg_sd_degree =  avg_for_each(variance_degree_each_bot);
 
 	map<string,pair<float,float> > avg_sd_packet = avg_for_each(total_packets_per_peer);
+
+    ofstream myfile;
+    myfile.open("TESTING.stat");
+    
+    std::map<string,vector<int> >::iterator it;
+    for(it = variance_degree_each_bot.begin(); it != variance_degree_each_bot.end() ; it++){
+        vector<int> list = it->second;
+        int length = list.size();
+        int sum = 0;
+        for(int i = 0 ; i < length ; i++){
+            sum = sum + list[i];
+        }
+        myfile << it->first << "  " << length << "  " << sum << "\n";
+    }
+    
+   
 
 
 	//current time/interval to add to file names.
