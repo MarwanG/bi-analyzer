@@ -197,6 +197,7 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	vector<int> nb_video_peers;
 	vector<int> nb_signalling_peers;
 
+	vector<long long> packets_exchange_top;
 
 	
 
@@ -253,11 +254,7 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 				biggest_pack_per_ip[g->bots[i]->get_title()]=g->bots[i]->max_packet;
 			}
 						
-			video_packs_per_ip[g->bots[i]->get_title()]=+g->bots[i]->nb_video_packs;
-			signalling_packs_per_ip[g->bots[i]->get_title()]=+g->bots[i]->nb_signalling_packs;
-			nb_packets_per_ip[g->bots[i]->get_title()]=+g->bots[i]->nb_video_packs;
-			nb_packets_per_ip[g->bots[i]->get_title()]=+g->bots[i]->nb_signalling_packs;
-
+			
 			std::set<int>::iterator it;
 			for (it = g->bots[i]->neighbours_indexs.begin(); it != g->bots[i]->neighbours_indexs.end(); ++it){
 				channels_for_each_peer[g->bots[i]->get_title()].insert(g->tops[*it]->get_title());
@@ -268,19 +265,17 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 			}
 		
 		}
-		nb_video_peers.push_back(nb_video_peers_count);
-		nb_signalling_peers.push_back(nb_signalling_peers_count);
-		
+		long long sum_packets = 0;
+		for(int i = 0; i < g->tops.size() ; i++){
+			sum_packets = sum_packets + g->tops[i]->video_packs + g->tops[i]->signal_packs;
+		}
+		packets_exchange_top.push_back(sum_packets);
 		g->free_data();
 		delete(g);
 	}
 
-	map<string,pair<float,float> > avg_sd_degree =  avg_for_each(variance_degree_each_bot);
-
-	map<string,pair<float,float> > avg_sd_packet = avg_for_each(total_packets_per_peer);
-
     ofstream myfile;
-    myfile.open("TESTING.stat");
+    myfile.open("nb_window_totaldegree.stat");
     
     std::map<string,vector<int> >::iterator it;
     for(it = variance_degree_each_bot.begin(); it != variance_degree_each_bot.end() ; it++){
@@ -292,9 +287,14 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
         }
         myfile << it->first << "  " << length << "  " << sum << "\n";
     }
-    
-   
+    myfile.close();
 
+
+	myfile.open("packets_testing.stat");   
+	for(int i = 0; i < packets_exchange_top.size() ; i++){
+		myfile << times[i] << " " << packets_exchange_top[i] << "\n";
+	} 
+	myfile.close();
 
 	//current time/interval to add to file names.
 	stringstream stream1;
@@ -304,21 +304,18 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 
 
 	// nb of peers per time video and signalling.
-	create_graph_int(nb_video_peers,times,"nb_video_peers_"+current_time_+"_"+interval_string+".stat");
-	create_graph_int(nb_signalling_peers,times,"nb_signalling_peers_"+current_time_+"_"+interval_string+".stat");
+	//create_graph_int(nb_video_peers,times,"nb_video_peers_"+current_time_+"_"+interval_string+".stat");
+	//create_graph_int(nb_signalling_peers,times,"nb_signalling_peers_"+current_time_+"_"+interval_string+".stat");
 	
 	// avg-sd degree and largest packet for each ip.
+	map<string,pair<float,float> > avg_sd_degree =  avg_for_each(variance_degree_each_bot);
 	create_graph_map_pairs(avg_sd_degree,biggest_pack_per_ip,"avg_sd_degree_max_pack_"+current_time_+"_"+interval_string+".stat");
 	
 	// nb of active peers per channel per time.
 	create_graph_nb_bot(nb_bot_graph,times,dist_degree_by_top,"nb_bot_interval_"+current_time_+"_"+interval_string+".stat");	
 	
-	// nb of packs per ip
-	create_graph_2_map_int(video_packs_per_ip,signalling_packs_per_ip,"nb_video_signalling_"+current_time_+"_"+interval_string+".stat");
-	create_graph_map_long_long(nb_packets_per_ip,"nb_packets_per_ip_"+current_time_+"_"+interval_string+".stat");
-
+	
 	//grouping servers
-
 	create_graph_map_string_set(channels_for_each_peer,"channels_for_each_peer_"+current_time_+"_"+interval_string+".stat");
 
 	
