@@ -269,6 +269,7 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 		for(int i = 0; i < g->tops.size() ; i++){
 			sum_packets = sum_packets + g->tops[i]->video_packs + g->tops[i]->signal_packs;
 		}
+		cout << sum_packets << "\n";
 		packets_exchange_top.push_back(sum_packets);
 		g->free_data();
 		delete(g);
