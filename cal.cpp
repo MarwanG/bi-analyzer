@@ -101,7 +101,7 @@ void get_stat_pcap_batch(vector<string> names,vector<int> nbChannels){
 //Reads the file till interval is reached and returns the graph g with the new data that
 //was read.
 
-void file2dataPCAP_interval(ifstream * file,vector<string> channels,int interval,Graph *g){
+long long file2dataPCAP_interval(ifstream * file,vector<string> channels,int interval,Graph *g){
 	string str; 
 	string t;
 	string b;
@@ -111,6 +111,7 @@ void file2dataPCAP_interval(ifstream * file,vector<string> channels,int interval
 	struct tm tm;
 	time_t t1 = 4;
 	time_t t2 = 4;
+	long long size_pack_total = 0;
 	int size_pack = 0;
 	while (getline(*file, str))
     {
@@ -163,8 +164,10 @@ void file2dataPCAP_interval(ifstream * file,vector<string> channels,int interval
 			   		addlink(g,t,b,&time_str,size_pack);
 			    }
 			}
+		size_pack_total = size_pack + size_pack_total;
 	    }
 	}
+	return size_pack_total;
 }
 
 
@@ -220,17 +223,20 @@ void get_stat_pcap_interval(vector<string> names,vector<int> nbChannels,int inte
 	bool keep = true;
     set<string> prev;
     int nb_interval = 0;
+    long long total_size = 0;
 	while(keep){
 		nb_interval++;
 		Graph * g = new Graph();
 		for(int i = 0 ; i < files.size() ; i++){
-			file2dataPCAP_interval(files[i],channels,interval,g);
+			long long tmp = file2dataPCAP_interval(files[i],channels,interval,g);
 			if(files[i]->eof() != 0){
 				keep = false;
 				break;
 			}
+			total_size = total_size + tmp;
 		}
 		cout << g->time_ << "\n";
+		cout << total_size << "\n";
 		calculate_stat_graph(g);
 		
 		times.push_back(g->time_);

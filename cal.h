@@ -17,7 +17,7 @@
 
 void file2data_PCAP_batch(std::string name,std::vector<std::string> channels,Graph * g);
 void get_stat_pcap_batch(std::vector<std::string> names,std::vector<int> nbChannels);
-void file2dataPCAP_interval(std::ifstream * file,std::vector<std::string> channels,int interval,Graph *g);
+long long file2dataPCAP_interval(std::ifstream * file,std::vector<std::string> channels,int interval,Graph *g);
 void get_stat_pcap_interval(std::vector<std::string> names,std::vector<int> nbChannels,int interval);
 void get_stat_pcap_interval_filter(std::vector<std::string> names,std::vector<int> nbChannels,std::vector<std::string>filter,int interval);
 
